@@ -36,8 +36,8 @@ imoprt_swaps_combination_from_json = True
 # method control
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 0
-use_Astar_lookahead = 1
+use_Astar_search = 1
+use_Astar_lookahead = 0
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
@@ -166,7 +166,7 @@ for file in QASM_files:
             y_label_HeuristicGreedySearch.append(cost_HeuristicGreedySearch)
         #print('Astar')
         if use_Astar_search == True:
-            cost_Astar = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, possible_swap_combination, draw_physical_circuit_Astar)
+            cost_Astar = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
             y_label_Astar.append(cost_Astar)
         if use_Astar_lookahead == True:
             res = ct.AStarSearchLookAhead(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG=DiG)
