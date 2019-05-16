@@ -18,7 +18,7 @@ import copy
 import json
 
 '''initialize parameters'''
-# number of CNOT operations
+'''number of CNOT operations'''
 list_num_CNOT = [8]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200, 250, 300, 350, 400]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200]
@@ -36,11 +36,11 @@ method_AG = ['grid', 8, 2]
 method_AG = ['IBM QX4']
 imoprt_swaps_combination_from_json = False
 
-# method control
+'''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 0
-use_Astar_lookahead = 1
+use_Astar_search = 1
+use_Astar_lookahead = 0
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
@@ -50,7 +50,7 @@ use_RemotoCNOTandWindowLookAhead1 = 0
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
-# draw control
+'''draw control'''
 draw_circle = False
 draw_Steiner_paper = False
 draw_architecture_graph = False
@@ -211,7 +211,8 @@ for num_CNOT in list_num_CNOT:
             total_HeuristicGreedySearch = total_HeuristicGreedySearch + cost_HeuristicGreedySearch
         #print('Astar')
         if use_Astar_search == True:
-            cost_Astar = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, possible_swap_combination, draw_physical_circuit_Astar)
+            res = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
+            cost_Astar = res[0]
             y_label_Astar.append(cost_Astar)
             total_Astar = total_Astar + cost_Astar
         if use_Astar_lookahead == True:

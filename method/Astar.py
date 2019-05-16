@@ -11,7 +11,7 @@ import circuittransform as ct
 import networkx as nx
 import copy
 
-def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination):
+def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG):
     finished_node = None
     father_map = search_tree.nodes[father_node]['mapping']
     father_g = search_tree.nodes[father_node]['cost_g']
@@ -45,7 +45,7 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
             '''if next leaf node if better than exist leaf node, then delete exist node'''
             leaf_nodes.pop(str(next_identity))
         '''add new leaf node'''
-        next_h_total = ct.HeuristicCostZulehner(next_map, DG, executable_vertex, shortest_length_G)
+        next_h_total = ct.HeuristicCostZulehner(next_map, DG, executable_vertex, shortest_length_G, shortest_path_G, DiG)
         next_h = next_h_total[0]
         next_node = next_node_list[0]
         next_node_list[0] += 1
@@ -60,7 +60,7 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
         search_tree.nodes[next_node]['exist_swaps'] = next_swaps
         #print('swaps are', next_swaps)
         search_tree.nodes[next_node]['identity'] = next_identity
-        if next_h == 0:
+        if next_h_total[5] == 1:
             if finished_node == None:
                 finished_node = next_node
             else:
@@ -71,9 +71,14 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
         
     return finished_node
 
-def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, possible_swap_combination=None, draw=False):
+def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_path_G=None, possible_swap_combination=None, draw=False, DiG=None):
     # only set True when debugging
     debug_model = False
+    SWAP_cost = 3
+    if DiG != None:
+        edges_DiG = list(DiG.edges)
+        #print('egdes are', edges_DiG)
+        SWAP_cost = 7
     '''initial level and map'''
     executable_vertex = ct.FindExecutableNode(DG)
     finished_map = initial_map
@@ -104,12 +109,12 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, possible_
         none_leaf_nodes = {}
         
         '''calculate heuristic cost for initial node'''
-        cost_h_total = ct.HeuristicCostZulehner(finished_map, DG, executable_vertex, shortest_length_G)
+        cost_h_total = ct.HeuristicCostZulehner(finished_map, DG, executable_vertex, shortest_length_G, shortest_path_G, DiG)
         cost_h = cost_h_total[0]
         search_tree.nodes[0]['cost_h'] = cost_h
         search_tree.nodes[0]['cost_total'] = search_tree.nodes[0]['cost_g'] + search_tree.nodes[0]['cost_h']
         
-        if cost_h == 0:
+        if cost_h_total[5] == 1:
             finished_node = 0
             finished_map = search_tree.nodes[finished_node]['mapping']
         else:
@@ -134,7 +139,7 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, possible_
                         father_cost = search_tree.nodes[father_node]['cost_total']
             
             '''expand search tree based on current father node'''
-            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination)
+            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
         
         '''conduct SWAP operations before each level'''
         if draw == True:
@@ -148,11 +153,16 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, possible_
         swap_count += len(search_tree.nodes[finished_node]['exist_swaps'])
         finished_map = search_tree.nodes[finished_node]['mapping']
         for vertex in executable_vertex:
-            ct.ConductOperationInVertex(DG, vertex, finished_map, cir_phy, q_phy)
+            '''check whether this CNOT needs 4 H gates to convert direction'''
+            if DiG != None:
+                flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, finished_map, edges_DiG)
+                swap_count += flag_4H*4/7   
+            ct.ConductCNOTOperationInVertex(DG, vertex, finished_map, cir_phy, q_phy, flag_4H)
         cir_phy.barrier()
         if debug_model == True: print(cir_phy.draw())
         '''refresh executable operations and go to the next level'''
         executable_vertex = ct.FindExecutableNode(DG)
     
     if draw == True: print(cir_phy.draw())
-    return swap_count
+    additional_gates = swap_count * SWAP_cost
+    return swap_count, additional_gates

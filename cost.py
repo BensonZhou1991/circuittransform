@@ -41,7 +41,7 @@ def OperationCost(dom, mapping, G = None, shortest_length = None):
     
     return cost
 
-def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G):
+def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G=None, DiG=None):
     '''
     Calculate heuristic cost for remaining gates
     see "An Efficient Methodology for Mapping Quantum Circuits to the IBM QX Architectures"
@@ -51,6 +51,8 @@ def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G)
     sum_num_swap = 0
     best_num_swap = None
     mapping = current_map
+    flag_finished = True
+    if DiG != None: edges = list(DiG.edges)
     for v_DG in executable_vertex:
         current_operation = DG.node[v_DG]['operation']
         q0 = current_operation.involve_qubits[0]
@@ -58,6 +60,12 @@ def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G)
         v0 = mapping.DomToCod(q0)
         v1 = mapping.DomToCod(q1)
         current_num_swap = shortest_length_G[v0][v1] - 1
+        if current_num_swap > 0: flag_finished = False
+        '''if architecture graph is directed, confirm whether use 4 H gates to change direction'''
+        if DiG != None:
+            flag_4H = ct.CheckCNOTNeedConvertDirection(v0, v1, shortest_path_G[v0][v1], edges)
+            #print('flag_4H is', flag_4H)
+            current_num_swap += flag_4H * 4/7 #we only count the number of SWAP gates
         '''renew number of all swaps'''
         sum_num_swap = sum_num_swap + current_num_swap
         '''renew swap number of worst operation'''
@@ -79,7 +87,7 @@ def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G)
             if current_num_swap < best_num_swap:
                 best_num_swap = current_num_swap
         
-    return worst_num_swap, sum_num_swap, best_num_swap, count_same_worst, worst_vertex
+    return worst_num_swap, sum_num_swap, best_num_swap, count_same_worst, worst_vertex, flag_finished
 
 def HeuristicCostZulehnerLookAhead(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G=None, DiG=None):
     '''
