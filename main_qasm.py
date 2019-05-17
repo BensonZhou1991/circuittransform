@@ -109,7 +109,7 @@ else:
 num_file = 0
 
 '''only test specific circuits'''
-QASM_files = ['z4_268.qasm']
+QASM_files = ['wim_266.qasm']
 
 for file in QASM_files:
     num_file += 1
