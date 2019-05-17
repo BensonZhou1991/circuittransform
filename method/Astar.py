@@ -60,11 +60,12 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
         search_tree.nodes[next_node]['exist_swaps'] = next_swaps
         #print('swaps are', next_swaps)
         search_tree.nodes[next_node]['identity'] = next_identity
+        '''check whether added node is finished'''
         if next_h_total[5] == 1:
             if finished_node == None:
                 finished_node = next_node
             else:
-                if search_tree.nodes[next_node]['cost_g'] < search_tree.nodes[finished_node]['cost_g']:
+                if search_tree.nodes[next_node]['cost_total'] < search_tree.nodes[finished_node]['cost_total']:
                     finished_node = next_node
         '''add next node to leaf_nodes list'''
         leaf_nodes[str(next_identity)] = next_node

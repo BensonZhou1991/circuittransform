@@ -37,7 +37,7 @@ imoprt_swaps_combination_from_json = True
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
 use_Astar_search = 1
-use_Astar_lookahead = 0
+use_Astar_lookahead = 1
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
@@ -59,6 +59,8 @@ draw_physical_circuit_HeuristicGreedySearch = 0
 draw_physical_circuit_Astar = 0
 draw_physical_circuit_RemotoCNOTandWindow = False
 draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
+
+x_label = []
 
 y_label_naive = []
 y_label_HeuristicGreedySearch = []
@@ -107,7 +109,7 @@ else:
 num_file = 0
 
 '''only test specific circuits'''
-QASM_files = ['qft_16.qasm']
+QASM_files = ['z4_268.qasm']
 
 for file in QASM_files:
     num_file += 1
@@ -119,6 +121,7 @@ for file in QASM_files:
         '''initialize logical quantum circuit'''
         q_log = res[1][2]
         cir_log = res[0]
+        x_label.append(cir_log.size())
         
         '''initialize physical quantum circuit'''
         q_phy = QuantumRegister(num_vertex, 'v')
@@ -137,7 +140,7 @@ for file in QASM_files:
         if draw_architecture_graph == True: nx.draw(G, with_labels=True)
         '''
         
-        '''generate CNOT operation randomly'''
+        '''generate CNOT operation'''
         total_CNOT = res[1][3]
         
         '''generate party map for CNOT circuits'''
@@ -166,11 +169,12 @@ for file in QASM_files:
             y_label_HeuristicGreedySearch.append(cost_HeuristicGreedySearch)
         #print('Astar')
         if use_Astar_search == True:
-            cost_Astar = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
+            res = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
+            cost_Astar = res[1] + cir_log.size()#0: swap count, 1: additional gates count
             y_label_Astar.append(cost_Astar)
         if use_Astar_lookahead == True:
             res = ct.AStarSearchLookAhead(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG=DiG)
-            cost_Astar_lookahead = res[2]
+            cost_Astar_lookahead = res[2] + cir_log.size()#0: swap count, 2: additional gates count
             cost_Astar_lookahead_state = res[1]
             y_label_Astar_lookahead.append(cost_Astar_lookahead)
             y_label_Astar_lookahead_state.append(cost_Astar_lookahead_state)

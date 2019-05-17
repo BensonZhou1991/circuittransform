@@ -68,7 +68,8 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
             if finished_node == None:
                 finished_node = next_node
             else:
-                if search_tree.nodes[next_node]['cost_g'] < search_tree.nodes[finished_node]['cost_g']:
+                if (search_tree.nodes[next_node]['cost_g'] + search_tree.nodes[next_node]['cost_h_current_level']) < \
+                (search_tree.nodes[finished_node]['cost_g'] + search_tree.nodes[finished_node]['cost_h_current_level']):
                     finished_node = next_node
         '''add next node to leaf_nodes list'''
         leaf_nodes[str(next_identity)] = next_node

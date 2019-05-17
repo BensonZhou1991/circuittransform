@@ -40,7 +40,7 @@ imoprt_swaps_combination_from_json = False
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
 use_Astar_search = 1
-use_Astar_lookahead = 0
+use_Astar_lookahead = 1
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
@@ -145,7 +145,7 @@ for num_CNOT in list_num_CNOT:
     total_UDecompositionFullConnectivityPATEL = 0
     total_RemotoCNOTandWindowLookAhead = 0
     total_RemotoCNOTandWindowLookAhead0 = 0
-    total_RemotoCNOTandWindowLookAhead1 = 0
+    total_RemotoCNOTandWindowLookAhead1 = 1
     total_RemotoCNOTandWindowLookAhead3 = 0
     total_RemotoCNOTandWindowLookAhead2nocut = 0
     total_RemotoCNOTandWindowLookAhead_state = 0
