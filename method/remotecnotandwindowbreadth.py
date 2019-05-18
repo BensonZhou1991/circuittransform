@@ -58,6 +58,7 @@ def SearchTreeLeafNodesPruning(search_tree, start_node, leaf_nodes, num_pruned_n
 def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, q_phy, draw, DiG):
     use_remoteCNOT = True
     best_cost_total = None
+    flag_4H = 0
     finished_nodes = []
     added_nodes = []
     if DiG != None: edges_DiG = list(DiG.edges)
@@ -96,7 +97,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                             flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG_next, next_map, edges_DiG)
                             cost_g_next += flag_4H*4
                         if draw == True:
-                            ct.ConductOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy)
+                            ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
                             cir_phy_next.barrier()
                         else:
                             DG_next.remove_node(vertex)
@@ -229,6 +230,7 @@ def FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead):
 def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_path_G, depth_lookahead, use_prune, draw=False, DiG=None):
     SWAP_cost = 3
     IBM_QX_mode = False
+    flag_4H = 0
     if DiG != None:
         edges_DiG = list(DiG.edges)
         SWAP_cost = 7
@@ -257,7 +259,7 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
                     flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, initial_map, edges_DiG)
                     cost_g_initial += flag_4H*4
                 '''conduct the operation'''
-                ct.ConductOperationInVertex(DG, vertex, initial_map, cir_phy, q_phy)
+                ct.ConductCNOTOperationInVertex(DG, vertex, initial_map, cir_phy, q_phy, flag_4H)
                 cir_phy.barrier()
                 num_executed_vertex += 1
                 temp = True
@@ -271,7 +273,7 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     cost_h_initial = CalculateHeuristicCost(initial_map, DG, executable_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, DiG)
     cost_total_initial = CalculateTotalCost(cost_h_initial, 0)
     search_tree.nodes[0]['mapping'] = initial_map
-    search_tree.nodes[0]['cost_g'] = cost_g_initial
+    search_tree.nodes[0]['cost_g'] = cost_g_initial#this is the count for number of added gates
     search_tree.nodes[0]['cost_h'] = cost_total_initial
     search_tree.nodes[0]['num_executed_vertex'] = num_executed_vertex
     search_tree.nodes[0]['DG'] = DG

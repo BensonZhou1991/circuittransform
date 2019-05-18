@@ -76,6 +76,7 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_
     # only set True when debugging
     debug_model = False
     SWAP_cost = 3
+    flag_4H = 0
     if DiG != None:
         edges_DiG = list(DiG.edges)
         #print('egdes are', edges_DiG)

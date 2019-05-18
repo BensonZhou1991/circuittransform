@@ -19,10 +19,10 @@ import json
 
 '''initialize parameters'''
 '''number of CNOT operations'''
-list_num_CNOT = [8]
+#list_num_CNOT = [8]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200, 250, 300, 350, 400]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200]
-list_num_CNOT = [3, 5, 10, 20, 30]
+list_num_CNOT = [3, 5, 10, 20, 30, 50]
 # number of logical qubits
 num_qubits = 16
 # description of architecture graph
@@ -31,36 +31,36 @@ num_vertex = 16
 repeat_time = 10
 # architecture graph generation control
 #method_AG = ['circle']
-#method_AG = ['grid', 8, 2]
-method_AG = ['IBM QX3']
+#method_AG = ['grid', 3, 3]
+#method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
 method_AG = ['IBM QX5']
-imoprt_swaps_combination_from_json = True
+imoprt_swaps_combination_from_json = 0
 
 '''method control'''
-use_naive_search = 1
+use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 1
+use_Astar_search = 0
 use_Astar_lookahead = 1
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
-use_RemotoCNOTandWindowLookAhead0 = 1
-use_RemotoCNOTandWindowLookAhead1 = 0
+use_RemotoCNOTandWindowLookAhead0 = 0
+use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''draw control'''
 draw_circle = False
 draw_Steiner_paper = False
-draw_architecture_graph = False
+draw_architecture_graph = 0
 draw_DG = False
-draw_logical_circuit = False
+draw_logical_circuit = 0
 draw_physical_circuit = False
 draw_physical_circuit_niave = 0
 draw_physical_circuit_HeuristicGreedySearch = 0
-draw_physical_circuit_Astar = False
+draw_physical_circuit_Astar = 0
 draw_physical_circuit_RemotoCNOTandWindow = False
 draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
 
@@ -146,7 +146,7 @@ for num_CNOT in list_num_CNOT:
     total_UDecompositionFullConnectivityPATEL = 0
     total_RemotoCNOTandWindowLookAhead = 0
     total_RemotoCNOTandWindowLookAhead0 = 0
-    total_RemotoCNOTandWindowLookAhead1 = 1
+    total_RemotoCNOTandWindowLookAhead1 = 0
     total_RemotoCNOTandWindowLookAhead3 = 0
     total_RemotoCNOTandWindowLookAhead2nocut = 0
     total_RemotoCNOTandWindowLookAhead_state = 0
@@ -262,7 +262,7 @@ for num_CNOT in list_num_CNOT:
             total_UDecompositionFullConnectivityPATEL = total_UDecompositionFullConnectivityPATEL + cost_UDecompositionFullConnectivityPATEL        
 
         if use_RemotoCNOTandWindowLookAhead0 == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=0, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead)
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=0, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
             cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -274,7 +274,7 @@ for num_CNOT in list_num_CNOT:
             total_RemotoCNOTandWindowLookAhead0_state_cut = total_RemotoCNOTandWindowLookAhead0_state_cut + cost_RemotoCNOTandWindowLookAhead_state_cut           
 
         if use_RemotoCNOTandWindowLookAhead1 == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead)
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
             cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -286,7 +286,7 @@ for num_CNOT in list_num_CNOT:
             total_RemotoCNOTandWindowLookAhead1_state_cut = total_RemotoCNOTandWindowLookAhead1_state_cut + cost_RemotoCNOTandWindowLookAhead_state_cut
 
         if use_RemotoCNOTandWindowLookAhead2 == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead)
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
             cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -298,7 +298,7 @@ for num_CNOT in list_num_CNOT:
             total_RemotoCNOTandWindowLookAhead_state_cut = total_RemotoCNOTandWindowLookAhead_state_cut + cost_RemotoCNOTandWindowLookAhead_state_cut
         
         if use_RemotoCNOTandWindowLookAhead3 == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=3, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead)
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=3, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
             cost_RemotoCNOTandWindowLookAhead =res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -310,7 +310,7 @@ for num_CNOT in list_num_CNOT:
             total_RemotoCNOTandWindowLookAhead3_state_cut = total_RemotoCNOTandWindowLookAhead3_state_cut + cost_RemotoCNOTandWindowLookAhead_state_cut 
 
         if use_RemotoCNOTandWindowLookAhead2_nocut == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead)
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
             cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]

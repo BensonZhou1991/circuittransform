@@ -79,10 +79,13 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
 def AStarSearchLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_path_G=None, possible_swap_combination=None, draw=False, DiG=None):
     # only set True when debugging
     debug_model = False
+    flag_4H = 0
     if DiG != None:
         edges_DiG = list(DiG.edges)
         #print('egdes are', edges_DiG)
         SWAP_cost = 7
+    else:
+        SWAP_cost = 3
     '''initial level and map'''
     executable_vertex = ct.FindExecutableNode(DG)
     finished_map = initial_map
