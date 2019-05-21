@@ -4,6 +4,7 @@ Created on Mon Apr  8 11:53:26 2019
 
 @author: Xiangzhen Zhou
 """
+import copy
 import networkx as nx
 import numpy as np
 from qiskit import QuantumCircuit, QuantumRegister
@@ -252,3 +253,17 @@ if __name__ == '__main__':
     DG = res[0]
     print(cir.draw())
     nx.draw(DG, with_labels=True)
+    
+def CreateCNOTList(DG):
+    CNOT_list = []
+    DG_copy = copy.deepcopy(DG)
+    leaf_nodes = ct.FindExecutableNode(DG_copy)
+    while len(leaf_nodes) > 0:
+        for node in leaf_nodes:
+            op = DG_copy.node[node]['operation']
+            add_CNOT = (op.involve_qubits[0][1], op.involve_qubits[1][1])
+            CNOT_list.append(add_CNOT)
+        DG_copy.remove_nodes_from(leaf_nodes)
+        leaf_nodes = ct.FindExecutableNode(DG_copy)
+    
+    return CNOT_list

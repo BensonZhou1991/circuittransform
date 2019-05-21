@@ -36,8 +36,8 @@ imoprt_swaps_combination_from_json = True
 # method control
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 1
-use_Astar_lookahead = 1
+use_Astar_search = 0
+use_Astar_lookahead = 0
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
@@ -50,8 +50,8 @@ use_RemotoCNOTandWindowLookAhead2_nocut = 0
 # draw control
 draw_circle = False
 draw_Steiner_paper = False
-draw_architecture_graph = True
-draw_DG = False
+draw_architecture_graph = 0
+draw_DG = 1
 draw_logical_circuit = 0
 draw_physical_circuit = False
 draw_physical_circuit_niave = 0
@@ -109,7 +109,7 @@ else:
 num_file = 0
 
 '''only test specific circuits'''
-QASM_files = ['wim_266.qasm']
+QASM_files = ['qft_10.qasm']
 
 for file in QASM_files:
     num_file += 1
