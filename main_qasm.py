@@ -36,22 +36,25 @@ imoprt_swaps_combination_from_json = True
 # method control
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 0
-use_Astar_lookahead = 0
+use_Astar_search = 1
+use_Astar_lookahead = 1
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
 use_RemotoCNOTandWindowLookAhead0 = 0
-use_RemotoCNOTandWindowLookAhead1 = 0
+use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
+'''output control'''
+out_num_swaps = True
+out_num_add_gates = False
 # draw control
 draw_circle = False
 draw_Steiner_paper = False
 draw_architecture_graph = 0
-draw_DG = 1
+draw_DG = 0
 draw_logical_circuit = 0
 draw_physical_circuit = False
 draw_physical_circuit_niave = 0
@@ -95,8 +98,16 @@ if isinstance(G, DiGraph): #check whether it is a directed graph
     G = nx.Graph(DiG)
 if draw_architecture_graph == True: nx.draw(G, with_labels=True)
 '''calculate shortest path and its length'''
-shortest_path_G = nx.shortest_path(G, source=None, target=None, weight=None, method='dijkstra')
-shortest_length_G = dict(nx.shortest_path_length(G, source=None, target=None, weight=None, method='dijkstra'))
+#shortest_path_G = nx.shortest_path(G, source=None, target=None, weight=None, method='dijkstra')
+#shortest_length_G = dict(nx.shortest_path_length(G, source=None, target=None, weight=None, method='dijkstra'))
+if DiG == None:
+    res = ct.ShortestPath(G)
+    shortest_path_G = res[1]
+    shortest_length_G = res[0]
+else:
+    res = ct.ShortestPath(DiG)
+    shortest_path_G = res[1]
+    shortest_length_G = res[0]
 
 if imoprt_swaps_combination_from_json == True:
     fileObject = open('inputs\\swaps for architecture graph\\'+method_AG[0]+'.json', 'r')
@@ -105,6 +116,11 @@ if imoprt_swaps_combination_from_json == True:
 else:
     if use_Astar_search == True or use_Astar_lookahead == True or use_RemotoCNOTandWindow == True or use_UDecompositionFullConnectivity == True or use_HeuristicGreedySearch == True:
         possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
+        
+possible_swap_combination = []
+edges = list(G.edges()).copy()
+for current_edge in edges:
+    possible_swap_combination.append([current_edge]) 
 
 num_file = 0
 

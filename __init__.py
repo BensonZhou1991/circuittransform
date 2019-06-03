@@ -13,4 +13,4 @@ from circuittransform.method import NaiveSearch, AStarSearch, AStarSearchLookAhe
 from .operation_for_U_decomposition import SteinerTreeAndRemoteCNOT, AllocateVertexToPartyMap, PerformOperationCNOTinPartyMap
 from .operation_for_U_decomposition import UDecompositionFullConnectivity, UDecompositionFullConnectivityPATEL, FindAllLeafNodesInDG
 from circuittransform.Qiskitconverter import QiskitCircuitToDG
-from circuittransform.inputs import CreateDGfromQASMfile, CreateQASMFilesFromExample
+from circuittransform.inputs import CreateDGfromQASMfile, CreateQASMFilesFromExample, ShortestPath

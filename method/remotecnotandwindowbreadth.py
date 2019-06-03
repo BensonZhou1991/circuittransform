@@ -13,6 +13,10 @@ import networkx as nx
 from networkx import DiGraph, Graph
 
 def CalculateHeuristicCost(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, DiG):
+    '''
+    cost_h1: sum_num_gate
+    cost_h2: lookahead for all remaining gates
+    '''
     num_remaining_vertex = len(DG.nodes()) - len(executable_vertex)
     cost_h_total = ct.HeuristicCostZhou1(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, DiG)
     cost_h1 = cost_h_total[1] * SWAP_cost + cost_h_total[5]*0.00001
@@ -283,12 +287,13 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     
     
     '''expand search tree for the first time'''
+    finished_nodes = []
     for i in range(depth_lookahead+1):
         res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, q_phy, draw, DiG)
         leaf_nodes = res[2]
+        finished_nodes.extend(res[1])
 
     best_leaf_node = res[0]
-    finished_nodes = res[1]
     
     while finished_nodes == []:
         next_node = FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead)

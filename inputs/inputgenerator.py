@@ -78,7 +78,7 @@ def CreateQASMFilesFromExample():
 def GenerateEdgeofArchitectureGraph(vertex, method):
     edge = []
     num_vertex = len(vertex)
-    if method[0] == 'circle':        
+    if method[0] == 'circle' or method[0] == 'directed circle':        
         for i in range(num_vertex-1):
             edge.append((i, i+1))
         edge.append((num_vertex-1, 0))  
@@ -86,7 +86,7 @@ def GenerateEdgeofArchitectureGraph(vertex, method):
     '''
     grid architecturew with length = additional_arg[0], width = additional_arg[1]
     '''
-    if method[0] == 'grid':
+    if method[0] == 'grid' or method[0] == 'directed grid':
         length = method[1]
         width = method[2]
         for raw in range(width-1):
@@ -142,6 +142,8 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
             IBM QX3
             IBM QX4
             IBM QX5
+            directed grid
+            directed circle
     '''
     if method == ['IBM QX3']:
         G = GenerateArchitectureGraph(16, ['grid', 8, 2])
@@ -166,7 +168,10 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
         G.add_edges_from(edges)
         return G
     
-    G = nx.Graph()
+    if method[0] == 'directed grid' or method[0] == 'directed circle':
+        G = nx.DiGraph()
+    else:
+        G = nx.Graph()
     vertex = list(range(num_vertex))
     G.add_nodes_from(vertex)
     edge = GenerateEdgeofArchitectureGraph(vertex, method)

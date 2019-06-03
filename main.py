@@ -35,6 +35,8 @@ repeat_time = 10
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
 method_AG = ['IBM QX5']
+#method_AG = ['directed grid', 2, 3]
+#method_AG = ['directed circle', 6]
 imoprt_swaps_combination_from_json = 0
 
 '''method control'''
@@ -46,11 +48,14 @@ use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
-use_RemotoCNOTandWindowLookAhead0 = 0
+use_RemotoCNOTandWindowLookAhead0 = 1
 use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
+'''output control'''
+out_num_swaps = True
+out_num_add_gates = False
 '''draw control'''
 draw_circle = False
 draw_Steiner_paper = False
@@ -122,9 +127,17 @@ if isinstance(G, DiGraph): #check whether it is a directed graph
     G = nx.Graph(DiG)
 if draw_architecture_graph == True: nx.draw(G, with_labels=True)
 '''calculate shortest path and its length'''
-shortest_path_G = nx.shortest_path(G, source=None, target=None, weight=None, method='dijkstra')
-shortest_length_G = dict(nx.shortest_path_length(G, source=None, target=None, weight=None, method='dijkstra'))
-
+#shortest_path_G = nx.shortest_path(G, source=None, target=None, weight=None, method='dijkstra')
+#shortest_length_G = dict(nx.shortest_path_length(G, source=None, target=None, weight=None, method='dijkstra'))
+if DiG == None:
+    res = ct.ShortestPath(G)
+    shortest_path_G = res[1]
+    shortest_length_G = res[0]
+else:
+    res = ct.ShortestPath(DiG)
+    shortest_path_G = res[1]
+    shortest_length_G = res[0]      
+'''
 if imoprt_swaps_combination_from_json == True:
     fileObject = open('inputs\\swaps for architecture graph\\'+method_AG[0]+'.json', 'r')
     possible_swap_combination = json.load(fileObject)
@@ -132,6 +145,13 @@ if imoprt_swaps_combination_from_json == True:
 else:
     if use_Astar_search == True or use_Astar_lookahead == True or use_RemotoCNOTandWindow == True or use_UDecompositionFullConnectivity == True or use_HeuristicGreedySearch == True:
         possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
+'''
+'''test'''
+possible_swap_combination = []
+edges = list(G.edges()).copy()
+for current_edge in edges:
+    possible_swap_combination.append([current_edge]) 
+
 
 for num_CNOT in list_num_CNOT:
     print('Number of CNOT is', num_CNOT)
@@ -213,12 +233,12 @@ for num_CNOT in list_num_CNOT:
         #print('Astar')
         if use_Astar_search == True:
             res = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
-            cost_Astar = res[0]
+            if out_num_swaps == True: cost_Astar = res[0]
             y_label_Astar.append(cost_Astar)
             total_Astar = total_Astar + cost_Astar
         if use_Astar_lookahead == True:
             res = ct.AStarSearchLookAhead(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
-            cost_Astar_lookahead = res[0]
+            if out_num_swaps == True: cost_Astar_lookahead = res[0]
             cost_Astar_lookahead_state = res[1]
             y_label_Astar_lookahead.append(cost_Astar_lookahead)
             total_Astar_lookahead = total_Astar_lookahead + cost_Astar_lookahead
@@ -263,7 +283,7 @@ for num_CNOT in list_num_CNOT:
 
         if use_RemotoCNOTandWindowLookAhead0 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=0, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[0]
+            if out_num_swaps == True: cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead0.append(cost_RemotoCNOTandWindowLookAhead)
@@ -275,7 +295,7 @@ for num_CNOT in list_num_CNOT:
 
         if use_RemotoCNOTandWindowLookAhead1 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[0]
+            if out_num_swaps == True: cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead1.append(cost_RemotoCNOTandWindowLookAhead)
@@ -287,7 +307,7 @@ for num_CNOT in list_num_CNOT:
 
         if use_RemotoCNOTandWindowLookAhead2 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[0]
+            if out_num_swaps == True: cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead.append(cost_RemotoCNOTandWindowLookAhead)
@@ -299,7 +319,7 @@ for num_CNOT in list_num_CNOT:
         
         if use_RemotoCNOTandWindowLookAhead3 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=3, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead =res[0]
+            if out_num_swaps == True: cost_RemotoCNOTandWindowLookAhead =res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead3.append(cost_RemotoCNOTandWindowLookAhead)
@@ -311,7 +331,7 @@ for num_CNOT in list_num_CNOT:
 
         if use_RemotoCNOTandWindowLookAhead2_nocut == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[0]
+            if out_num_swaps == True: cost_RemotoCNOTandWindowLookAhead = res[0]
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead2nocut.append(cost_RemotoCNOTandWindowLookAhead)
@@ -401,6 +421,7 @@ if draw_Steiner_paper == True:
 
 plt.legend()
 plt.grid()
+plt.title(method_AG[0])
 #plt.axis([0, 450, 0, 100])
 plt.show()
 # save as local file
@@ -437,6 +458,7 @@ if use_RemotoCNOTandWindowLookAhead2_nocut == True:
  
 plt.legend()
 plt.grid()
+plt.title(method_AG[0])
 #plt.axis([0, 450, 0, 100])
 plt.show()
 # save as local file
