@@ -22,6 +22,12 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
     none_leaf_nodes[str(father_node_identity)] = father_node
     '''try all possible next state'''
     for swaps in possible_swap_combination:
+        '''judge whether the swap in trivial to avoid unnecessary state'''
+        flag_nontrivial = ct.CheckSWAPInvolved(swaps, executable_vertex, DG, father_map)
+        if flag_nontrivial == False:
+            #print('trivival swap')
+            continue
+        
         #print(swaps)
         next_map = father_map.Copy()
         '''try to conduct each swap'''
@@ -95,6 +101,7 @@ def AStarSearchLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, 
         possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
     
     '''search in all levels'''
+    next_node_list = [1]
     swap_count = 0
     while executable_vertex != []:
         if debug_model == True:

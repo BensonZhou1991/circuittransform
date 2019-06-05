@@ -93,6 +93,7 @@ class Map(object):
     def MapToTuple(self):
         '''
         calculate corresponding tuple for the map
+        it can be used to indetify the identical mapping
         '''
         out = []
         for q in self.logical_quantum_register:

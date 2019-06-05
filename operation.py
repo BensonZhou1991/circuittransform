@@ -255,3 +255,21 @@ def CheckCNOTNeedConvertDirection2(vertex, DG, mapping, edges):
         return False
     
     return True
+
+def CheckSWAPInvolved(swaps, executable_vertex, DG, mapping):
+    '''
+    check whether the swaps has swap having no effect on any executable gate, if yes, return False
+    '''
+    q_phy = []
+    for vertex in executable_vertex:
+        op = DG.node[vertex]['operation']
+        q0 = op.involve_qubits[0]
+        q1 = op.involve_qubits[1]
+        v0 = mapping.DomToCod(q0)
+        v1 = mapping.DomToCod(q1)
+        q_phy.extend([v0, v1])
+    for swap in swaps:
+        if (not (swap[0] in q_phy)) and (not (swap[1] in q_phy)):
+            return False
+    return True
+        

@@ -21,6 +21,7 @@ def CalculateHeuristicCost(current_map, DG, executable_vertex, shortest_length_G
     cost_h_total = ct.HeuristicCostZhou1(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, DiG)
     cost_h1 = cost_h_total[1] * SWAP_cost + cost_h_total[5]*0.00001
     cost_h2 = SWAP_cost * num_remaining_vertex * (max_shortest_length_G - 1)/2
+    cost_h2 = 0
     cost_h_list = [cost_h1, cost_h2, cost_h_total]
     
     return cost_h_list

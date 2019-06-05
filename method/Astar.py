@@ -22,7 +22,13 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
     none_leaf_nodes[str(father_node_identity)] = father_node
     '''try all possible next state'''
     for swaps in possible_swap_combination:
-        #print(swaps)
+        '''judge whether the swap in trivial to avoid unnecessary state'''
+        flag_nontrivial = ct.CheckSWAPInvolved(swaps, executable_vertex, DG, father_map)
+        if flag_nontrivial == False:
+            #print('trivival swap')
+            continue
+        
+        #print('non trivival swaps')
         next_map = father_map.Copy()
         '''try to conduct each swap'''
         for current_swap in swaps:
@@ -140,12 +146,22 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_
                         father_node = node
                         father_cost = search_tree.nodes[father_node]['cost_total']
             
+            '''draw quantum circuit for each selected father node, only for debugging'''
+# =============================================================================
+#             swaps = search_tree.nodes[father_node]['exist_swaps']
+#             for current_swap in swaps:
+#                 cir_phy.swap(q_phy[current_swap[0]], q_phy[current_swap[1]])
+#             cir_phy.barrier()
+#             print(cir_phy.draw())            
+# =============================================================================
+            
             '''expand search tree based on current father node'''
             finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
         
         '''conduct SWAP operations before each level'''
         if draw == True:
             swaps = search_tree.nodes[finished_node]['exist_swaps']
+            print(swaps)
             for current_swap in swaps:
                 cir_phy.swap(q_phy[current_swap[0]], q_phy[current_swap[1]])
         

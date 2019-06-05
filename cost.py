@@ -87,6 +87,7 @@ def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G,
             if current_num_swap < best_num_swap:
                 best_num_swap = current_num_swap
         
+    worst_num_swap += sum_num_swap/100 #when identical worst costs for different gates exist, consider sum of swaps as second goal
     return worst_num_swap, sum_num_swap, best_num_swap, count_same_worst, worst_vertex, flag_finished
 
 def HeuristicCostZulehnerLookAhead(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G=None, DiG=None):

@@ -43,13 +43,13 @@ use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
 use_RemotoCNOTandWindowLookAhead0 = 0
-use_RemotoCNOTandWindowLookAhead1 = 1
+use_RemotoCNOTandWindowLookAhead1 = 0
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''output control'''
-out_num_swaps = True
-out_num_add_gates = False
+out_num_swaps = False
+out_num_add_gates = True
 # draw control
 draw_circle = False
 draw_Steiner_paper = False
@@ -109,14 +109,17 @@ else:
     shortest_path_G = res[1]
     shortest_length_G = res[0]
 
-if imoprt_swaps_combination_from_json == True:
-    fileObject = open('inputs\\swaps for architecture graph\\'+method_AG[0]+'.json', 'r')
-    possible_swap_combination = json.load(fileObject)
-    fileObject.close()
-else:
-    if use_Astar_search == True or use_Astar_lookahead == True or use_RemotoCNOTandWindow == True or use_UDecompositionFullConnectivity == True or use_HeuristicGreedySearch == True:
-        possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
-        
+'''use all possible swaps in parallel'''
+# =============================================================================
+# if imoprt_swaps_combination_from_json == True:
+#     fileObject = open('inputs\\swaps for architecture graph\\'+method_AG[0]+'.json', 'r')
+#     possible_swap_combination = json.load(fileObject)
+#     fileObject.close()
+# else:
+#     if use_Astar_search == True or use_Astar_lookahead == True or use_RemotoCNOTandWindow == True or use_UDecompositionFullConnectivity == True or use_HeuristicGreedySearch == True:
+#         possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
+# =============================================================================
+'''only use single swap'''      
 possible_swap_combination = []
 edges = list(G.edges()).copy()
 for current_edge in edges:
@@ -125,7 +128,7 @@ for current_edge in edges:
 num_file = 0
 
 '''only test specific circuits'''
-QASM_files = ['qft_10.qasm']
+QASM_files = ['sys6-v0_111_CXonly.qasm']
 
 for file in QASM_files:
     num_file += 1
@@ -186,11 +189,11 @@ for file in QASM_files:
         #print('Astar')
         if use_Astar_search == True:
             res = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
-            cost_Astar = res[1] + cir_log.size()#0: swap count, 1: additional gates count
+            if out_num_add_gates == True: cost_Astar = res[1]# + cir_log.size()#0: swap count, 1: additional gates count
             y_label_Astar.append(cost_Astar)
         if use_Astar_lookahead == True:
             res = ct.AStarSearchLookAhead(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG=DiG)
-            cost_Astar_lookahead = res[2] + cir_log.size()#0: swap count, 2: additional gates count
+            if out_num_add_gates == True: cost_Astar_lookahead = res[2]# + cir_log.size()#0: swap count, 2: additional gates count
             cost_Astar_lookahead_state = res[1]
             y_label_Astar_lookahead.append(cost_Astar_lookahead)
             y_label_Astar_lookahead_state.append(cost_Astar_lookahead_state)
@@ -229,7 +232,7 @@ for file in QASM_files:
 
         if use_RemotoCNOTandWindowLookAhead0 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=0, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[0]
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead0.append(cost_RemotoCNOTandWindowLookAhead)
@@ -238,7 +241,7 @@ for file in QASM_files:
 
         if use_RemotoCNOTandWindowLookAhead1 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[3]
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead1.append(cost_RemotoCNOTandWindowLookAhead)
@@ -247,7 +250,7 @@ for file in QASM_files:
 
         if use_RemotoCNOTandWindowLookAhead2 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[0]
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead.append(cost_RemotoCNOTandWindowLookAhead)
@@ -256,7 +259,7 @@ for file in QASM_files:
         
         if use_RemotoCNOTandWindowLookAhead3 == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=3, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead =res[0]
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead =res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead3.append(cost_RemotoCNOTandWindowLookAhead)
@@ -265,7 +268,7 @@ for file in QASM_files:
 
         if use_RemotoCNOTandWindowLookAhead2_nocut == True:
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-            cost_RemotoCNOTandWindowLookAhead = res[3]
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead2nocut.append(cost_RemotoCNOTandWindowLookAhead)
