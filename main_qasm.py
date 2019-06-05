@@ -59,7 +59,7 @@ draw_logical_circuit = 0
 draw_physical_circuit = False
 draw_physical_circuit_niave = 0
 draw_physical_circuit_HeuristicGreedySearch = 0
-draw_physical_circuit_Astar = 0
+draw_physical_circuit_Astar = 1
 draw_physical_circuit_RemotoCNOTandWindow = False
 draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
 
@@ -128,7 +128,7 @@ for current_edge in edges:
 num_file = 0
 
 '''only test specific circuits'''
-QASM_files = ['sys6-v0_111_CXonly.qasm']
+QASM_files = ['test3.qasm']
 
 for file in QASM_files:
     num_file += 1
@@ -170,7 +170,10 @@ for file in QASM_files:
         
         
         '''initialize map from logical qubits to physical qubits'''
+        '''1-1, 2-2 ...'''
         initial_map = Map(q_log, G)
+        initial_map.RenewMapViaExchangeCod(0, 1)
+        
         
         '''generate dependency graph'''
         DG = res[1][0]

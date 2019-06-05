@@ -11,8 +11,7 @@ import circuittransform as ct
 import networkx as nx
 import copy
 
-def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG):
-    finished_node = None
+def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, finished_node, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG):
     father_map = search_tree.nodes[father_node]['mapping']
     father_g = search_tree.nodes[father_node]['cost_g']
     father_exist_swaps = search_tree.nodes[father_node]['exist_swaps']
@@ -70,12 +69,12 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
         search_tree.nodes[next_node]['exist_swaps'] = next_swaps
         #print('swaps are', next_swaps)
         search_tree.nodes[next_node]['identity'] = next_identity
+        '''judge whether the new node is finished'''
         if next_flag_finished == True:
             if finished_node == None:
                 finished_node = next_node
             else:
-                if (search_tree.nodes[next_node]['cost_g'] + search_tree.nodes[next_node]['cost_h_current_level']) < \
-                (search_tree.nodes[finished_node]['cost_g'] + search_tree.nodes[finished_node]['cost_h_current_level']):
+                if search_tree.nodes[next_node]['cost_total'] < search_tree.nodes[finished_node]['cost_total']:
                     finished_node = next_node
         '''add next node to leaf_nodes list'''
         leaf_nodes[str(next_identity)] = next_node
@@ -132,14 +131,17 @@ def AStarSearchLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, 
         search_tree.nodes[0]['flag_finished'] = flag_finished
         search_tree.nodes[0]['cost_total'] = search_tree.nodes[0]['cost_g'] + search_tree.nodes[0]['cost_h']
         
-        if cost_h_current_level == 0:
+        if flag_finished == True:
             finished_node = 0
             finished_map = search_tree.nodes[finished_node]['mapping']
         else:
             finished_node = None
         
         '''search til find the finished node'''
-        while finished_node == None:
+        flag_finished = False
+        '''expand tree for the first time, set father node 0'''
+        finished_node = ExpandSearchTree(DG, search_tree, next_node_list, 0, none_leaf_nodes, leaf_nodes, finished_node, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
+        while flag_finished == False:
             if debug_model == True:
                 jjj -= 1
                 if jjj == 0:
@@ -155,9 +157,14 @@ def AStarSearchLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, 
                     if search_tree.nodes[node]['cost_total'] < father_cost:
                         father_node = node
                         father_cost = search_tree.nodes[father_node]['cost_total']
-            
+            '''judge whether the search has finished'''
+            if finished_node != None:
+                finishe_node_cost = search_tree.nodes[finished_node]['cost_total']
+                if father_cost > finishe_node_cost:
+                    flag_finished = True
+                    break            
             '''expand search tree based on current father node'''
-            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
+            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes, leaf_nodes, finished_node, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
         
         '''conduct SWAP operations before each level'''
         if draw == True:
@@ -181,7 +188,11 @@ def AStarSearchLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, 
         '''refresh executable operations and go to the next level'''
         executable_vertex = ct.FindExecutableNode(DG)
     
-    if draw == True: print(cir_phy.draw())
+    if draw == True:
+        print(cir_phy.draw())
+        fig = (cir_phy.draw(scale=0.7, filename=None, style=None, output='mpl', interactive=False, line_length=None, plot_barriers=True, reverse_bits=False))
+        fig.savefig('circuit_Astarlookahead.eps', format='eps', dpi=1000)
+
     '''number of traversed states'''
     num_total_state = next_node_list[0] - 1
     additional_gates = swap_count * SWAP_cost

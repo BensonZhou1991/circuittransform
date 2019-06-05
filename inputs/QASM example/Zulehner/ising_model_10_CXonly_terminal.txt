@@ -1,0 +1,71 @@
+arch:1
+gen qx5 graph
+Circuit name: ising_model_10_CXonly.qasm (requires 16 qubits)
+
+Before mapping: 
+  elementary gates: 90
+  depth: 20
+layer:0-------------------------Beg
+1 0 2 3 5 4 6 7 9 8 10 11 12 13 14 15 layer:0-------------------------End
+layer:1-------------------------Beg
+1 0 2 3 5 4 6 7 9 8 10 11 12 13 14 15 layer:1-------------------------End
+layer:2-------------------------Beg
+0 1 2 3 4 5 6 7 10 8 9 11 12 13 14 15 layer:2-------------------------End
+layer:3-------------------------Beg
+0 1 2 3 4 5 6 7 10 8 9 11 12 13 14 15 layer:3-------------------------End
+layer:4-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:4-------------------------End
+layer:5-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:5-------------------------End
+layer:6-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:6-------------------------End
+layer:7-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:7-------------------------End
+layer:8-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:8-------------------------End
+layer:9-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:9-------------------------End
+layer:10-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:10-------------------------End
+layer:11-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:11-------------------------End
+layer:12-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:12-------------------------End
+layer:13-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:13-------------------------End
+layer:14-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:14-------------------------End
+layer:15-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:15-------------------------End
+layer:16-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:16-------------------------End
+layer:17-------------------------Beg
+0 1 2 3 4 5 6 7 9 8 10 11 12 13 14 15 layer:17-------------------------End
+layer:18-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:18-------------------------End
+layer:19-------------------------Beg
+0 1 2 3 4 6 5 7 10 8 9 11 12 13 14 15 layer:19-------------------------End
+
+After mapping (no post mapping optimizations are conducted): 
+  elementary gates: 288
+  depth: 80
+
+The mapping required 0.061375 seconds
+
+Initial mapping of the logical qubits (q) to the physical qubits (Q) of the IBM QX5 architecture: 
+  q0 is initially mapped to Q1
+  q1 is initially mapped to Q0
+  q2 is initially mapped to Q2
+  q3 is initially mapped to Q3
+  q4 is initially mapped to Q5
+  q5 is initially mapped to Q4
+  q6 is initially mapped to Q6
+  q7 is initially mapped to Q7
+  q8 is initially mapped to Q9
+  q9 is initially mapped to Q8
+  q10 is initially mapped to Q10
+  q11 is initially mapped to Q11
+  q12 is initially mapped to Q12
+  q13 is initially mapped to Q13
+  q14 is initially mapped to Q14
+  q15 is initially mapped to Q15

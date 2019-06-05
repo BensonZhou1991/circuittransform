@@ -11,8 +11,7 @@ import circuittransform as ct
 import networkx as nx
 import copy
 
-def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG):
-    finished_node = None
+def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes, leaf_nodes, finished_node, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG):
     father_map = search_tree.nodes[father_node]['mapping']
     father_g = search_tree.nodes[father_node]['cost_g']
     father_exist_swaps = search_tree.nodes[father_node]['exist_swaps']
@@ -125,11 +124,15 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_
         if cost_h_total[5] == 1:
             finished_node = 0
             finished_map = search_tree.nodes[finished_node]['mapping']
+            flag_finish = True
+            '''expand tree for the first time, set father node 0'''
+            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, 0, none_leaf_nodes,  leaf_nodes, finished_node, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
         else:
             finished_node = None
+        flag_finish = False
         
         '''search til find the finished node'''
-        while finished_node == None:
+        while flag_finish == False:
             if debug_model == True:
                 jjj -= 1
                 if jjj == 0:
@@ -145,7 +148,12 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_
                     if search_tree.nodes[node]['cost_total'] < father_cost:
                         father_node = node
                         father_cost = search_tree.nodes[father_node]['cost_total']
-            
+            '''judge whether the search has finished'''
+            if finished_node != None:
+                finishe_node_cost = search_tree.nodes[finished_node]['cost_total']
+                if father_cost >= finishe_node_cost:
+                    flag_finish = True
+                    break
             '''draw quantum circuit for each selected father node, only for debugging'''
 # =============================================================================
 #             swaps = search_tree.nodes[father_node]['exist_swaps']
@@ -156,12 +164,12 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_
 # =============================================================================
             
             '''expand search tree based on current father node'''
-            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
+            finished_node = ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nodes,  leaf_nodes, finished_node, executable_vertex, shortest_length_G, possible_swap_combination, shortest_path_G, DiG)
         
         '''conduct SWAP operations before each level'''
         if draw == True:
             swaps = search_tree.nodes[finished_node]['exist_swaps']
-            print(swaps)
+            #print(swaps)
             for current_swap in swaps:
                 cir_phy.swap(q_phy[current_swap[0]], q_phy[current_swap[1]])
         
@@ -181,6 +189,9 @@ def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_
         '''refresh executable operations and go to the next level'''
         executable_vertex = ct.FindExecutableNode(DG)
     
-    if draw == True: print(cir_phy.draw())
+    if draw == True:
+        print(cir_phy.draw())
+        fig = (cir_phy.draw(scale=0.7, filename=None, style=None, output='mpl', interactive=False, line_length=None, plot_barriers=True, reverse_bits=False))
+        fig.savefig('circuit_Astar.eps', format='eps', dpi=1000)
     additional_gates = swap_count * SWAP_cost
     return swap_count, additional_gates
