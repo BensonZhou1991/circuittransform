@@ -1,0 +1,35 @@
+gen qx5 graph
+Circuit name: graycode6_47.qasm (requires 16 qubits)
+
+Before mapping: 
+  elementary gates: 5
+  depth: 5
+layer 0:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 1:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 2:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 3:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 4:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+
+After mapping (no post mapping optimizations are conducted): 
+  elementary gates: 17
+  depth: 11
+
+The mapping required 6e-05 seconds
+
+Initial mapping of the logical qubits (q) to the physical qubits (Q) of the IBM QX5 architecture: 
+  q0 is initially mapped to Q0
+  q1 is initially mapped to Q1
+  q2 is initially mapped to Q2
+  q3 is initially mapped to Q3
+  q4 is initially mapped to Q4
+  q5 is initially mapped to Q5
+  q6 is initially mapped to Q6
+  q7 is initially mapped to Q7
+  q8 is initially mapped to Q8
+  q9 is initially mapped to Q9
+  q10 is initially mapped to Q10
+  q11 is initially mapped to Q11
+  q12 is initially mapped to Q12
+  q13 is initially mapped to Q13
+  q14 is initially mapped to Q14
+  q15 is initially mapped to Q15

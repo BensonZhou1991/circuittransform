@@ -33,7 +33,7 @@ def OperationToDependencyGraph(operations):
 
 def FindExecutableNode(dependency_graph):
     '''
-    Use dependency graph to find the executable vertexes/nodes
+    Use dependency graph to find the executable vertexes/nodes, i.e., nodes in current level
     return:
         executable_node: a list of nodes. If no executable node, return []
     '''

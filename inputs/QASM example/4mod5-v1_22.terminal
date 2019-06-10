@@ -1,0 +1,42 @@
+gen qx5 graph
+Circuit name: 4mod5-v1_22.qasm (requires 16 qubits)
+
+Before mapping: 
+  elementary gates: 21
+  depth: 12
+layer 0:(1 2 0 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 1:(1 2 0 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 2:(1 2 14 3 4 5 6 7 8 9 10 11 12 13 15 0 )
+layer 3:(1 2 14 3 4 5 6 7 8 9 10 11 12 13 15 0 )
+layer 4:(1 2 3 14 4 5 6 7 8 9 10 11 12 13 15 0 )
+layer 5:(1 2 3 14 4 5 6 7 8 9 10 11 12 13 15 0 )
+layer 6:(1 2 3 14 4 5 6 7 8 9 10 11 12 13 15 0 )
+layer 7:(1 2 3 13 4 5 6 7 8 9 10 11 12 14 15 0 )
+layer 8:(1 2 3 13 4 5 6 7 8 9 10 11 12 14 15 0 )
+layer 9:(1 2 4 13 3 5 6 7 8 9 10 11 12 14 15 0 )
+layer 10:(1 2 4 13 3 5 6 7 8 9 10 11 12 14 15 0 )
+layer 11:(1 2 3 13 4 5 6 7 8 9 10 11 12 14 15 0 )
+
+After mapping (no post mapping optimizations are conducted): 
+  elementary gates: 75
+  depth: 48
+
+The mapping required 0.000184 seconds
+
+Initial mapping of the logical qubits (q) to the physical qubits (Q) of the IBM QX5 architecture: 
+  q0 is initially mapped to Q1
+  q1 is initially mapped to Q2
+  q2 is initially mapped to Q0
+  q3 is initially mapped to Q3
+  q4 is initially mapped to Q4
+  q5 is initially mapped to Q5
+  q6 is initially mapped to Q6
+  q7 is initially mapped to Q7
+  q8 is initially mapped to Q8
+  q9 is initially mapped to Q9
+  q10 is initially mapped to Q10
+  q11 is initially mapped to Q11
+  q12 is initially mapped to Q12
+  q13 is initially mapped to Q13
+  q14 is initially mapped to Q14
+  q15 is initially mapped to Q15

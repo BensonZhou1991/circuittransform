@@ -148,6 +148,7 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
     if method == ['IBM QX3']:
         G = GenerateArchitectureGraph(16, ['grid', 8, 2])
         G.remove_edges_from([(1, 9),(4, 5)])
+        if draw_architecture_graph == True: nx.draw(G, with_labels=True)
         return G
 
     if method == ['IBM QX5']:
@@ -158,6 +159,7 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
                   (13,14), (13,4), (15,14), (15,2), (15,0)]
         G.add_nodes_from(vertex)
         G.add_edges_from(edges)
+        if draw_architecture_graph == True: nx.draw(G, with_labels=True)
         return G
 
     if method == ['IBM QX4']:
@@ -166,6 +168,7 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
         edges = [(1,0), (2,0), (2,1), (2,4), (3,4), (3,2)]
         G.add_nodes_from(vertex)
         G.add_edges_from(edges)
+        if draw_architecture_graph == True: nx.draw(G, with_labels=True)
         return G
     
     if method[0] == 'directed grid' or method[0] == 'directed circle':
