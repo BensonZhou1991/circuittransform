@@ -1,0 +1,50 @@
+gen qx5 graph
+Circuit name: 4gt11_82.qasm (requires 16 qubits)
+
+Before mapping: 
+  elementary gates: 27
+  depth: 20
+layer 0:(2 0 1 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 1:(2 0 1 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 2:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 3:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 4:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 5:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 6:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 7:(1 15 3 4 2 5 6 7 8 9 10 11 12 13 14 0 )
+layer 8:(1 15 3 4 2 5 6 7 8 9 10 11 12 13 14 0 )
+layer 9:(0 15 3 4 2 5 6 7 8 9 10 11 12 13 14 1 )
+layer 10:(0 15 3 4 2 5 6 7 8 9 10 11 12 13 14 1 )
+layer 11:(0 15 3 4 2 5 6 7 8 9 10 11 12 13 14 1 )
+layer 12:(0 15 3 4 1 5 6 7 8 9 10 11 12 13 14 2 )
+layer 13:(0 15 3 4 1 5 6 7 8 9 10 11 12 13 14 2 )
+layer 14:(0 15 3 4 2 5 6 7 8 9 10 11 12 13 14 1 )
+layer 15:(0 15 2 4 3 5 6 7 8 9 10 11 12 13 14 1 )
+layer 16:(0 15 2 4 3 5 6 7 8 9 10 11 12 13 14 1 )
+layer 17:(0 15 3 4 2 5 6 7 8 9 10 11 12 13 14 1 )
+layer 18:(0 15 3 4 1 5 6 7 8 9 10 11 12 13 14 2 )
+layer 19:(0 15 3 4 1 5 6 7 8 9 10 11 12 13 14 2 )
+
+After mapping (no post mapping optimizations are conducted): 
+  elementary gates: 133
+  depth: 82
+
+The mapping required 0.000259 seconds
+
+Initial mapping of the logical qubits (q) to the physical qubits (Q) of the IBM QX5 architecture: 
+  q0 is initially mapped to Q2
+  q1 is initially mapped to Q0
+  q2 is initially mapped to Q1
+  q3 is initially mapped to Q3
+  q4 is initially mapped to Q4
+  q5 is initially mapped to Q5
+  q6 is initially mapped to Q6
+  q7 is initially mapped to Q7
+  q8 is initially mapped to Q8
+  q9 is initially mapped to Q9
+  q10 is initially mapped to Q10
+  q11 is initially mapped to Q11
+  q12 is initially mapped to Q12
+  q13 is initially mapped to Q13
+  q14 is initially mapped to Q14
+  q15 is initially mapped to Q15

@@ -28,29 +28,33 @@ repeat_time = 1
 # architecture graph generation control
 #method_AG = ['circle']
 #method_AG = ['grid', 8, 2]
-method_AG = ['IBM QX3']
-method_AG = ['IBM QX4']
+#method_AG = ['IBM QX3']
+#method_AG = ['IBM QX4']
 method_AG = ['IBM QX5']
+#method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 
-# method control
+'''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 1
-use_Astar_lookahead = 1
+use_Astar_search = 0
+use_Astar_lookahead = 0
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
 use_RemotoCNOTandWindowLookAhead0 = 0
-use_RemotoCNOTandWindowLookAhead1 = 0
+use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
+'''QASM input control'''
+QASM_files = ['qft_10.qasm']
+print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
 out_num_add_gates = True
-# draw control
+'''draw control'''
 draw_circle = False
 draw_Steiner_paper = False
 draw_architecture_graph = 0
@@ -59,7 +63,7 @@ draw_logical_circuit = 0
 draw_physical_circuit = False
 draw_physical_circuit_niave = 0
 draw_physical_circuit_HeuristicGreedySearch = 0
-draw_physical_circuit_Astar = 1
+draw_physical_circuit_Astar = 0
 draw_physical_circuit_RemotoCNOTandWindow = False
 draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
 
@@ -127,9 +131,6 @@ for current_edge in edges:
 
 num_file = 0
 
-'''only test specific circuits'''
-QASM_files = ['test3.qasm']
-
 for file in QASM_files:
     num_file += 1
     res = ct.CreateDGfromQASMfile(file)
@@ -172,8 +173,13 @@ for file in QASM_files:
         '''initialize map from logical qubits to physical qubits'''
         '''1-1, 2-2 ...'''
         initial_map = Map(q_log, G)
-        initial_map.RenewMapViaExchangeCod(0, 1)
-        
+        '''for circuit with only 10 qubit, we mannually map last 5 qubits to the down line'''
+# =============================================================================
+#         initial_map.RenewMapViaExchangeCod(9, 15)
+#         initial_map.RenewMapViaExchangeCod(8, 14)
+#         initial_map.RenewMapViaExchangeCod(7, 13)
+#         initial_map.RenewMapViaExchangeCod(6, 12)
+# =============================================================================
         
         '''generate dependency graph'''
         DG = res[1][0]
@@ -192,11 +198,11 @@ for file in QASM_files:
         #print('Astar')
         if use_Astar_search == True:
             res = ct.AStarSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG)
-            if out_num_add_gates == True: cost_Astar = res[1]# + cir_log.size()#0: swap count, 1: additional gates count
+            if out_num_add_gates == True: cost_Astar = res[1] + cir_log.size()#0: swap count, 1: additional gates count
             y_label_Astar.append(cost_Astar)
         if use_Astar_lookahead == True:
             res = ct.AStarSearchLookAhead(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, possible_swap_combination, draw_physical_circuit_Astar, DiG=DiG)
-            if out_num_add_gates == True: cost_Astar_lookahead = res[2]# + cir_log.size()#0: swap count, 2: additional gates count
+            if out_num_add_gates == True: cost_Astar_lookahead = res[2] + cir_log.size()#0: swap count, 2: additional gates count
             cost_Astar_lookahead_state = res[1]
             y_label_Astar_lookahead.append(cost_Astar_lookahead)
             y_label_Astar_lookahead_state.append(cost_Astar_lookahead_state)

@@ -1,0 +1,105 @@
+gen qx5 graph
+Circuit name: sys6-v0_111.qasm (requires 16 qubits)
+
+Before mapping: 
+  elementary gates: 215
+  depth: 75
+layer 0:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 1:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 2:(0 3 1 2 5 6 4 7 8 9 10 11 12 13 14 15 )
+layer 3:(15 3 1 2 5 6 14 7 8 9 10 11 12 4 13 0 )
+layer 4:(15 14 1 2 5 6 3 7 8 9 10 11 12 4 13 0 )
+layer 5:(15 14 1 2 5 6 3 7 8 9 10 11 12 4 13 0 )
+layer 6:(15 14 1 2 5 6 3 7 8 9 10 11 12 4 13 0 )
+layer 7:(15 14 1 3 5 6 2 7 8 9 10 11 12 4 13 0 )
+layer 8:(15 14 1 3 5 6 2 7 8 9 10 11 12 4 13 0 )
+layer 9:(15 14 1 3 5 6 2 7 8 9 10 11 12 4 13 0 )
+layer 10:(15 14 1 3 5 6 2 7 8 9 10 11 12 4 13 0 )
+layer 11:(15 14 1 2 6 7 4 5 8 9 10 11 12 3 13 0 )
+layer 12:(15 14 3 1 6 7 5 4 8 9 10 11 12 2 13 0 )
+layer 13:(15 14 3 1 6 7 4 5 8 9 10 11 12 2 13 0 )
+layer 14:(15 14 3 1 6 7 4 5 8 9 10 11 12 2 13 0 )
+layer 15:(15 14 3 1 6 7 4 5 8 9 10 11 12 2 13 0 )
+layer 16:(15 14 4 1 6 7 3 5 8 9 10 11 12 2 13 0 )
+layer 17:(15 14 4 1 6 7 3 5 8 9 10 11 12 2 13 0 )
+layer 18:(15 14 4 1 6 7 3 5 8 9 10 11 12 2 13 0 )
+layer 19:(15 14 13 4 6 7 2 5 8 9 10 11 12 1 3 0 )
+layer 20:(15 13 14 4 7 8 3 5 6 9 10 11 12 1 2 0 )
+layer 21:(15 13 3 5 7 8 14 4 6 9 10 11 12 1 2 0 )
+layer 22:(15 13 14 5 7 8 3 4 6 9 10 11 12 1 2 0 )
+layer 23:(15 13 14 5 7 8 3 4 6 9 10 11 12 1 2 0 )
+layer 24:(15 13 14 6 7 8 3 4 5 9 10 11 12 1 2 0 )
+layer 25:(15 13 3 6 7 8 14 4 5 9 10 11 12 1 2 0 )
+layer 26:(15 14 3 5 7 8 13 4 6 9 10 11 12 1 2 0 )
+layer 27:(15 14 3 5 7 8 13 4 6 9 10 11 12 1 2 0 )
+layer 28:(15 14 3 4 7 8 13 5 6 9 10 11 12 1 2 0 )
+layer 29:(15 14 3 13 6 9 4 5 7 8 10 11 12 1 2 0 )
+layer 30:(15 14 3 12 6 9 4 5 8 7 10 11 13 1 2 0 )
+layer 31:(15 14 3 13 6 9 4 5 7 8 10 11 12 1 2 0 )
+layer 32:(15 14 3 13 6 9 4 5 7 8 10 11 12 1 2 0 )
+layer 33:(15 14 3 13 6 9 4 5 7 8 10 11 12 1 2 0 )
+layer 34:(15 14 3 13 6 9 5 4 8 7 10 11 12 1 2 0 )
+layer 35:(15 14 3 13 7 9 4 5 8 6 10 11 12 1 2 0 )
+layer 36:(15 14 3 13 7 9 4 5 8 6 10 11 12 1 2 0 )
+layer 37:(15 14 4 13 7 9 3 6 8 5 10 11 12 1 2 0 )
+layer 38:(15 14 13 4 6 9 3 7 8 5 10 11 12 1 2 0 )
+layer 39:(15 14 13 3 6 9 4 8 7 5 10 11 12 1 2 0 )
+layer 40:(15 14 13 4 6 9 3 7 8 5 10 11 12 1 2 0 )
+layer 41:(15 14 13 4 6 9 3 7 8 5 10 11 12 1 2 0 )
+layer 42:(15 14 13 4 6 9 3 7 8 5 10 11 12 1 2 0 )
+layer 43:(15 14 13 3 6 9 4 8 7 5 10 11 12 1 2 0 )
+layer 44:(15 14 4 3 7 9 13 8 6 5 10 11 12 1 2 0 )
+layer 45:(15 14 4 3 7 9 13 8 6 5 10 11 12 1 2 0 )
+layer 46:(15 14 4 3 6 8 11 9 7 5 10 12 13 1 2 0 )
+layer 47:(15 14 4 3 7 8 10 9 6 5 11 12 13 1 2 0 )
+layer 48:(15 14 4 3 9 6 10 8 7 5 11 12 13 1 2 0 )
+layer 49:(15 14 4 3 9 6 10 8 7 5 11 12 13 1 2 0 )
+layer 50:(15 14 4 3 9 6 10 8 7 5 11 12 13 1 2 0 )
+layer 51:(15 14 4 3 8 5 10 9 7 6 11 12 13 1 2 0 )
+layer 52:(15 14 4 3 8 5 10 9 7 6 11 12 13 1 2 0 )
+layer 53:(15 14 4 3 8 5 9 10 6 7 11 12 13 1 2 0 )
+layer 54:(15 14 4 3 8 5 9 10 6 7 11 12 13 1 2 0 )
+layer 55:(15 14 3 7 8 13 9 12 5 6 10 11 4 1 2 0 )
+layer 56:(15 14 3 7 8 13 9 12 5 6 10 11 4 1 2 0 )
+layer 57:(15 14 3 7 8 13 10 12 4 6 9 11 5 1 2 0 )
+layer 58:(15 14 3 7 8 13 10 12 4 6 9 11 5 1 2 0 )
+layer 59:(15 14 3 7 8 13 10 12 4 6 9 11 5 1 2 0 )
+layer 60:(15 14 3 7 9 13 10 5 4 6 8 11 12 1 2 0 )
+layer 61:(15 14 3 7 9 13 10 5 4 6 8 11 12 1 2 0 )
+layer 62:(15 14 3 10 9 4 7 5 13 6 8 11 12 1 2 0 )
+layer 63:(15 14 3 10 9 4 7 5 13 6 8 11 12 1 2 0 )
+layer 64:(15 14 3 10 9 4 7 5 13 6 8 11 12 1 2 0 )
+layer 65:(15 14 3 9 11 6 7 4 13 5 8 10 12 1 2 0 )
+layer 66:(15 14 3 9 11 6 7 4 13 5 8 10 12 1 2 0 )
+layer 67:(15 14 3 9 6 11 7 4 13 5 8 10 12 1 2 0 )
+layer 68:(15 14 3 9 6 11 7 4 13 5 8 10 12 1 2 0 )
+layer 69:(15 14 3 9 6 11 7 4 13 5 8 10 12 1 2 0 )
+layer 70:(15 14 3 9 6 10 7 4 13 5 8 11 12 1 2 0 )
+layer 71:(15 14 3 9 6 10 7 4 13 5 8 11 12 1 2 0 )
+layer 72:(15 14 3 9 7 10 6 4 13 5 8 11 12 1 2 0 )
+layer 73:(15 14 3 9 7 10 6 4 13 5 8 11 12 1 2 0 )
+layer 74:(15 14 3 9 7 10 6 5 13 4 8 11 12 1 2 0 )
+
+After mapping (no post mapping optimizations are conducted): 
+  elementary gates: 940
+  depth: 332
+
+The mapping required 0.09386 seconds
+
+Initial mapping of the logical qubits (q) to the physical qubits (Q) of the IBM QX5 architecture: 
+  q0 is initially mapped to Q0
+  q1 is initially mapped to Q1
+  q2 is initially mapped to Q2
+  q3 is initially mapped to Q3
+  q4 is initially mapped to Q4
+  q5 is initially mapped to Q5
+  q6 is initially mapped to Q6
+  q7 is initially mapped to Q7
+  q8 is initially mapped to Q8
+  q9 is initially mapped to Q9
+  q10 is initially mapped to Q10
+  q11 is initially mapped to Q11
+  q12 is initially mapped to Q12
+  q13 is initially mapped to Q13
+  q14 is initially mapped to Q14
+  q15 is initially mapped to Q15

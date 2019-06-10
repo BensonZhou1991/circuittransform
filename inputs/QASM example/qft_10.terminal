@@ -1,0 +1,93 @@
+gen qx5 graph
+Circuit name: qft_10.qasm (requires 16 qubits)
+
+Before mapping: 
+  elementary gates: 200
+  depth: 63
+layer 0:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 1:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 2:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 3:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 4:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 5:(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 6:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 7:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 8:(1 0 2 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 9:(2 0 1 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 10:(2 0 1 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 11:(2 0 1 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 12:(2 0 1 3 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 13:(3 1 0 2 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 14:(3 1 0 2 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 15:(3 1 0 2 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 16:(3 2 0 1 4 5 6 7 8 9 10 11 12 13 14 15 )
+layer 17:(4 2 0 1 3 5 6 7 8 9 10 11 12 13 14 15 )
+layer 18:(4 2 0 1 3 5 6 7 8 9 10 11 12 13 14 15 )
+layer 19:(4 2 0 1 3 5 6 7 8 9 10 11 12 13 14 15 )
+layer 20:(5 3 1 0 2 4 6 7 8 9 10 11 12 13 14 15 )
+layer 21:(5 3 1 0 2 4 6 7 8 9 10 11 12 13 14 15 )
+layer 22:(5 3 1 0 2 4 6 7 8 9 10 11 12 13 14 15 )
+layer 23:(5 3 2 0 1 4 6 7 8 9 10 11 12 13 14 15 )
+layer 24:(6 4 2 0 1 3 5 7 8 9 10 11 12 13 14 15 )
+layer 25:(6 4 2 0 1 3 5 7 8 9 10 11 12 13 14 15 )
+layer 26:(6 4 2 0 1 3 5 7 8 9 10 11 12 13 14 15 )
+layer 27:(6 5 3 1 0 2 4 7 8 9 10 11 12 13 14 15 )
+layer 28:(6 5 3 1 0 2 4 7 8 9 10 11 12 13 14 15 )
+layer 29:(7 5 3 1 0 2 4 6 8 9 10 11 12 13 14 15 )
+layer 30:(7 5 3 2 0 1 4 6 8 9 10 11 12 13 14 15 )
+layer 31:(7 6 4 2 0 1 3 5 8 9 10 11 12 13 14 15 )
+layer 32:(7 6 4 2 0 1 3 5 8 9 10 11 12 13 14 15 )
+layer 33:(8 6 4 2 0 1 3 5 7 9 10 11 12 13 14 15 )
+layer 34:(8 6 5 3 1 0 2 4 7 9 10 11 12 13 14 15 )
+layer 35:(8 6 5 3 1 0 2 4 7 9 10 11 12 13 14 15 )
+layer 36:(8 7 5 3 1 0 2 4 6 9 10 11 12 13 14 15 )
+layer 37:(8 7 5 3 2 0 1 4 6 10 9 11 12 13 14 15 )
+layer 38:(8 7 6 4 2 0 1 3 5 10 9 11 12 13 14 15 )
+layer 39:(8 7 6 4 2 0 1 3 5 10 9 11 12 13 14 15 )
+layer 40:(8 10 6 4 2 0 1 3 5 7 9 11 12 13 14 15 )
+layer 41:(8 10 6 5 3 1 0 2 4 7 9 11 12 13 14 15 )
+layer 42:(8 10 6 5 3 1 0 2 4 7 9 11 12 13 14 15 )
+layer 43:(8 10 5 6 3 1 0 2 4 7 9 11 12 13 14 15 )
+layer 44:(8 10 5 6 3 2 0 1 4 7 9 11 12 13 14 15 )
+layer 45:(8 10 5 6 4 2 0 1 3 7 9 11 12 13 14 15 )
+layer 46:(8 10 4 5 6 2 0 1 3 7 9 11 12 13 14 15 )
+layer 47:(8 10 4 5 6 2 0 1 3 7 9 11 12 13 14 15 )
+layer 48:(8 10 4 5 6 3 1 0 2 7 9 11 12 13 14 15 )
+layer 49:(8 10 5 6 7 3 1 0 2 4 9 11 12 13 14 15 )
+layer 50:(8 10 5 6 7 3 1 0 2 4 9 11 12 13 14 15 )
+layer 51:(8 10 5 6 7 3 2 0 1 4 9 11 12 13 14 15 )
+layer 52:(8 10 5 6 7 4 2 0 1 3 9 11 12 13 14 15 )
+layer 53:(8 10 5 6 7 4 2 0 1 3 9 11 12 13 14 15 )
+layer 54:(8 10 5 6 7 4 2 0 1 3 9 11 12 13 14 15 )
+layer 55:(8 10 5 6 7 4 3 1 0 2 9 11 12 13 14 15 )
+layer 56:(8 10 5 6 7 4 3 1 0 2 9 11 12 13 14 15 )
+layer 57:(8 10 5 6 7 4 3 1 0 2 9 11 12 13 14 15 )
+layer 58:(8 10 5 6 7 4 3 0 1 2 9 11 12 13 14 15 )
+layer 59:(8 10 5 6 7 4 3 0 1 2 9 11 12 13 14 15 )
+layer 60:(8 10 5 6 7 4 3 0 1 2 9 11 12 13 14 15 )
+layer 61:(8 10 5 6 7 4 3 0 1 2 9 11 12 13 14 15 )
+layer 62:(8 10 5 6 7 4 3 0 1 2 9 11 12 13 14 15 )
+
+After mapping (no post mapping optimizations are conducted): 
+  elementary gates: 637
+  depth: 183
+
+The mapping required 0.005612 seconds
+
+Initial mapping of the logical qubits (q) to the physical qubits (Q) of the IBM QX5 architecture: 
+  q0 is initially mapped to Q0
+  q1 is initially mapped to Q1
+  q2 is initially mapped to Q2
+  q3 is initially mapped to Q3
+  q4 is initially mapped to Q4
+  q5 is initially mapped to Q5
+  q6 is initially mapped to Q6
+  q7 is initially mapped to Q7
+  q8 is initially mapped to Q8
+  q9 is initially mapped to Q9
+  q10 is initially mapped to Q10
+  q11 is initially mapped to Q11
+  q12 is initially mapped to Q12
+  q13 is initially mapped to Q13
+  q14 is initially mapped to Q14
+  q15 is initially mapped to Q15

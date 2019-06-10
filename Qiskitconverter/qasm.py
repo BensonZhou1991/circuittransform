@@ -67,7 +67,7 @@ def DrawCircuitFromQASM(input_file_name):
     
 if __name__ == '__main__':
     '''use ConvertQASM'''
-    ConvertQASM('max46_240.qasm')
+    ConvertQASM('sqrt8_260.qasm')
     
     '''use DrawCircuitFromQASM'''
 # =============================================================================

@@ -19,14 +19,14 @@ import json
 
 '''initialize parameters'''
 '''number of CNOT operations'''
-#list_num_CNOT = [3]
+#list_num_CNOT = [3, 5, 10]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200, 250, 300, 350, 400]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200]
-list_num_CNOT = [3, 5, 10, 20, 30, 50]
+list_num_CNOT = [3, 5, 10, 20, 30]
 # number of logical qubits
-num_qubits = 16
+num_qubits = 12
 # description of architecture graph
-num_vertex = 16
+num_vertex = 12
 # repeat time
 repeat_time = 10
 # architecture graph generation control
@@ -34,8 +34,8 @@ repeat_time = 10
 #method_AG = ['grid', 3, 3]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['directed grid', 3, 4]
+#method_AG = ['IBM QX5']
+method_AG = ['directed grid', 4, 3]
 #method_AG = ['directed circle', 6]
 imoprt_swaps_combination_from_json = 0
 
@@ -43,13 +43,13 @@ imoprt_swaps_combination_from_json = 0
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
 use_Astar_search = 1
-use_Astar_lookahead = 0
+use_Astar_lookahead = 1
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
 use_RemotoCNOTandWindowLookAhead0 = 0
-use_RemotoCNOTandWindowLookAhead1 = 0
+use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
@@ -138,21 +138,21 @@ else:
     shortest_path_G = res[1]
     shortest_length_G = res[0]      
 '''use all possible swaps in parallel'''
-if imoprt_swaps_combination_from_json == True:
-    fileObject = open('inputs\\swaps for architecture graph\\'+method_AG[0]+'.json', 'r')
-    possible_swap_combination = json.load(fileObject)
-    fileObject.close()
-else:
-    if use_Astar_search == True or use_Astar_lookahead == True or use_RemotoCNOTandWindow == True or use_UDecompositionFullConnectivity == True or use_HeuristicGreedySearch == True:
-        possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
+# =============================================================================
+# if imoprt_swaps_combination_from_json == True:
+#     fileObject = open('inputs\\swaps for architecture graph\\'+method_AG[0]+'.json', 'r')
+#     possible_swap_combination = json.load(fileObject)
+#     fileObject.close()
+# else:
+#     if use_Astar_search == True or use_Astar_lookahead == True or use_RemotoCNOTandWindow == True or use_UDecompositionFullConnectivity == True or use_HeuristicGreedySearch == True:
+#         possible_swap_combination = ct.FindAllPossibleSWAPParallel(G)
+# =============================================================================
 
 '''only use single swap'''
-# =============================================================================
-# possible_swap_combination = []
-# edges = list(G.edges()).copy()
-# for current_edge in edges:
-#     possible_swap_combination.append([current_edge]) 
-# =============================================================================
+possible_swap_combination = []
+edges = list(G.edges()).copy()
+for current_edge in edges:
+    possible_swap_combination.append([current_edge]) 
 
 
 for num_CNOT in list_num_CNOT:
