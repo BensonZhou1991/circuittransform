@@ -184,40 +184,135 @@ def FindAllPossibleSWAPParallel(G, availiavle_vertex=None):
         
     return total_swap
 
-def CalRemoteCNOTCostinArchitectureGraph(path, shortest_length_G=None):
+def CalRemoteCNOTCostinArchitectureGraph(path, DiG=None, shortest_length_G=None):
     '''Calculate the number of CNOT in remote CNOT implementation, including the target CNOT operation'''
+    '''if the architecture graph is directed, the result will be added the possible 4 H gates'''
     dis = len(path) - 1
+    if DiG != None: edges = list(DiG.edges())
     if dis == 2:
-        CNOT_cost = 4
+        if DiG == None:
+            CNOT_cost = 4
+        else:
+            CNOT_cost = 4 + CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges)*2*4 + \
+            CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges)*2*4
     else:
         if dis ==3:
-            CNOT_cost = 6
-            
+            if DiG == None:
+                CNOT_cost = 6
+            else:
+                CNOT_cost = 6 + CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges)*2*4 + \
+                CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges)*2*4 + \
+                CheckCNOTNeedConvertDirection(path[2], path[3], path[2:4], edges)*2*4
     return CNOT_cost
 
-def RemoteCNOTinArchitectureGraph(path, cir_phy, q_phy):
+def RemoteCNOTinArchitectureGraph(path, cir_phy, q_phy, DiG=None):
     '''
     implement remote CNOT in physical circuit via path of nodes in architecture graph, i.e., [v_c, ..., v_t]
     '''
     num_CNOT = 0
+    if DiG != None: edges = list(DiG.edges())
     dis = len(path) - 1
     q = q_phy
     v_c = path[0]
     v_t = path[-1]
     if dis == 2:
+        flag_4H_1 = False
+        flag_4H_2 = False
+        if DiG != None:
+            if CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges) == True:
+                flag_4H_1 = True
+                num_CNOT += 2*4
+            if CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges) == True:
+                flag_4H_2 = True
+                num_CNOT += 2*4
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])
         cir_phy.cx(q[v_c], q[path[1]])
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])            
         cir_phy.cx(q[path[1]], q[v_t])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])  
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])        
         cir_phy.cx(q[v_c], q[path[1]])
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])  
         cir_phy.cx(q[path[1]], q[v_t])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])  
+            
         num_CNOT = num_CNOT + 4
     else:
         if dis == 3:
+            flag_4H_1 = False
+            flag_4H_2 = False
+            flag_4H_3 = False
+            if DiG != None:
+                if CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges) == True:
+                    flag_4H_1 = True
+                    num_CNOT += 2*4
+                if CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges) == True:
+                    flag_4H_2 = True
+                    num_CNOT += 2*4    
+                if CheckCNOTNeedConvertDirection(path[2], path[3], path[2:4], edges) == True:
+                    flag_4H_3 = True
+                    num_CNOT += 2*4   
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])
             cir_phy.cx(q[v_c], q[path[1]])
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])               
             cir_phy.cx(q[path[2]], q[v_t])
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])   
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])            
             cir_phy.cx(q[path[1]], q[path[2]])
-            cir_phy.cx(q[v_c], q[path[1]])  
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])   
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])            
+            cir_phy.cx(q[v_c], q[path[1]]) 
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])               
             cir_phy.cx(q[path[1]], q[path[2]])
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])   
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])               
             cir_phy.cx(q[path[2]], q[v_t])
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])               
+            
             num_CNOT = num_CNOT + 6
                    
     return num_CNOT

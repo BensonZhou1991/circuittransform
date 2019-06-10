@@ -218,20 +218,21 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                                 best_node = next_node                       
             
         '''remote CNOT'''
-        if use_remoteCNOT == True and DiG == None:
+        #if use_remoteCNOT == True and DiG == None:
+        if use_remoteCNOT == True:
             '''judge whether remote CNOT is applicable'''
             for current_vertex in executable_vertex_current:
-                DG_next = copy.deepcopy(DG_current)
-                next_map = current_map.Copy()
                 '''calculate distance between two input qubits'''
-                current_operation = DG_next.node[current_vertex]['operation']
+                current_operation = DG_current.node[current_vertex]['operation']
                 q0 = current_operation.involve_qubits[0]
                 q1 = current_operation.involve_qubits[1]
-                v0 = next_map.DomToCod(q0)
-                v1 = next_map.DomToCod(q1)
+                v0 = current_map.DomToCod(q0)
+                v1 = current_map.DomToCod(q1)
                 current_hop = shortest_length_G[v0][v1]
                 '''if a remote CNOT can be done, then execute it'''
-                if current_hop <= min_remoteCNOT_hop:
+                if (current_hop <= min_remoteCNOT_hop) and (current_hop >= 2):
+                    DG_next = copy.deepcopy(DG_current)
+                    next_map = current_map.Copy()
                     #print('current_hop is ', current_hop)
                     current_path = shortest_path_G[v0][v1]
                     # number of additional CNOTs in this remote CNOT operation
@@ -245,18 +246,50 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                     executable_vertex_next = ct.FindExecutableNode(DG_next)
                     num_executed_vertex_next = num_executed_vertex_current + 1
                     '''check whether this window already has appliable vertexes, if has, then execute them'''
+                    '''old version without considering the direction of CNOT gate'''
+# =============================================================================
+#                     temp = True
+#                     while temp == True:
+#                         temp = False
+#                         for vertex in executable_vertex_next:
+#                             if ct.IsVertexInDGOperatiable(vertex, DG_next, G, next_map) == True:
+#                                 if draw == True:
+#                                     ct.ConductOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy)
+#                                     cir_phy_next.barrier()
+#                                 else:
+#                                     DG_next.remove_node(vertex)
+#                                 num_executed_vertex_next += 1
+#                                 temp = True
+#                         if temp == True: executable_vertex_next = ct.FindExecutableNode(DG_next)
+# =============================================================================
+                    '''check whether this window already has appliable vertexes, if has, then execute them'''
+                    '''new version considering the direction of CNOT gate'''
                     temp = True
                     while temp == True:
                         temp = False
-                        for vertex in executable_vertex_next:
+                        for vertex in executable_vertex_next :
                             if ct.IsVertexInDGOperatiable(vertex, DG_next, G, next_map) == True:
-                                if draw == True:
-                                    ct.ConductOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy)
-                                    cir_phy_next.barrier()
+                                '''check whether this CNOT needs 4 H gates to convert direction'''
+                                if DiG != None:
+                                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG_next, next_map, edges_DiG)
+                                    if flag_4H == False:
+                                        '''if no need 4 extra H, then execute it'''
+                                        num_executed_vertex_next += 1
+                                        if draw == True:
+                                            ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
+                                            cir_phy_next.barrier()
+                                        else:
+                                            DG_next.remove_node(vertex)
+                                        temp = True
                                 else:
-                                    DG_next.remove_node(vertex)
-                                num_executed_vertex_next += 1
-                                temp = True
+                                    '''if architecture graph is undirected, execute it'''
+                                    num_executed_vertex_next += 1
+                                    if draw == True:
+                                        ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
+                                        cir_phy_next.barrier()
+                                    else:
+                                        DG_next.remove_node(vertex)                            
+                                    temp = True
                         if temp == True: executable_vertex_next = ct.FindExecutableNode(DG_next)
                     '''calculate cost for the new node'''
                     #print('executable_vertex_next is', executable_vertex_next)
@@ -315,7 +348,7 @@ def FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead):
 
 def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_path_G, depth_lookahead, use_prune, draw=False, DiG=None, level_lookahead=None):
     '''parameter control'''
-    if level_lookahead == None: level_lookahead = [1, 0.8, 0.6, 0.5]
+    if level_lookahead == None: level_lookahead = [1, 0.8, 0.6, 0.4]
     display_complete_state = 1
     debug_mode = False
     '''initialize other parameters'''
