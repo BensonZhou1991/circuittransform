@@ -113,7 +113,7 @@ def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, q_phy=None, cir_phy=None
     conduct CNOT in a vertex in DG along a specific path([control, ..., target]) in architecture graph,
     then, renew physical circuit and mapping
     '''
-    op = vertex['operation']
+    '''untested'''
     add_gates_count = 0
     v_c_pos = 0
     v_t_pos = len(path) - 1
@@ -138,17 +138,16 @@ def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, q_phy=None, cir_phy=None
     else:
         for i in range(num_swaps):
             add_gates_count += 7
-            if flag_head == True:
+            if not (([path[v_c_pos], path[v_c_pos+1]]) in edges_DiG) == True:
                 SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy)
                 v_c_pos += 1
-                flag_4H = CheckCNOTNeedConvertDirection(v_c, v_t, path, edges)
-                flag_head = not flag_head
             else:
                 SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy)
                 v_t_pos -= 1
-                flag_head = not flag_head
+        flag_4H = not (([path[v_c_pos], path[v_c_pos]]) in edges_DiG)
+        add_gates_count += flag_4H * 4
         if cir_phy != None:
-            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
             cir_phy.barrier()
         else:
             DG.remove_node(vertex)        
