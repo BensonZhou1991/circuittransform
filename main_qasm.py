@@ -49,7 +49,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''QASM input control'''
-QASM_files = ['qft_10.qasm']
+QASM_files = ['wim_266.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False

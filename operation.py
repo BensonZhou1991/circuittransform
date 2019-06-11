@@ -100,13 +100,58 @@ def ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_dr
         cir_phy.cx(q_phy_c, q_phy_t)
     DG.remove_node(vertex)
     
-def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy, cir_phy):
+def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy=None, cir_phy=None):
     '''
     Conduct SWAP in physical qubits represented by nodes in architerture graph
     Then, renew physical circuit and mapping
     '''
-    cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
+    if cir_phy != None: cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
     mapping.RenewMapViaExchangeCod(vertex0, vertex1)
+
+def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, q_phy=None, cir_phy=None, edges_DiG=None):
+    '''
+    conduct CNOT in a vertex in DG along a specific path([control, ..., target]) in architecture graph,
+    then, renew physical circuit and mapping
+    '''
+    op = vertex['operation']
+    add_gates_count = 0
+    v_c_pos = 0
+    v_t_pos = len(path) - 1
+    num_swaps = len(path) - 2
+    flag_head = True
+    if edges_DiG == None:
+        for i in range(num_swaps):
+            add_gates_count += 3
+            if flag_head == True:
+                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy)
+                v_c_pos += 1
+                flag_head = not flag_head
+            else:
+                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy)
+                v_t_pos -= 1
+                flag_head = not flag_head
+        if cir_phy != None:
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+            cir_phy.barrier()
+        else:
+            DG.remove_node(vertex)
+    else:
+        for i in range(num_swaps):
+            add_gates_count += 7
+            if flag_head == True:
+                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy)
+                v_c_pos += 1
+                flag_4H = CheckCNOTNeedConvertDirection(v_c, v_t, path, edges)
+                flag_head = not flag_head
+            else:
+                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy)
+                v_t_pos -= 1
+                flag_head = not flag_head
+        if cir_phy != None:
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+            cir_phy.barrier()
+        else:
+            DG.remove_node(vertex)        
     
 def RemoveUnparallelEdge(remain_edge, remove_edge):
     '''

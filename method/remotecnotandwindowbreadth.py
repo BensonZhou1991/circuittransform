@@ -71,6 +71,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
     '''find all possible operation for next step and expand the search tree accordingly'''
     #print(len(leaf_nodes))
     for leaf_node in leaf_nodes:
+        #print('current leaf node is', leaf_node)
         '''get attributes from current leaf node'''
         current_map = search_tree.nodes[leaf_node]['mapping']
         cost_g_current = search_tree.nodes[leaf_node]['cost_g']
@@ -81,6 +82,12 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
         '''add successor nodes to current node'''
         '''SWAP'''
         for swaps in possible_swap_combination:
+            '''judge whether the swap in trivial to avoid unnecessary state'''
+            flag_nontrivial = ct.CheckSWAPInvolved(swaps, executable_vertex_current, DG_current, current_map)
+            if flag_nontrivial == False:
+                #print('trivival swap')
+                continue
+            
             #print(swaps)
             #start = time()
             DG_next = copy.deepcopy(DG_current)
@@ -218,8 +225,8 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                                 best_node = next_node                       
             
         '''remote CNOT'''
-        #if use_remoteCNOT == True and DiG == None:
-        if use_remoteCNOT == True:
+        if use_remoteCNOT == True and DiG == None:
+        #if use_remoteCNOT == True:
             '''judge whether remote CNOT is applicable'''
             for current_vertex in executable_vertex_current:
                 '''calculate distance between two input qubits'''
@@ -361,6 +368,8 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
         IBM_QX_mode = True
     min_remoteCNOT_hop = 3
     max_shortest_length_G = max(shortest_length_G)
+    total_fallback_num = max_shortest_length_G / 2#maximum fall back count 
+    fallback_mode = 1#0:choose the current best gate, 1: current worst gate
     if debug_mode == True: draw = True
     
     '''initialize possible swap'''
@@ -428,8 +437,10 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
         res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         leaf_nodes = res[2]
         finished_nodes.extend(res[1])
-
+    '''initialize fall back module'''
     best_leaf_node = res[0]
+    fallback_count = total_fallback_num
+    pre_num_executed_vertex = num_executed_vertex
     
     while finished_nodes == []:
         next_node = FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead)
@@ -438,6 +449,14 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
             SearchTreeLeafNodesPruning(search_tree, next_node, leaf_nodes, num_pruned_nodes_list)
         res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         best_leaf_node = res[0]
+        '''renew fallback count'''
+        current_num_executed_vertex = search_tree.nodes[best_leaf_node]['num_executed_vertex']
+        if pre_num_executed_vertex == current_num_executed_vertex:
+            fallback_count -= 1
+        else:
+            if pre_num_executed_vertex > current_num_executed_vertex:
+                pre_num_executed_vertex = current_num_executed_vertex
+                fallback_count = total_fallback_num
         if debug_mode == True: print(search_tree.nodes[best_leaf_node]['phy_circuit'].draw())
         if display_complete_state == True: print(len(search_tree.nodes[best_leaf_node]['DG'].nodes()), 'gates remaining')
         finished_nodes = res[1]     
