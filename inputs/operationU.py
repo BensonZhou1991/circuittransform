@@ -101,6 +101,12 @@ class OperationCNOT(OperationU):
         '''             
         cir.cx(q_c, q_t)
         self.conducted = 1
+        
+    def CalSWAPCost(self, mapping, shortest_length_G_with4H):
+        v_c = mapping.LogToPhy(self.control_qubit)
+        v_t = mapping.LogToPhy(self.target_qubit)
+        swap_cost = shortest_length_G_with4H[v_c][v_t] - 1
+        return swap_cost
 
 class OperationSWAP(OperationU):
     '''

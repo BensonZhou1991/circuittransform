@@ -38,13 +38,22 @@ class Map(object):
                 for i in range(num_q, num_v):
                     self.__CodToDom[vertex[i]] = []
         else:
-            # initialize __CodToDom
-            for v in vertex:
-                self.__CodToDom[v] = []
-            keys = list(initial_map.keys())
-            for q in keys:
-                self.__DomToCod[q] = initial_map[q]
-                self.__CodToDom[initial_map[q]] = q
+            if isinstance(initial_map, dict):
+                # initialize __CodToDom
+                for v in vertex:
+                    self.__CodToDom[v] = []
+                keys = list(initial_map.keys())
+                for q in keys:
+                    self.__DomToCod[q] = initial_map[q]
+                    self.__CodToDom[initial_map[q]] = q
+            if isinstance(initial_map, list):
+                # initialize __CodToDom
+                for v in vertex:
+                    self.__CodToDom[v] = []
+                for i in range(len(q_reg)):
+                    q = q_reg[i]
+                    self.__DomToCod[q] = initial_map[i]
+                    self.__CodToDom[initial_map[i]] = q
 
         Map.instances_count = Map.instances_count + 1 
     
@@ -56,6 +65,12 @@ class Map(object):
         return self.__DomToCod[qubit]
     
     def CodToDom(self, vertex):
+        return self.__CodToDom[vertex]
+
+    def LogToPhy(self, qubit):
+        return self.__DomToCod[qubit]
+    
+    def PhyToLog(self, vertex):
         return self.__CodToDom[vertex]
     
     def RenewMapViaExchangeDom(self, q0, q1):

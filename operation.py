@@ -100,15 +100,15 @@ def ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_dr
         cir_phy.cx(q_phy_c, q_phy_t)
     DG.remove_node(vertex)
     
-def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy=None, cir_phy=None):
+def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy=None, cir_phy=None, draw=True):
     '''
     Conduct SWAP in physical qubits represented by nodes in architerture graph
     Then, renew physical circuit and mapping
     '''
-    if cir_phy != None: cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
+    if draw == True: cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
     mapping.RenewMapViaExchangeCod(vertex0, vertex1)
 
-def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, q_phy=None, cir_phy=None, edges_DiG=None):
+def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, draw, q_phy=None, cir_phy=None, edges_DiG=None):
     '''
     conduct CNOT in a vertex in DG along a specific path([control, ..., target]) in architecture graph,
     then, renew physical circuit and mapping
@@ -123,14 +123,14 @@ def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, q_phy=None, cir_phy=None
         for i in range(num_swaps):
             add_gates_count += 3
             if flag_head == True:
-                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy)
+                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy, draw)
                 v_c_pos += 1
                 flag_head = not flag_head
             else:
-                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy)
+                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy, draw)
                 v_t_pos -= 1
                 flag_head = not flag_head
-        if cir_phy != None:
+        if draw == True:
             ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
             cir_phy.barrier()
         else:
@@ -138,19 +138,20 @@ def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, q_phy=None, cir_phy=None
     else:
         for i in range(num_swaps):
             add_gates_count += 7
-            if not (([path[v_c_pos], path[v_c_pos+1]]) in edges_DiG) == True:
-                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy)
+            if not ((path[v_c_pos], path[v_c_pos+1]) in edges_DiG) == True:
+                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy, draw)
                 v_c_pos += 1
             else:
-                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy)
+                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy, draw)
                 v_t_pos -= 1
-        flag_4H = not (([path[v_c_pos], path[v_c_pos]]) in edges_DiG)
+        flag_4H = not ((path[v_c_pos], path[v_t_pos]) in edges_DiG)
         add_gates_count += flag_4H * 4
-        if cir_phy != None:
+        if draw == True:
             ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
             cir_phy.barrier()
         else:
-            DG.remove_node(vertex)        
+            DG.remove_node(vertex)   
+    return add_gates_count
     
 def RemoveUnparallelEdge(remain_edge, remove_edge):
     '''
@@ -410,5 +411,4 @@ def CheckSWAPInvolved(swaps, executable_vertex, DG, mapping):
     for swap in swaps:
         if (not (swap[0] in q_phy)) and (not (swap[1] in q_phy)):
             return False
-    return True
-        
+    return True        

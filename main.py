@@ -136,7 +136,7 @@ if DiG == None:
 else:
     res = ct.ShortestPath(DiG)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]      
+    shortest_length_G = (res[0], res[2])    
 '''use all possible swaps in parallel'''
 # =============================================================================
 # if imoprt_swaps_combination_from_json == True:

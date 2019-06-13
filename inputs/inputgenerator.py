@@ -142,6 +142,7 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
             IBM QX3
             IBM QX4
             IBM QX5
+            IBM QX20
             directed grid
             directed circle
     '''
@@ -157,6 +158,18 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
         edges = [(1,2), (1,0), (2,3), (3,4), (3,14), (5,4), (6,5), (6,11), (6,7),\
                   (7,10), (8,7), (9,8), (9,10), (11,10), (12,5), (12,11), (12,13),\
                   (13,14), (13,4), (15,14), (15,2), (15,0)]
+        G.add_nodes_from(vertex)
+        G.add_edges_from(edges)
+        if draw_architecture_graph == True: nx.draw(G, with_labels=True)
+        return G
+
+    if method == ['IBM QX20']:
+        G = nx.Graph()
+        vertex = list(range(20))
+        edges = [(0,1),(1,2),(2,3),(3,4),(0,5),(1,6),(2,7),(3,8),(4,9),(1,7),(2,6),(3,9),(4,8),\
+                 (5,6),(6,7),(7,8),(8,9),(5,10),(6,11),(7,12),(8,13),(9,14),(5,11),(6,10),(7,13),(8,12),\
+                 (10,11),(11,12),(12,13),(13,14),(10,15),(11,16),(12,17),(13,18),(14,19),(11,17),(12,16),(13,19),(14,18),\
+                 (15,16),(16,17),(17,18),(18,19)]
         G.add_nodes_from(vertex)
         G.add_edges_from(edges)
         if draw_architecture_graph == True: nx.draw(G, with_labels=True)

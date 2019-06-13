@@ -10,7 +10,9 @@ import numpy as np
 
 def ShortestPath(G):
     """
-    output the number of needed swaps + 1 between nodes(control to target) and according paths
+    output:
+        shortest_length_G: the number of needed swaps + 1 between nodes(control to target) and according paths
+        shortest_length_G2: shortest_length_G plus possibile 4H in directed G
     """
     delete_fraction = False
     if nx.is_directed(G) == False:
@@ -67,12 +69,14 @@ def ShortestPath(G):
                     unfinished_nodes.remove(node2)
                     finished_nodes.append(node2)
     
+    shortest_length_G_with4H = shortest_length_G.copy()
+    
     if delete_fraction == False:
         for node1 in G.nodes():
             for node2 in G.nodes():
                 shortest_length_G[node1][node2] = np.floor(shortest_length_G[node1][node2])
                             
-    return shortest_length_G, shortest_path_G
+    return shortest_length_G, shortest_path_G, shortest_length_G_with4H
                                 
                 
         

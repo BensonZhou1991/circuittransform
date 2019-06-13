@@ -27,10 +27,11 @@ num_vertex = 16
 repeat_time = 1
 # architecture graph generation control
 #method_AG = ['circle']
-#method_AG = ['grid', 8, 2]
+#method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
 method_AG = ['IBM QX5']
+#method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 
@@ -49,7 +50,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''QASM input control'''
-QASM_files = ['wim_266.qasm']
+QASM_files = ['sqn_258.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -68,6 +69,7 @@ draw_physical_circuit_RemotoCNOTandWindow = False
 draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
 
 x_label = []
+x_lable_filename = []
 
 y_label_naive = []
 y_label_HeuristicGreedySearch = []
@@ -107,11 +109,11 @@ if draw_architecture_graph == True: nx.draw(G, with_labels=True)
 if DiG == None:
     res = ct.ShortestPath(G)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]
+    shortest_length_G = (res[0], res[2])
 else:
     res = ct.ShortestPath(DiG)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]
+    shortest_length_G = (res[0], res[2])
 
 '''use all possible swaps in parallel'''
 # =============================================================================
@@ -134,6 +136,7 @@ num_file = 0
 for file in QASM_files:
     num_file += 1
     res = ct.CreateDGfromQASMfile(file)
+    x_lable_filename.append(file)
     
     print('Number of circuits is', num_file)
     for repeat in range(repeat_time):
@@ -179,6 +182,10 @@ for file in QASM_files:
 #         initial_map.RenewMapViaExchangeCod(8, 14)
 #         initial_map.RenewMapViaExchangeCod(7, 13)
 #         initial_map.RenewMapViaExchangeCod(6, 12)
+# =============================================================================
+        '''specific initial map through vertex list in AG'''
+# =============================================================================
+#         initial_map = Map(q_log, G, [1,2,3,8,7,6,11,12,13,16,17,18,4,9,14,19])
 # =============================================================================
         
         '''generate dependency graph'''
