@@ -20,9 +20,9 @@ import json
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex = 16
+num_vertex = 20
 # repeat time
 repeat_time = 1
 # architecture graph generation control
@@ -30,11 +30,13 @@ repeat_time = 1
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['IBM QX20']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
-
+'''initial mapping method'''
+initial_mapping_control = 3#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search
+num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -50,7 +52,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''QASM input control'''
-QASM_files = ['sqn_258.qasm']
+QASM_files = ['qft_10.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -165,7 +167,11 @@ for file in QASM_files:
         
         '''generate CNOT operation'''
         total_CNOT = res[1][3]
-        
+ 
+        '''generate dependency graph'''
+        DG = res[1][0]
+        if draw_DG == True: nx.draw(DG, with_labels=True)
+       
         '''generate party map for CNOT circuits'''
         if use_steiner_tree_and_remoteCNOT == 1 or use_UDecompositionFullConnectivity ==1 or use_UDecompositionFullConnectivityPATEL ==1:
             party_map = np.eye(num_vertex)
@@ -175,22 +181,28 @@ for file in QASM_files:
         
         '''initialize map from logical qubits to physical qubits'''
         '''1-1, 2-2 ...'''
-        initial_map = Map(q_log, G)
+        if initial_mapping_control == 0: initial_map = Map(q_log, G)
         '''for circuit with only 10 qubit, we mannually map last 5 qubits to the down line'''
-# =============================================================================
-#         initial_map.RenewMapViaExchangeCod(9, 15)
-#         initial_map.RenewMapViaExchangeCod(8, 14)
-#         initial_map.RenewMapViaExchangeCod(7, 13)
-#         initial_map.RenewMapViaExchangeCod(6, 12)
-# =============================================================================
+        if initial_mapping_control == 2:
+            initial_map = Map(q_log, G)
+            initial_map.RenewMapViaExchangeCod(9, 15)
+            initial_map.RenewMapViaExchangeCod(8, 14)
+            initial_map.RenewMapViaExchangeCod(7, 13)
+            initial_map.RenewMapViaExchangeCod(6, 12)
         '''specific initial map through vertex list in AG'''
 # =============================================================================
 #         initial_map = Map(q_log, G, [1,2,3,8,7,6,11,12,13,16,17,18,4,9,14,19])
 # =============================================================================
-        
-        '''generate dependency graph'''
-        DG = res[1][0]
-        if draw_DG == True: nx.draw(DG, with_labels=True)
+        '''optimized initial mapping'''
+        if initial_mapping_control == 1:
+            map_res = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
+            initial_map = map_res[0]
+            print('initial_map is', initial_map[1])
+        '''annealing search'''
+        if initial_mapping_control == 3:
+            start_map = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
+            map_res = ct.InitialMapSimulatedAnnealing(start_map[1], DG, G, DiG, q_log, shortest_length_G[0], shortest_path_G, num_consider_gates)
+            initial_map = map_res
         
         '''draw logical quantum circuits'''
         if draw_logical_circuit == True: print(cir_log.draw())

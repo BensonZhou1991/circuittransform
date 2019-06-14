@@ -11,16 +11,17 @@ import circuittransform as ct
 import copy
 import networkx as nx
 from networkx import DiGraph, Graph
+from numba import jit
 #from time import time
 
 '''parameter control'''
 use_remoteCNOT = False
 min_remoteCNOT_hop = 2
 use_fallback = True
+fallback_mode = 0#0:choose the current best gate, 1: current worst gate
 display_complete_state = 1
 debug_mode = False
 level_lookahead_default = [1, 0.8, 0.6, 0.4]
-
 
 def CalculateHeuristicCost(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG):
     '''
@@ -62,13 +63,15 @@ def SearchTreeLeafNodesPruning(search_tree, start_node, leaf_nodes, num_pruned_n
     '''
     Given a search tree and leaf nodes, judge whether the new node should be kept
     '''
-    leaf_nodes_copy = copy.copy(leaf_nodes)
+    #print('leaf nodes before purning', leaf_nodes)
+    leaf_nodes_copy = leaf_nodes.copy()
     for node in leaf_nodes_copy:
         flag_prune = SearchTreeNodePruning(search_tree, start_node, node, num_pruned_nodes_list)
         if flag_prune == True:
             search_tree.remove_node(node)
             leaf_nodes.remove(node)
             num_pruned_nodes_list[0] += 1
+    #print('leaf nodes after purning', leaf_nodes)
 
 def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG):
     best_cost_total = None
@@ -101,11 +104,11 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
             
             #print(swaps)
             #start = time()
-            DG_next = copy.deepcopy(DG_current)
+            DG_next = DG_current.copy()
             #elapsed = (time() - start)
             #print("deep copy Time used:", elapsed, 's')
             if draw == True: cir_phy_next = copy.deepcopy(cir_phy_current)
-            executable_vertex_next = copy.copy(executable_vertex_current)
+            executable_vertex_next = executable_vertex_current.copy()
             num_executed_vertex_next = num_executed_vertex_current
             cost_g_next = cost_g_current + len(swaps)  * SWAP_cost
             next_map = current_map.Copy()
@@ -178,7 +181,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                     if flag_4H == False: raise Exception('unexpected operatible CNOT without 4 H gates')
                     if flag_4H == True:
                         '''if need 4 extra H, then execute it and add to the new node'''
-                        DG_next = copy.deepcopy(DG_current)
+                        DG_next = DG_current.copy()
                         next_map = current_map.Copy() 
                         cost_g_next = cost_g_current + flag_4H*4
                         num_executed_vertex_next = num_executed_vertex_current
@@ -249,7 +252,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                 current_hop = shortest_length_G[v0][v1]
                 '''if a remote CNOT can be done, then execute it'''
                 if (current_hop <= min_remoteCNOT_hop) and (current_hop >= 2):
-                    DG_next = copy.deepcopy(DG_current)
+                    DG_next = DG_current.copy()
                     next_map = current_map.Copy()
                     #print('current_hop is ', current_hop)
                     current_path = shortest_path_G[v0][v1]
@@ -365,7 +368,7 @@ def FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead):
     
     #print('number of nodes in search tree after', len(list(search_tree.nodes())))
     return next_node
-    
+
 def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG):
     '''fallback'''    
     leaf_nodes = []
@@ -378,7 +381,7 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
     if draw == True: cir_phy_current = search_tree.nodes[father_node]['phy_circuit']
     executable_vertex_current = ct.FindExecutableNode(DG_current)
 
-    '''fallback method'''
+    '''fallback method: find the vertex in DG to be executed along shoetest path'''
     select_vertex = None
     for current_vertex in executable_vertex_current:
         current_operation = DG_current.nodes[current_vertex]['operation']
@@ -387,14 +390,17 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
             select_gate_cost = current_operation.CalSWAPCost(current_map, shortest_length_G_with4H) * SWAP_cost
         else:
             current_swap_cost = current_operation.CalSWAPCost(current_map, shortest_length_G_with4H) * SWAP_cost
-            if current_swap_cost > select_gate_cost:
+            if fallback_mode == 1 and current_swap_cost > select_gate_cost:
                 select_vertex = current_vertex
                 select_gate_cost = current_swap_cost
+            if fallback_mode == 0 and current_swap_cost < select_gate_cost:
+                select_vertex = current_vertex
+                select_gate_cost = current_swap_cost                
     '''initialize next node'''
     next_map = current_map.Copy()
     cost_g_next = cost_g_current
     num_executed_vertex_next = num_executed_vertex_current
-    DG_next = copy.deepcopy(DG_current)
+    DG_next = DG_current.copy()
     if draw == True:
         cir_phy_next = copy.deepcopy(cir_phy_current)
     else:
@@ -470,6 +476,7 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
     
     return best_node, finished_nodes, leaf_nodes, new_father_node
 
+#@jit
 def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_length_Gs, shortest_path_G, depth_lookahead, use_prune, draw=False, DiG=None, level_lookahead=None):
     if level_lookahead == None: level_lookahead = level_lookahead_default
     '''initialize other parameters'''
@@ -487,7 +494,7 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     shortest_length_G_with4H = shortest_length_Gs[1]
     max_shortest_length_G = max(shortest_length_G)
     total_fallback_num = max_shortest_length_G / 2#maximum fall back count 
-    fallback_mode = 1#0:choose the current best gate, 1: current worst gate
+    finished_nodes = []
     if debug_mode == True: draw = True
     
     '''initialize possible swap'''
@@ -545,30 +552,38 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     search_tree.nodes[0]['num_executed_vertex'] = num_executed_vertex
     search_tree.nodes[0]['DG'] = DG
     if draw == True: search_tree.nodes[0]['phy_circuit'] = cir_phy
+    if len(DG.nodes()) == 0: finished_nodes.append(0)
     leaf_nodes = [0]
     num_pruned_nodes_list = [0]
     
     if display_complete_state == True: print(len(search_tree.nodes[0]['DG'].nodes()), 'gates remaining')
     
     '''expand search tree for the first time'''
-    finished_nodes = []
     for i in range(depth_lookahead+1):
+        if finished_nodes != []: break
         res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         leaf_nodes = res[2]
         finished_nodes.extend(res[1])
-    best_leaf_node = res[0]
+    if finished_nodes == []: best_leaf_node = res[0]
     '''initialize fall back module'''
     if use_fallback == True:
         fallback_count = total_fallback_num
         fallback_vertex = 0
         pre_num_executed_vertex = num_executed_vertex
+        flag_no_leaf_fallback = False
     
     while finished_nodes == []:
         next_node = FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead)
         leaf_nodes = ct.FindAllLeafNodesInDG(search_tree)
         if use_prune == True:
             SearchTreeLeafNodesPruning(search_tree, next_node, leaf_nodes, num_pruned_nodes_list)
-        res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
+            '''check whether fallback is needed'''
+            if len(leaf_nodes) == 0:
+                flag_no_leaf_fallback = True
+            else:
+                res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
+        else:
+            res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         best_leaf_node = res[0]
         '''renew fallback count'''
         if use_fallback == True:
@@ -583,9 +598,12 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
                     fallback_vertex = next_node
                     fallback_count = total_fallback_num
             '''check whether fallback is needed'''
-            if fallback_count < 0:
-                if display_complete_state == True: print('fall back')
+            if fallback_count < 0 or flag_no_leaf_fallback == True:
+                if display_complete_state == True:
+                    if fallback_count < 0: print('fall back')
+                    if flag_no_leaf_fallback == True: print('no leaf fall back')
                 fallback_count = total_fallback_num
+                flag_no_leaf_fallback = False
                 res = FallBack(fallback_vertex, G, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG)
                 best_leaf_node = res[0]
                 next_node = res[3]
