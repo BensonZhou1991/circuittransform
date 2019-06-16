@@ -9,6 +9,7 @@ This module is for functions on operations
 
 import networkx as nx
 import numpy as np
+import circuittransform as ct
 
 def OperationToDependencyGraph(operations):
     '''
@@ -411,4 +412,35 @@ def CheckSWAPInvolved(swaps, executable_vertex, DG, mapping):
     for swap in swaps:
         if (not (swap[0] in q_phy)) and (not (swap[1] in q_phy)):
             return False
-    return True        
+    return True
+
+def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, mapping, draw, DiG, edges_DiG, cir_phy=None, q_phy=None):
+    '''check whether this window already has appliable vertexes, if has, then execute them'''
+    temp = True
+    while temp == True:
+        temp = False
+        for vertex in executable_vertex :
+            if ct.IsVertexInDGOperatiable(vertex, DG, G, mapping) == True:
+                '''check whether this CNOT needs 4 H gates to convert direction'''
+                if DiG != None:
+                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, mapping, edges_DiG)
+                    if flag_4H == False:
+                        '''if no need 4 extra H, then execute it'''
+                        num_executed_vertex += 1
+                        if draw == True:
+                            ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
+                            cir_phy.barrier()
+                        else:
+                            DG.remove_node(vertex)
+                        temp = True
+                else:
+                    '''if architecture graph is undirected, execute it'''
+                    num_executed_vertex += 1
+                    if draw == True:
+                        ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
+                        cir_phy.barrier()
+                    else:
+                        DG.remove_node(vertex)                            
+                    temp = True
+        if temp == True: executable_vertex = ct.FindExecutableNode(DG)
+    return num_executed_vertex

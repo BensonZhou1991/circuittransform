@@ -233,7 +233,7 @@ def InitialMapSimulatedAnnealing(start_map, DG, G, DiG, q_log, shortest_length_G
         added_nodes = ct.FindExecutableNode(DG_copy)
         counted_CNOT_nodes.extend(added_nodes)
         DG_copy.remove_nodes_from(added_nodes)
-
+    print('number of counted gates is', len(counted_CNOT_nodes))
     '''Simulated Annealing'''
     solutionnew = start_map
     num = len(start_map)
@@ -300,5 +300,5 @@ def InitialMapSimulatedAnnealing(start_map, DG, G, DiG, q_log, shortest_length_G
         #print(valuebest)
         result.append(valuebest)
     print('initial_map is', solutionbest)
-    return Map(q_log, G, solutionbest)
+    return Map(q_log, G, solutionbest), solutionbest
         

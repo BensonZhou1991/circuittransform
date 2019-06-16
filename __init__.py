@@ -6,7 +6,7 @@ from circuittransform.inputs import CreateCNOTRandomly, GenerateArchitectureGrap
 from .operation import OperationToDependencyGraph, FindExecutableNode, FindExecutableOperation
 from .operation import ConductOperationInVertex, SWAPInArchitectureGraph, FindAllPossibleSWAPParallel, RemoteCNOTinArchitectureGraph
 from .operation import IsVertexInDGOperatiable, CalRemoteCNOTCostinArchitectureGraph, CheckCNOTNeedConvertDirection, CheckCNOTNeedConvertDirection2
-from .operation import ConductCNOTOperationInVertex, CheckSWAPInvolved, ConductCNOTInDGAlongPath
+from .operation import ConductCNOTOperationInVertex, CheckSWAPInvolved, ConductCNOTInDGAlongPath, ExecuteAllPossibileNodesInDG
 from .map import Map, FindInitialMapping, InitialMapSimulatedAnnealing
 from .cost import OperationCost, HeuristicCostZulehner, HeuristicCostZhou1, HeuristicCostZulehnerLookAhead
 from circuittransform.method import NaiveSearch, AStarSearch, AStarSearchLookAhead, RemoteCNOTandWindow, RemoteCNOTandWindowLookAhead, HeuristicGreedySearch
