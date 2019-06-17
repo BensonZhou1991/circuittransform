@@ -5,13 +5,13 @@ Created on Tue May 14 23:33:23 2019
 @author: zxz58
 """
 
+import circuittransform as ct
 import networkx as nx
 from networkx import DiGraph, Graph
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit import QuantumRegister
 from circuittransform import OperationU, OperationCNOT, OperationSWAP, Map
-import circuittransform as ct
 import matplotlib.pyplot as plt
 import copy
 import json
@@ -20,9 +20,9 @@ import json
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex = 16
+num_vertex = 20
 # repeat time
 repeat_time = 1
 # architecture graph generation control
@@ -30,14 +30,14 @@ repeat_time = 1
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['IBM QX20']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
 initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [4, 10, 15, 12, 11, 5, 13, 3, 14, 2, 8, 6, 1, 9, 0, 7]#only used for initial_mapping_control = 4
+initial_map_list = [6, 11, 7, 16, 12, 17, 10, 2, 5, 13, 15, 1, 9, 14, 4, 3, 8, 18, 0, 19]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -53,7 +53,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''QASM input control'''
-QASM_files = ['rd53_311.qasm']
+QASM_files = ['qft_10.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -198,7 +198,7 @@ for file in QASM_files:
         if initial_mapping_control == 1:
             map_res = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
             initial_map = map_res[0]
-            print('initial_map is', initial_map[1])
+            print('initial_map is', map_res[1])
         '''annealing search'''
         if initial_mapping_control == 3:
             start_map = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])

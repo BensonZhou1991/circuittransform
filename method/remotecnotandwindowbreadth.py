@@ -15,13 +15,17 @@ from numba import jit
 #from time import time
 
 '''parameter control'''
-use_remoteCNOT = False
+use_remoteCNOT = 0
+use_remoteCNOT_fallback = 1
 min_remoteCNOT_hop = 2
 use_fallback = True
 fallback_mode = 0#0:choose the current best gate, 1: current worst gate
 display_complete_state = 1
 debug_mode = False
 level_lookahead_default = [1, 0.8, 0.6, 0.4]
+
+def AddNewNodeToSearchTree():
+    pass
 
 def CalculateHeuristicCost(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG):
     '''
@@ -78,6 +82,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
     flag_4H = 0
     finished_nodes = []
     added_nodes = []
+    cir_phy_next = None
     if DiG != None:
         edges_DiG = list(DiG.edges)
     else:
@@ -119,33 +124,9 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                 next_map.RenewMapViaExchangeCod(v0, v1)
                 if draw == True: cir_phy_next.swap(q_phy[v0], q_phy[v1])
             '''check whether this window already has appliable vertexes, if has, then execute them'''
-            temp = True
-            while temp == True:
-                temp = False
-                for vertex in executable_vertex_next :
-                    if ct.IsVertexInDGOperatiable(vertex, DG_next, G, next_map) == True:
-                        '''check whether this CNOT needs 4 H gates to convert direction'''
-                        if DiG != None:
-                            flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG_next, next_map, edges_DiG)
-                            if flag_4H == False:
-                                '''if no need 4 extra H, then execute it'''
-                                num_executed_vertex_next += 1
-                                if draw == True:
-                                    ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
-                                    cir_phy_next.barrier()
-                                else:
-                                    DG_next.remove_node(vertex)
-                                temp = True
-                        else:
-                            '''if architecture graph is undirected, execute it'''
-                            num_executed_vertex_next += 1
-                            if draw == True:
-                                ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
-                                cir_phy_next.barrier()
-                            else:
-                                DG_next.remove_node(vertex)                            
-                            temp = True
-                if temp == True: executable_vertex_next = ct.FindExecutableNode(DG_next)
+            res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+            num_executed_vertex_next = res[0]
+            executable_vertex_next = res[1]
             '''calculate cost for the new node'''
             #print('executable_vertex_next is', executable_vertex_next)
             cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
@@ -194,23 +175,9 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                             DG_next.remove_node(vertex)
                         executable_vertex_next = ct.FindExecutableNode(DG_next)
                         '''check whether this window already has appliable vertexes, if has, then execute them'''
-                        temp = True
-                        while temp == True:
-                            temp = False
-                            for vertex2 in executable_vertex_next :
-                                if ct.IsVertexInDGOperatiable(vertex2, DG_next, G, next_map) == True:
-                                    '''check whether this CNOT needs 4 H gates to convert direction'''
-                                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex2, DG_next, next_map, edges_DiG)
-                                    if flag_4H == False:
-                                        '''if no need 4 extra H, then execute it'''
-                                        if draw == True:
-                                            ct.ConductCNOTOperationInVertex(DG_next, vertex2, next_map, cir_phy_next, q_phy, flag_4H)
-                                            cir_phy_next.barrier()
-                                        else:
-                                            DG_next.remove_node(vertex2)                                       
-                                        num_executed_vertex_next += 1
-                                        temp = True
-                            if temp == True: executable_vertex_next = ct.FindExecutableNode(DG_next)
+                        res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+                        num_executed_vertex_next = res[0]
+                        executable_vertex_next = res[1]
                         '''calculate cost for the new node'''
                         #print('executable_vertex_next is', executable_vertex_next)
                         cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
@@ -257,11 +224,11 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                     #print('current_hop is ', current_hop)
                     current_path = shortest_path_G[v0][v1]
                     # number of additional CNOTs in this remote CNOT operation
-                    cost_CNOT_remoteCNOT = ct.CalRemoteCNOTCostinArchitectureGraph(current_path) - 1 #这里减1是因为要去除本身的CNOT
+                    cost_CNOT_remoteCNOT = ct.CalRemoteCNOTCostinArchitectureGraph(current_path, DiG) - 1 #这里减1是因为要去除本身的CNOT
                     cost_g_next = cost_g_current + cost_CNOT_remoteCNOT
                     if draw == True:
                         cir_phy_next = copy.deepcopy(cir_phy_current)
-                        ct.RemoteCNOTinArchitectureGraph(current_path, cir_phy_next, q_phy)
+                        ct.RemoteCNOTinArchitectureGraph(current_path, cir_phy_next, q_phy, DiG)
                         cir_phy_next.barrier()
                     DG_next.remove_node(current_vertex)
                     executable_vertex_next = ct.FindExecutableNode(DG_next)
@@ -285,37 +252,15 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
 # =============================================================================
                     '''check whether this window already has appliable vertexes, if has, then execute them'''
                     '''new version considering the direction of CNOT gate'''
-                    temp = True
-                    while temp == True:
-                        temp = False
-                        for vertex in executable_vertex_next :
-                            if ct.IsVertexInDGOperatiable(vertex, DG_next, G, next_map) == True:
-                                '''check whether this CNOT needs 4 H gates to convert direction'''
-                                if DiG != None:
-                                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG_next, next_map, edges_DiG)
-                                    if flag_4H == False:
-                                        '''if no need 4 extra H, then execute it'''
-                                        num_executed_vertex_next += 1
-                                        if draw == True:
-                                            ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
-                                            cir_phy_next.barrier()
-                                        else:
-                                            DG_next.remove_node(vertex)
-                                        temp = True
-                                else:
-                                    '''if architecture graph is undirected, execute it'''
-                                    num_executed_vertex_next += 1
-                                    if draw == True:
-                                        ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
-                                        cir_phy_next.barrier()
-                                    else:
-                                        DG_next.remove_node(vertex)                            
-                                    temp = True
-                        if temp == True: executable_vertex_next = ct.FindExecutableNode(DG_next)
+                    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+                    num_executed_vertex_next = res[0]
+                    executable_vertex_next = res[1]
                     '''calculate cost for the new node'''
-                    #cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
-                    cost_h_next = search_tree.nodes[next_node]['cost_h'].copy()
-                    cost_h_next[0] = cost_h_next[0] - ct.OperationCost(DG_current.nodes[vertex]['operation'], next_map, G, shortest_length_G, edges_DiG, shortest_path_G)
+                    cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
+# =============================================================================
+#                     cost_h_next = search_tree.nodes[leaf_node]['cost_h'].copy()
+#                     cost_h_next[0] = cost_h_next[0] - ct.OperationCost(current_operation, next_map, G, shortest_length_G, edges_DiG, shortest_path_G)
+# =============================================================================
                     cost_total_next = CalculateTotalCost(cost_h_next, cost_g_next)
                     '''generate next node'''
                     next_node = next_node_list[0]
@@ -408,40 +353,42 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
     '''execute selected operation'''
     select_operation = DG_current.nodes[select_vertex]['operation']
     v_c = current_map.LogToPhy(select_operation.control_qubit)
-    v_t = current_map.LogToPhy(select_operation.target_qubit)
+    v_t = current_map.LogToPhy(select_operation.target_qubit)  
     select_path = shortest_path_G[v_c][v_t]
-    add_gates_count = ct.ConductCNOTInDGAlongPath(DG_next, select_vertex, select_path, next_map, draw, q_phy, cir_phy_next, edges_DiG)
-    num_executed_vertex_next += 1
-    executable_vertex_next = ct.FindExecutableNode(DG_next)
-    cost_g_next += add_gates_count
+    if  (use_remoteCNOT_fallback == True) and (shortest_length_G[v_c][v_t] <= min_remoteCNOT_hop) and (shortest_length_G[v_c][v_t] >= 2):
+        '''remote CNOT'''
+        #print('current_hop is ', current_hop)
+        # number of additional CNOTs in this remote CNOT operation
+        cost_CNOT_remoteCNOT = ct.CalRemoteCNOTCostinArchitectureGraph(select_path, DiG) - 1 #这里减1是因为要去除本身的CNOT
+        print('number of added gates for fallback is', cost_CNOT_remoteCNOT)
+        #if cost_CNOT_remoteCNOT <= ct.OperationCost(current_operation, next_map, G, shortest_length_G, edges_DiG, shortest_path_G)
+        cost_g_next = cost_g_current + cost_CNOT_remoteCNOT
+        if draw == True:
+            cir_phy_next = copy.deepcopy(cir_phy_current)
+            ct.RemoteCNOTinArchitectureGraph(select_path, cir_phy_next, q_phy, DiG)
+            cir_phy_next.barrier()
+        DG_next.remove_node(current_vertex)
+        executable_vertex_next = ct.FindExecutableNode(DG_next)
+        num_executed_vertex_next = num_executed_vertex_current + 1 
+# =============================================================================
+#         else:
+#             '''swap along the shortest path'''  
+#             add_gates_count = ct.ConductCNOTInDGAlongPath(DG_next, select_vertex, select_path, next_map, draw, q_phy, cir_phy_next, edges_DiG)
+#             num_executed_vertex_next += 1
+#             executable_vertex_next = ct.FindExecutableNode(DG_next)
+#             cost_g_next += add_gates_count            
+# =============================================================================
+    else:
+        '''swap along the shortest path'''  
+        add_gates_count = ct.ConductCNOTInDGAlongPath(DG_next, select_vertex, select_path, next_map, draw, q_phy, cir_phy_next, edges_DiG)
+        print('number of added gates for fallback is', add_gates_count)
+        num_executed_vertex_next += 1
+        executable_vertex_next = ct.FindExecutableNode(DG_next)
+        cost_g_next += add_gates_count
     '''check whether this window already has appliable vertexes, if has, then execute them'''
-    temp = True
-    while temp == True:
-        temp = False
-        for vertex in executable_vertex_next :
-            if ct.IsVertexInDGOperatiable(vertex, DG_next, G, next_map) == True:
-                '''check whether this CNOT needs 4 H gates to convert direction'''
-                if DiG != None:
-                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG_next, next_map, edges_DiG)
-                    if flag_4H == False:
-                        '''if no need 4 extra H, then execute it'''
-                        num_executed_vertex_next += 1
-                        if draw == True:
-                            ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
-                            cir_phy_next.barrier()
-                        else:
-                            DG_next.remove_node(vertex)
-                        temp = True
-                else:
-                    '''if architecture graph is undirected, execute it'''
-                    num_executed_vertex_next += 1
-                    if draw == True:
-                        ct.ConductCNOTOperationInVertex(DG_next, vertex, next_map, cir_phy_next, q_phy, flag_4H)
-                        cir_phy_next.barrier()
-                    else:
-                        DG_next.remove_node(vertex)                            
-                    temp = True
-        if temp == True: executable_vertex_next = ct.FindExecutableNode(DG_next)    
+    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+    num_executed_vertex_next = res[0]
+    executable_vertex_next = res[1]  
     '''calculate h cost'''
     cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
     cost_total_next = CalculateTotalCost(cost_h_next, cost_g_next)
@@ -629,9 +576,9 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     '''draw physical circuit'''
     if draw == True:
         best_cir_phy = search_tree.nodes[best_finish_node]['phy_circuit']
-        print(best_cir_phy.draw())
+        #print(best_cir_phy.draw())
         fig = (best_cir_phy.draw(scale=0.7, filename=None, style=None, output='mpl', interactive=False, line_length=None, plot_barriers=True, reverse_bits=False))
-        fig.savefig('Circuit_RemoteCNOTandWindowLookAhead.eps', format='eps', dpi=1000)
+        fig.savefig('Circuit_RemoteCNOTandWindowLookAhead.pdf', format='pdf', papertype='a4')
     '''number of traversed states'''
     num_total_state = next_node_list[0] - 1
     num_pruned_nodes = num_pruned_nodes_list[0]

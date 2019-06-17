@@ -40,7 +40,7 @@ def DrawCircuitFromQASM(input_file_name):
     draw quantum circuit from QASM file, treat all single-qubit gate as H, support only
     single-qubit and CNOT gate
     '''
-    QASM_location = 'C:/ProgramData/Anaconda3/Lib/site-packages/circuittransform/inputs/QASM example/Zulehner/'    
+    QASM_location = 'C:/ProgramData/Anaconda3/Lib/site-packages/circuittransform/inputs/QASM example/'    
     QASM_file = open(QASM_location + input_file_name, 'r')
     iter_f = iter(QASM_file)
     QASM = ''
@@ -67,9 +67,38 @@ def DrawCircuitFromQASM(input_file_name):
     
 if __name__ == '__main__':
     '''use ConvertQASM'''
-    ConvertQASM('sqrt8_260.qasm')
+    file_names = ('4mod5-v1_22.qasm',
+    'mod5mils_65.qasm',
+    'alu-v0_27.qasm',
+    'decod24-v2_43.qasm',
+    '4gt13_92.qasm',
+    'ising_model_10.qasm',
+    'ising_model_13.qasm',
+    'ising_model_16.qasm',
+    'qft_10.qasm',
+    'qft_16.qasm',
+    'rd84_142.qasm',
+    'adr4_197.qasm',
+    'radd_250.qasm',
+    'z4_268.qasm',
+    'sym6_145.qasm',
+    'misex1_241.qasm',
+    'rd73_252.qasm',
+    'cycle10_2_110.qasm',
+    'square_root_7.qasm',
+    'sqn_258.qasm',
+    'rd84_253.qasm',
+    'co14_215.qasm',
+    'sym9_193.qasm',
+    '9symml_195.qasm',
+    )
+    #map(ConvertQASM, file_names)
+    for file_name in file_names:
+        ConvertQASM(file_name)
     
     '''use DrawCircuitFromQASM'''
 # =============================================================================
-#     DrawCircuitFromQASM('max46.qasm')
+#     DrawCircuitFromQASM
 # =============================================================================
+
+
