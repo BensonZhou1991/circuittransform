@@ -9,6 +9,7 @@ This module is for functions on operations
 
 import networkx as nx
 import numpy as np
+import circuittransform as ct
 
 def OperationToDependencyGraph(operations):
     '''
@@ -31,19 +32,29 @@ def OperationToDependencyGraph(operations):
     
     return DG
 
-def FindExecutableNode(dependency_graph):
+def FindExecutableNode(dependency_graph, executable_vertex=None, removed_vertexes=None):
     '''
     Use dependency graph to find the executable vertexes/nodes, i.e., nodes in current level
     return:
-        executable_node: a list of nodes. If no executable node, return []
+        executable_nodes: a list of nodes. If no executable node, return []
     '''
     DG = dependency_graph
-    degree = DG.in_degree
-    executable_node = []
-    for i in degree:
-        if i[1] == 0:
-            executable_node.append(i[0])
-    return executable_node
+    if executable_vertex == None:
+        degree = DG.in_degree
+        executable_nodes = []
+        for i in degree:
+            if i[1] == 0:
+                executable_nodes.append(i[0])
+    else:
+        executable_nodes = executable_vertex
+        for removed_vertex in removed_vertexes:
+            if not removed_vertex in executable_vertex: raise Exception('removed node is not executable')
+            nodes = DG.successors(removed_vertex)
+            executable_nodes.remove(removed_vertex)
+            DG.remove_node(removed_vertex)
+            for node in nodes:
+                if DG.in_degree[node] == 0: executable_nodes.append(node)
+    return executable_nodes
     
 def FindExecutableOperation(dependency_graph, executable_node = None):
     '''
@@ -100,13 +111,58 @@ def ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_dr
         cir_phy.cx(q_phy_c, q_phy_t)
     DG.remove_node(vertex)
     
-def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy, cir_phy):
+def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy=None, cir_phy=None, draw=True):
     '''
     Conduct SWAP in physical qubits represented by nodes in architerture graph
     Then, renew physical circuit and mapping
     '''
-    cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
+    if draw == True: cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
     mapping.RenewMapViaExchangeCod(vertex0, vertex1)
+
+def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, draw, q_phy=None, cir_phy=None, edges_DiG=None):
+    '''
+    conduct CNOT in a vertex in DG along a specific path([control, ..., target]) in architecture graph,
+    then, renew physical circuit and mapping
+    '''
+    '''untested'''
+    add_gates_count = 0
+    v_c_pos = 0
+    v_t_pos = len(path) - 1
+    num_swaps = len(path) - 2
+    flag_head = True
+    if edges_DiG == None:
+        for i in range(num_swaps):
+            add_gates_count += 3
+            if flag_head == True:
+                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy, draw)
+                v_c_pos += 1
+                flag_head = not flag_head
+            else:
+                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy, draw)
+                v_t_pos -= 1
+                flag_head = not flag_head
+        if draw == True:
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+            cir_phy.barrier()
+        else:
+            DG.remove_node(vertex)
+    else:
+        for i in range(num_swaps):
+            add_gates_count += 7
+            if not ((path[v_c_pos], path[v_c_pos+1]) in edges_DiG) == True:
+                SWAPInArchitectureGraph(path[v_c_pos], path[v_c_pos+1], mapping, q_phy, cir_phy, draw)
+                v_c_pos += 1
+            else:
+                SWAPInArchitectureGraph(path[v_t_pos], path[v_t_pos-1], mapping, q_phy, cir_phy, draw)
+                v_t_pos -= 1
+        flag_4H = not ((path[v_c_pos], path[v_t_pos]) in edges_DiG)
+        add_gates_count += flag_4H * 4
+        if draw == True:
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
+            cir_phy.barrier()
+        else:
+            DG.remove_node(vertex)   
+    return add_gates_count
     
 def RemoveUnparallelEdge(remain_edge, remove_edge):
     '''
@@ -184,40 +240,135 @@ def FindAllPossibleSWAPParallel(G, availiavle_vertex=None):
         
     return total_swap
 
-def CalRemoteCNOTCostinArchitectureGraph(path, shortest_length_G=None):
+def CalRemoteCNOTCostinArchitectureGraph(path, DiG=None, shortest_length_G=None):
     '''Calculate the number of CNOT in remote CNOT implementation, including the target CNOT operation'''
+    '''if the architecture graph is directed, the result will be added the possible 4 H gates'''
     dis = len(path) - 1
+    if DiG != None: edges = list(DiG.edges())
     if dis == 2:
-        CNOT_cost = 4
+        if DiG == None:
+            CNOT_cost = 4
+        else:
+            CNOT_cost = 4 + CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges)*2*4 + \
+            CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges)*2*4
     else:
         if dis ==3:
-            CNOT_cost = 6
-            
+            if DiG == None:
+                CNOT_cost = 6
+            else:
+                CNOT_cost = 6 + CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges)*2*4 + \
+                CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges)*2*4 + \
+                CheckCNOTNeedConvertDirection(path[2], path[3], path[2:4], edges)*2*4
     return CNOT_cost
 
-def RemoteCNOTinArchitectureGraph(path, cir_phy, q_phy):
+def RemoteCNOTinArchitectureGraph(path, cir_phy, q_phy, DiG=None):
     '''
     implement remote CNOT in physical circuit via path of nodes in architecture graph, i.e., [v_c, ..., v_t]
     '''
     num_CNOT = 0
+    if DiG != None: edges = list(DiG.edges())
     dis = len(path) - 1
     q = q_phy
     v_c = path[0]
     v_t = path[-1]
     if dis == 2:
+        flag_4H_1 = False
+        flag_4H_2 = False
+        if DiG != None:
+            if CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges) == True:
+                flag_4H_1 = True
+                num_CNOT += 2*4
+            if CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges) == True:
+                flag_4H_2 = True
+                num_CNOT += 2*4
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])
         cir_phy.cx(q[v_c], q[path[1]])
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])            
         cir_phy.cx(q[path[1]], q[v_t])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])  
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])        
         cir_phy.cx(q[v_c], q[path[1]])
+        if flag_4H_1 == True:
+            cir_phy.h(q[path[0]])
+            cir_phy.h(q[path[1]])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])  
         cir_phy.cx(q[path[1]], q[v_t])
+        if flag_4H_2 == True:
+            cir_phy.h(q[path[1]])
+            cir_phy.h(q[path[2]])  
+            
         num_CNOT = num_CNOT + 4
     else:
         if dis == 3:
+            flag_4H_1 = False
+            flag_4H_2 = False
+            flag_4H_3 = False
+            if DiG != None:
+                if CheckCNOTNeedConvertDirection(path[0], path[1], path[0:2], edges) == True:
+                    flag_4H_1 = True
+                    num_CNOT += 2*4
+                if CheckCNOTNeedConvertDirection(path[1], path[2], path[1:3], edges) == True:
+                    flag_4H_2 = True
+                    num_CNOT += 2*4    
+                if CheckCNOTNeedConvertDirection(path[2], path[3], path[2:4], edges) == True:
+                    flag_4H_3 = True
+                    num_CNOT += 2*4   
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])
             cir_phy.cx(q[v_c], q[path[1]])
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])               
             cir_phy.cx(q[path[2]], q[v_t])
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])   
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])            
             cir_phy.cx(q[path[1]], q[path[2]])
-            cir_phy.cx(q[v_c], q[path[1]])  
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])   
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])            
+            cir_phy.cx(q[v_c], q[path[1]]) 
+            if flag_4H_1 == True:
+                cir_phy.h(q[path[0]])
+                cir_phy.h(q[path[1]])
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])               
             cir_phy.cx(q[path[1]], q[path[2]])
+            if flag_4H_2 == True:
+                cir_phy.h(q[path[1]])
+                cir_phy.h(q[path[2]])   
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])               
             cir_phy.cx(q[path[2]], q[v_t])
+            if flag_4H_3 == True:
+                cir_phy.h(q[path[2]])
+                cir_phy.h(q[path[3]])               
+            
             num_CNOT = num_CNOT + 6
                    
     return num_CNOT
@@ -272,4 +423,39 @@ def CheckSWAPInvolved(swaps, executable_vertex, DG, mapping):
         if (not (swap[0] in q_phy)) and (not (swap[1] in q_phy)):
             return False
     return True
-        
+
+def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, mapping, draw, DiG, edges_DiG, cir_phy=None, q_phy=None):
+    '''check whether this window already has appliable vertexes, if has, then execute them'''
+    temp = True
+    while temp == True:
+        temp = False
+        removed_nodes = []
+        for vertex in executable_vertex :
+            if ct.IsVertexInDGOperatiable(vertex, DG, G, mapping) == True:
+                '''check whether this CNOT needs 4 H gates to convert direction'''
+                if DiG != None:
+                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, mapping, edges_DiG)
+                    if flag_4H == False:
+                        '''if no need 4 extra H, then execute it'''
+                        num_executed_vertex += 1
+                        if draw == True:
+                            ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
+                            cir_phy.barrier()
+                        else:
+                            #DG.remove_node(vertex)
+                            removed_nodes.append(vertex)
+                        temp = True
+                else:
+                    '''if architecture graph is undirected, execute it'''
+                    num_executed_vertex += 1
+                    if draw == True:
+                        ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+                        cir_phy.barrier()
+                    else:
+                        #DG.remove_node(vertex)
+                        removed_nodes.append(vertex)                           
+                    temp = True
+        if temp == True:
+            if draw == True: executable_vertex = ct.FindExecutableNode(DG)
+            if draw == False: executable_vertex = FindExecutableNode(DG, executable_vertex, removed_nodes)
+    return num_executed_vertex, executable_vertex

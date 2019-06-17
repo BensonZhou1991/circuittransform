@@ -11,9 +11,9 @@ import networkx as nx
 import circuittransform as ct
 import copy
 
-def OperationCost(dom, mapping, G = None, shortest_length = None):
+def OperationCost(dom, mapping, G = None, shortest_length = None, edges_DiG=None, shortest_path_G=None):
     '''
-    calculate the cost of input operation with its corresponding map in an unidrected architecture graph
+    calculate the cost(number of swaps) of input operation with its corresponding map in an unidrected architecture graph
     via the length of shortest path between 2 input qubits
     input:
         dom: an U operation or a list of its corresponding qubits or vertexes in architecture graph
@@ -36,10 +36,13 @@ def OperationCost(dom, mapping, G = None, shortest_length = None):
             v1 = dom[1]
     
     if shortest_length != None:
-        cost = shortest_length[v0][v1]
+        cost = shortest_length[v0][v1] - 1
     else:
-        cost = nx.shortest_path_length(G, source=v0, target=v1, weight=None, method='dijkstra')
+        cost = nx.shortest_path_length(G, source=v0, target=v1, weight=None, method='dijkstra') - 1
     
+    if edges_DiG != None:
+        flag_4H = ct.CheckCNOTNeedConvertDirection(v0, v1, shortest_path_G[v0][v1], edges_DiG)
+        cost += flag_4H * 4/7 #we only count the number of SWAP gates
     return cost
 
 def HeuristicCostZulehner(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G=None, DiG=None):

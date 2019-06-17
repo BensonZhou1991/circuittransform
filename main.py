@@ -22,7 +22,7 @@ import json
 #list_num_CNOT = [3, 5, 10]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200, 250, 300, 350, 400]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200]
-list_num_CNOT = [3, 5, 10, 20, 30]
+list_num_CNOT = [50]
 # number of logical qubits
 num_qubits = 12
 # description of architecture graph
@@ -136,7 +136,7 @@ if DiG == None:
 else:
     res = ct.ShortestPath(DiG)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]      
+    shortest_length_G = (res[0], res[2])    
 '''use all possible swaps in parallel'''
 # =============================================================================
 # if imoprt_swaps_combination_from_json == True:

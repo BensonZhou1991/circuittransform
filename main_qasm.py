@@ -5,13 +5,13 @@ Created on Tue May 14 23:33:23 2019
 @author: zxz58
 """
 
+import circuittransform as ct
 import networkx as nx
 from networkx import DiGraph, Graph
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit import QuantumRegister
 from circuittransform import OperationU, OperationCNOT, OperationSWAP, Map
-import circuittransform as ct
 import matplotlib.pyplot as plt
 import copy
 import json
@@ -20,20 +20,24 @@ import json
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex = 16
+num_vertex = 20
 # repeat time
 repeat_time = 1
 # architecture graph generation control
 #method_AG = ['circle']
-#method_AG = ['grid', 8, 2]
+#method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
-
+'''initial mapping method'''
+initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
+num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
+initial_map_list = [6, 11, 7, 16, 12, 17, 10, 2, 5, 13, 15, 1, 9, 14, 4, 3, 8, 18, 0, 19]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -68,6 +72,7 @@ draw_physical_circuit_RemotoCNOTandWindow = False
 draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
 
 x_label = []
+x_lable_filename = []
 
 y_label_naive = []
 y_label_HeuristicGreedySearch = []
@@ -107,11 +112,11 @@ if draw_architecture_graph == True: nx.draw(G, with_labels=True)
 if DiG == None:
     res = ct.ShortestPath(G)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]
+    shortest_length_G = (res[0], res[2])
 else:
     res = ct.ShortestPath(DiG)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]
+    shortest_length_G = (res[0], res[2])
 
 '''use all possible swaps in parallel'''
 # =============================================================================
@@ -134,6 +139,7 @@ num_file = 0
 for file in QASM_files:
     num_file += 1
     res = ct.CreateDGfromQASMfile(file)
+    x_lable_filename.append(file)
     
     print('Number of circuits is', num_file)
     for repeat in range(repeat_time):
@@ -162,7 +168,11 @@ for file in QASM_files:
         
         '''generate CNOT operation'''
         total_CNOT = res[1][3]
-        
+ 
+        '''generate dependency graph'''
+        DG = res[1][0]
+        if draw_DG == True: nx.draw(DG, with_labels=True)
+       
         '''generate party map for CNOT circuits'''
         if use_steiner_tree_and_remoteCNOT == 1 or use_UDecompositionFullConnectivity ==1 or use_UDecompositionFullConnectivityPATEL ==1:
             party_map = np.eye(num_vertex)
@@ -172,18 +182,31 @@ for file in QASM_files:
         
         '''initialize map from logical qubits to physical qubits'''
         '''1-1, 2-2 ...'''
-        initial_map = Map(q_log, G)
+        if initial_mapping_control == 0: initial_map = Map(q_log, G)
         '''for circuit with only 10 qubit, we mannually map last 5 qubits to the down line'''
+        if initial_mapping_control == 2:
+            initial_map = Map(q_log, G)
+            initial_map.RenewMapViaExchangeCod(9, 15)
+            initial_map.RenewMapViaExchangeCod(8, 14)
+            initial_map.RenewMapViaExchangeCod(7, 13)
+            initial_map.RenewMapViaExchangeCod(6, 12)
+        '''specific initial map through vertex list in AG'''
 # =============================================================================
-#         initial_map.RenewMapViaExchangeCod(9, 15)
-#         initial_map.RenewMapViaExchangeCod(8, 14)
-#         initial_map.RenewMapViaExchangeCod(7, 13)
-#         initial_map.RenewMapViaExchangeCod(6, 12)
+#         initial_map = Map(q_log, G, [1,2,3,8,7,6,11,12,13,16,17,18,4,9,14,19])
 # =============================================================================
-        
-        '''generate dependency graph'''
-        DG = res[1][0]
-        if draw_DG == True: nx.draw(DG, with_labels=True)
+        '''optimized initial mapping'''
+        if initial_mapping_control == 1:
+            map_res = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
+            initial_map = map_res[0]
+            print('initial_map is', map_res[1])
+        '''annealing search'''
+        if initial_mapping_control == 3:
+            start_map = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
+            map_res = ct.InitialMapSimulatedAnnealing(start_map[1], DG, G, DiG, q_log, shortest_length_G[0], shortest_path_G, num_consider_gates)
+            initial_map = map_res[0]
+            initial_map_list = map_res[1]
+        if initial_mapping_control == 4:
+            initial_map = Map(q_log, G, initial_map_list)
         
         '''draw logical quantum circuits'''
         if draw_logical_circuit == True: print(cir_log.draw())
