@@ -429,7 +429,7 @@ def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, 
     temp = True
     while temp == True:
         temp = False
-        removed_nodes = []
+        #removed_nodes = []
         for vertex in executable_vertex :
             if ct.IsVertexInDGOperatiable(vertex, DG, G, mapping) == True:
                 '''check whether this CNOT needs 4 H gates to convert direction'''
@@ -442,8 +442,8 @@ def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, 
                             ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
                             cir_phy.barrier()
                         else:
-                            #DG.remove_node(vertex)
-                            removed_nodes.append(vertex)
+                            DG.remove_node(vertex)
+                            #removed_nodes.append(vertex)
                         temp = True
                 else:
                     '''if architecture graph is undirected, execute it'''
@@ -452,10 +452,10 @@ def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, 
                         ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
                         cir_phy.barrier()
                     else:
-                        #DG.remove_node(vertex)
-                        removed_nodes.append(vertex)                           
+                        DG.remove_node(vertex)
+                        #removed_nodes.append(vertex)                           
                     temp = True
         if temp == True:
             if draw == True: executable_vertex = ct.FindExecutableNode(DG)
-            if draw == False: executable_vertex = FindExecutableNode(DG, executable_vertex, removed_nodes)
+            if draw == False: executable_vertex = FindExecutableNode(DG)
     return num_executed_vertex, executable_vertex
