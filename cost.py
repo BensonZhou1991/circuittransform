@@ -144,7 +144,7 @@ def HeuristicCostZulehnerLookAhead(current_map, DG, executable_vertex, shortest_
     
     return sum_num_swap, current_level_num_swap, finished
 
-def HeuristicCostZhou1(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG=None):
+def HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG=None):
     '''
     Calculate heuristic cost for remaining gates and return best path
     this cost is based on the minimial distance in architecture graph between two input qubits of each operations
@@ -157,16 +157,18 @@ def HeuristicCostZhou1(current_map, DG, executable_vertex, shortest_length_G, sh
     best_executable_vertex = None
     best_path = None
     if DiG != None: edges = list(DiG.edges)
-    DG_copy = copy.deepcopy(DG)
+    #DG_copy = copy.deepcopy(DG)
+    executable_vertex_copy = executable_vertex.copy()
+    executed_vertex_copy = executed_vertex.copy()
     for current_lookahead_level in range(len(level_lookahead)):
         if current_lookahead_level == 0:
             '''current level'''
-            current_executable_vertex = executable_vertex
+            current_executable_vertex = executable_vertex_copy
             weight = 1
         else:
             '''lookahead level'''
-            DG_copy.remove_nodes_from(executable_vertex)
-            current_executable_vertex = ct.FindExecutableNode(DG_copy)
+            #DG_copy.remove_nodes_from(executable_vertex)
+            current_executable_vertex = ct.FindExecutableNode(DG, executed_vertex_copy, current_executable_vertex, current_executable_vertex.copy())
             weight = level_lookahead[current_lookahead_level - 1]
             
         for v_DG in current_executable_vertex:

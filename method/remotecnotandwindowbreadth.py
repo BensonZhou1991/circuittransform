@@ -24,16 +24,23 @@ display_complete_state = 1
 debug_mode = False
 level_lookahead_default = [1, 0.8, 0.6, 0.4]
 
-def AddNewNodeToSearchTree():
-    pass
-
-def CalculateHeuristicCost(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG):
+def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next):
+    '''generate next node'''
+    search_tree.add_node(next_node)
+    search_tree.nodes[next_node]['mapping'] = next_map
+    search_tree.nodes[next_node]['cost_g'] = cost_g_next
+    search_tree.nodes[next_node]['cost_h'] = cost_h_next
+    search_tree.nodes[next_node]['cost_total'] = cost_total_next
+    search_tree.nodes[next_node]['executed_vertex'] = executed_vertex_next
+    search_tree.nodes[next_node]['executable_vertex'] = executable_vertex_next
+    
+def CalculateHeuristicCost(current_map, DG, executable_vertex, executed_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG):
     '''
     cost_h1: sum_num_gate for lookahead level with weights
     cost_h2: lookahead for all remaining gates
     '''
-    num_remaining_vertex = len(DG.nodes())
-    cost_h_total = ct.HeuristicCostZhou1(current_map, DG, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG)
+    num_remaining_vertex = len(DG.nodes()) - len(executed_vertex)
+    cost_h_total = ct.HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG)
     cost_h1 = cost_h_total[1] * SWAP_cost + cost_h_total[5]*0.00001
     cost_h2 = SWAP_cost * num_remaining_vertex * (max_shortest_length_G - 1) * level_lookahead[-1]
     #cost_h2 = 0#only for test, remember to delete it
@@ -54,7 +61,7 @@ def SearchTreeNodePruning(search_tree, start_node, new_node, num_pruned_nodes_li
         return False
     if search_tree.nodes[start_node]['cost_h'][1] > search_tree.nodes[new_node]['cost_h'][1]:
         return False
-    if search_tree.nodes[start_node]['num_executed_vertex'] < search_tree.nodes[new_node]['num_executed_vertex']:
+    if len(search_tree.nodes[start_node]['executed_vertex']) < len(search_tree.nodes[new_node]['executed_vertex']):
         return False
     if cost_h_total_start[0] > cost_h_total_new[0]:
         return False    
@@ -77,12 +84,13 @@ def SearchTreeLeafNodesPruning(search_tree, start_node, leaf_nodes, num_pruned_n
             num_pruned_nodes_list[0] += 1
     #print('leaf nodes after purning', leaf_nodes)
 
-def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG):
+def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG):
     best_cost_total = None
     flag_4H = 0
     finished_nodes = []
     added_nodes = []
     cir_phy_next = None
+    num_all_vertex = len(DG.nodes())
     if DiG != None:
         edges_DiG = list(DiG.edges)
     else:
@@ -94,27 +102,25 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
         '''get attributes from current leaf node'''
         current_map = search_tree.nodes[leaf_node]['mapping']
         cost_g_current = search_tree.nodes[leaf_node]['cost_g']
-        num_executed_vertex_current = search_tree.nodes[leaf_node]['num_executed_vertex']
-        DG_current = search_tree.nodes[leaf_node]['DG']
+        executed_vertex_current = search_tree.nodes[leaf_node]['executed_vertex']
+        executable_vertex_current = search_tree.nodes[leaf_node]['executable_vertex']
         if draw == True: cir_phy_current = search_tree.nodes[leaf_node]['phy_circuit']
-        executable_vertex_current = ct.FindExecutableNode(DG_current)
         '''add successor nodes to current node'''
         '''SWAP'''
         for swaps in possible_swap_combination:
             '''judge whether the swap in trivial to avoid unnecessary state'''
-            flag_nontrivial = ct.CheckSWAPInvolved(swaps, executable_vertex_current, DG_current, current_map)
+            flag_nontrivial = ct.CheckSWAPInvolved(swaps, executable_vertex_current, DG, current_map)
             if flag_nontrivial == False:
                 #print('trivival swap')
                 continue
             
             #print(swaps)
             #start = time()
-            DG_next = DG_current.copy()
             #elapsed = (time() - start)
             #print("deep copy Time used:", elapsed, 's')
             if draw == True: cir_phy_next = copy.deepcopy(cir_phy_current)
             executable_vertex_next = executable_vertex_current.copy()
-            num_executed_vertex_next = num_executed_vertex_current
+            executed_vertex_next = executed_vertex_current.copy()
             cost_g_next = cost_g_current + len(swaps)  * SWAP_cost
             next_map = current_map.Copy()
             for current_swap in swaps:
@@ -124,28 +130,23 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                 next_map.RenewMapViaExchangeCod(v0, v1)
                 if draw == True: cir_phy_next.swap(q_phy[v0], q_phy[v1])
             '''check whether this window already has appliable vertexes, if has, then execute them'''
-            res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
-            num_executed_vertex_next = res[0]
+            res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, executed_vertex_next, G, DG, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+            executed_vertex_next = res[0]
             executable_vertex_next = res[1]
             '''calculate cost for the new node'''
             #print('executable_vertex_next is', executable_vertex_next)
-            cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
+            cost_h_next = CalculateHeuristicCost(next_map, DG, executable_vertex_next, executed_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
             cost_total_next = CalculateTotalCost(cost_h_next, cost_g_next)
             '''generate next node'''
             next_node = next_node_list[0]
             next_node_list[0] = next_node_list[0] + 1
             added_nodes.append(next_node)
-            search_tree.add_node(next_node)
-            search_tree.add_edge(leaf_node, next_node)           
-            search_tree.nodes[next_node]['mapping'] = next_map
-            search_tree.nodes[next_node]['cost_g'] = cost_g_next
-            search_tree.nodes[next_node]['cost_h'] = cost_h_next
-            search_tree.nodes[next_node]['num_executed_vertex'] = num_executed_vertex_next
-            search_tree.nodes[next_node]['DG'] = DG_next
+            AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
+            search_tree.add_edge(leaf_node, next_node)
             if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
-            search_tree.nodes[next_node]['cost_total'] = cost_total_next
             '''renew best expanded node in search tree'''
-            if len(DG_next.nodes()) == 0: finished_nodes.append(next_node)
+            num_remaining_vertex_next = num_all_vertex - len(executed_vertex_next)
+            if num_remaining_vertex_next == 0: finished_nodes.append(next_node)
             if best_cost_total == None:
                 best_cost_total = cost_total_next
                 best_node = next_node
@@ -156,47 +157,39 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
         '''execute possible CNOT needing 4 extra 4 H'''
         if DiG != None:
             for vertex in executable_vertex_current:
-                if ct.IsVertexInDGOperatiable(vertex, DG_current, G, next_map) == True:
+                if ct.IsVertexInDGOperatiable(vertex, DG, G, next_map) == True:
                     '''check whether this CNOT needs 4 H gates to convert direction'''
-                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG_current, current_map, edges_DiG)
+                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, current_map, edges_DiG)
                     if flag_4H == False: raise Exception('unexpected operatible CNOT without 4 H gates')
                     if flag_4H == True:
                         '''if need 4 extra H, then execute it and add to the new node'''
-                        DG_next = DG_current.copy()
                         next_map = current_map.Copy() 
                         cost_g_next = cost_g_current + flag_4H*4
-                        num_executed_vertex_next = num_executed_vertex_current
-                        num_executed_vertex_next += 1
+                        executed_vertex_next = executed_vertex_current.copy()
                         if draw == True:
                             cir_phy_next = copy.deepcopy(cir_phy_current)
-                            ct.ConductCNOTOperationInVertex(DG_next, vertex, current_map, cir_phy_next, q_phy, flag_4H)
+                            ct.ConductCNOTOperationInVertex(DG, vertex, current_map, cir_phy_next, q_phy, reverse_drection=flag_4H, remove_node=False)
                             cir_phy_next.barrier()
-                        else:
-                            DG_next.remove_node(vertex)
-                        executable_vertex_next = ct.FindExecutableNode(DG_next)
+                        executable_vertex_next = executable_vertex_current.copy()
+                        executable_vertex_next = ct.FindExecutableNode(DG, executed_vertex_next, executable_vertex_next, [vertex])
                         '''check whether this window already has appliable vertexes, if has, then execute them'''
-                        res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
-                        num_executed_vertex_next = res[0]
+                        res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, executed_vertex_next, G, DG, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+                        executed_vertex_next = res[0]
                         executable_vertex_next = res[1]
                         '''calculate cost for the new node'''
                         #print('executable_vertex_next is', executable_vertex_next)
-                        cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
+                        cost_h_next = CalculateHeuristicCost(next_map, DG, executable_vertex_next, executed_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
                         cost_total_next = CalculateTotalCost(cost_h_next, cost_g_next)
                         '''generate next node'''
                         next_node = next_node_list[0]
                         next_node_list[0] = next_node_list[0] + 1
                         added_nodes.append(next_node)
-                        search_tree.add_node(next_node)
-                        search_tree.add_edge(leaf_node, next_node)           
-                        search_tree.nodes[next_node]['mapping'] = next_map
-                        search_tree.nodes[next_node]['cost_g'] = cost_g_next
-                        search_tree.nodes[next_node]['cost_h'] = cost_h_next
-                        search_tree.nodes[next_node]['num_executed_vertex'] = num_executed_vertex_next
-                        search_tree.nodes[next_node]['DG'] = DG_next
+                        AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
+                        search_tree.add_edge(leaf_node, next_node) 
                         if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
-                        search_tree.nodes[next_node]['cost_total'] = cost_total_next
                         '''renew best expanded node in search tree'''
-                        if len(DG_next.nodes()) == 0: finished_nodes.append(next_node)
+                        num_remaining_vertex_next = num_all_vertex - len(executed_vertex_next)
+                        if num_remaining_vertex_next == 0: finished_nodes.append(next_node)
                         if best_cost_total == None:
                             best_cost_total = cost_total_next
                             best_node = next_node
@@ -211,7 +204,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
             '''judge whether remote CNOT is applicable'''
             for current_vertex in executable_vertex_current:
                 '''calculate distance between two input qubits'''
-                current_operation = DG_current.node[current_vertex]['operation']
+                current_operation = DG.node[current_vertex]['operation']
                 q0 = current_operation.involve_qubits[0]
                 q1 = current_operation.involve_qubits[1]
                 v0 = current_map.DomToCod(q0)
@@ -219,8 +212,9 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                 current_hop = shortest_length_G[v0][v1]
                 '''if a remote CNOT can be done, then execute it'''
                 if (current_hop <= min_remoteCNOT_hop) and (current_hop >= 2):
-                    DG_next = DG_current.copy()
                     next_map = current_map.Copy()
+                    executable_vertex_next = executable_vertex_current.copy()
+                    executed_vertex_next = executed_vertex_current.copy()
                     #print('current_hop is ', current_hop)
                     current_path = shortest_path_G[v0][v1]
                     # number of additional CNOTs in this remote CNOT operation
@@ -230,9 +224,7 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                         cir_phy_next = copy.deepcopy(cir_phy_current)
                         ct.RemoteCNOTinArchitectureGraph(current_path, cir_phy_next, q_phy, DiG)
                         cir_phy_next.barrier()
-                    DG_next.remove_node(current_vertex)
-                    executable_vertex_next = ct.FindExecutableNode(DG_next)
-                    num_executed_vertex_next = num_executed_vertex_current + 1
+                    executable_vertex_next = ct.FindExecutableNode(DG, executed_vertex_next, executable_vertex_next, [current_vertex])
                     '''check whether this window already has appliable vertexes, if has, then execute them'''
                     '''old version without considering the direction of CNOT gate'''
 # =============================================================================
@@ -252,11 +244,11 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
 # =============================================================================
                     '''check whether this window already has appliable vertexes, if has, then execute them'''
                     '''new version considering the direction of CNOT gate'''
-                    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
-                    num_executed_vertex_next = res[0]
+                    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, executed_vertex_next, G, DG, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+                    executed_vertex_next = res[0]
                     executable_vertex_next = res[1]
                     '''calculate cost for the new node'''
-                    cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
+                    cost_h_next = CalculateHeuristicCost(next_map, DG, executable_vertex_next, executed_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
 # =============================================================================
 #                     cost_h_next = search_tree.nodes[leaf_node]['cost_h'].copy()
 #                     cost_h_next[0] = cost_h_next[0] - ct.OperationCost(current_operation, next_map, G, shortest_length_G, edges_DiG, shortest_path_G)
@@ -266,17 +258,12 @@ def ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination,
                     next_node = next_node_list[0]
                     next_node_list[0] = next_node_list[0] + 1
                     added_nodes.append(next_node)
-                    search_tree.add_node(next_node)
+                    AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
                     search_tree.add_edge(leaf_node, next_node)
-                    search_tree.nodes[next_node]['mapping'] = next_map
-                    search_tree.nodes[next_node]['cost_g'] = cost_g_next
-                    search_tree.nodes[next_node]['cost_h'] = cost_h_next
-                    search_tree.nodes[next_node]['num_executed_vertex'] = num_executed_vertex_next
-                    search_tree.nodes[next_node]['DG'] = DG_next
                     if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
-                    search_tree.nodes[next_node]['cost_total'] = cost_total_next
                     '''renew best expanded node in search tree'''
-                    if len(DG_next.nodes()) == 0: finished_nodes.append(next_node)
+                    num_remaining_vertex_next = num_all_vertex - len(executed_vertex_next)
+                    if num_remaining_vertex_next == 0: finished_nodes.append(next_node)
                     if best_cost_total == None:
                         best_cost_total = cost_total_next
                         best_node = next_node
@@ -314,22 +301,20 @@ def FindNextNodeAndRenewTree(search_tree, best_leaf_node, depth_lookahead):
     #print('number of nodes in search tree after', len(list(search_tree.nodes())))
     return next_node
 
-def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG):
+def FallBack(father_node, G, DG, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG):
     '''fallback'''    
     leaf_nodes = []
     '''get attributes from current leaf node'''
     current_map = search_tree.nodes[father_node]['mapping']
     cost_g_current = search_tree.nodes[father_node]['cost_g']
-    num_executed_vertex_current = search_tree.nodes[father_node]['num_executed_vertex']
-    DG_current = search_tree.nodes[father_node]['DG']
+    executed_vertex_current = search_tree.nodes[father_node]['executed_vertex']
+    executable_vertex_current = search_tree.nodes[father_node]['executable_vertex']
     #print('remaining gates before', len(DG_current.nodes()))
     if draw == True: cir_phy_current = search_tree.nodes[father_node]['phy_circuit']
-    executable_vertex_current = ct.FindExecutableNode(DG_current)
-
     '''fallback method: find the vertex in DG to be executed along shoetest path'''
     select_vertex = None
     for current_vertex in executable_vertex_current:
-        current_operation = DG_current.nodes[current_vertex]['operation']
+        current_operation = DG.nodes[current_vertex]['operation']
         if select_vertex == None:
             select_vertex = current_vertex
             select_gate_cost = current_operation.CalSWAPCost(current_map, shortest_length_G_with4H) * SWAP_cost
@@ -343,15 +328,16 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
                 select_gate_cost = current_swap_cost                
     '''initialize next node'''
     next_map = current_map.Copy()
+    executable_vertex_next = executable_vertex_current.copy()
+    executed_vertex_next = executed_vertex_current.copy()
     cost_g_next = cost_g_current
-    num_executed_vertex_next = num_executed_vertex_current
-    DG_next = DG_current.copy()
+
     if draw == True:
         cir_phy_next = copy.deepcopy(cir_phy_current)
     else:
         cir_phy_next = None
     '''execute selected operation'''
-    select_operation = DG_current.nodes[select_vertex]['operation']
+    select_operation = DG.nodes[select_vertex]['operation']
     v_c = current_map.LogToPhy(select_operation.control_qubit)
     v_t = current_map.LogToPhy(select_operation.target_qubit)  
     select_path = shortest_path_G[v_c][v_t]
@@ -367,9 +353,7 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
             cir_phy_next = copy.deepcopy(cir_phy_current)
             ct.RemoteCNOTinArchitectureGraph(select_path, cir_phy_next, q_phy, DiG)
             cir_phy_next.barrier()
-        DG_next.remove_node(current_vertex)
-        executable_vertex_next = ct.FindExecutableNode(DG_next)
-        num_executed_vertex_next = num_executed_vertex_current + 1 
+        executable_vertex_next = ct.FindExecutableNode(DG, executed_vertex_next, executable_vertex_next, [select_vertex])
 # =============================================================================
 #         else:
 #             '''swap along the shortest path'''  
@@ -380,33 +364,26 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
 # =============================================================================
     else:
         '''swap along the shortest path'''  
-        add_gates_count = ct.ConductCNOTInDGAlongPath(DG_next, select_vertex, select_path, next_map, draw, q_phy, cir_phy_next, edges_DiG)
+        add_gates_count = ct.ConductCNOTInDGAlongPath(DG, select_vertex, select_path, next_map, draw, False, q_phy, cir_phy_next, edges_DiG)
         print('number of added gates for fallback is', add_gates_count)
-        num_executed_vertex_next += 1
-        executable_vertex_next = ct.FindExecutableNode(DG_next)
+        executable_vertex_next = ct.FindExecutableNode(DG, executed_vertex_next, executable_vertex_next, [select_vertex])
         cost_g_next += add_gates_count
     '''check whether this window already has appliable vertexes, if has, then execute them'''
-    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, num_executed_vertex_next, G, DG_next, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
-    num_executed_vertex_next = res[0]
+    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex_next, executed_vertex_next, G, DG, next_map, draw, DiG, edges_DiG, cir_phy_next, q_phy)
+    executed_vertex_next = res[0]
     executable_vertex_next = res[1]  
     '''calculate h cost'''
-    cost_h_next = CalculateHeuristicCost(next_map, DG_next, executable_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
+    cost_h_next = CalculateHeuristicCost(next_map, DG, executable_vertex_next, executed_vertex_next, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
     cost_total_next = CalculateTotalCost(cost_h_next, cost_g_next)
     '''generate next node'''
     next_node = next_node_list[0]
     new_father_node = next_node
     next_node_list[0] = next_node_list[0] + 1
     leaf_nodes.append(next_node)
-    search_tree.add_node(next_node)
+    AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
     search_tree.add_edge(father_node, next_node)           
-    search_tree.nodes[next_node]['mapping'] = next_map
-    search_tree.nodes[next_node]['cost_g'] = cost_g_next
-    search_tree.nodes[next_node]['cost_h'] = cost_h_next
-    search_tree.nodes[next_node]['num_executed_vertex'] = num_executed_vertex_next
     #print('remaining gates after', len(DG_next.nodes()))
-    search_tree.nodes[next_node]['DG'] = DG_next
     if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
-    search_tree.nodes[next_node]['cost_total'] = cost_total_next
     
     '''delete residula nodes in search tree'''
     delete_nodes = list(search_tree.nodes())
@@ -416,7 +393,7 @@ def FallBack(father_node, G, search_tree, next_node_list, shortest_path_G, short
     '''expand search tree for the first time'''
     finished_nodes = []
     for i in range(depth_lookahead+1):
-        res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
+        res = ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         leaf_nodes = res[2]
         finished_nodes.extend(res[1])
     best_node = res[0]
@@ -429,12 +406,10 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     '''initialize other parameters'''
     #use_prune = False
     SWAP_cost = 3
-    IBM_QX_mode = False
     flag_4H = 0
     if DiG != None:
         edges_DiG = list(DiG.edges)
         SWAP_cost = 7
-        IBM_QX_mode = True
     else:
         edges_DiG = None
     shortest_length_G = shortest_length_Gs[0]
@@ -452,63 +427,41 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
         
     '''check whether DG already has appliable vertexes, if has, then execute them'''
     cost_g_initial = 0#this is the count for number of added gates
-    num_executed_vertex = 0
+    num_all_vertex = len(DG.nodes())
+    executed_vertex = []
     executable_vertex = ct.FindExecutableNode(DG)
-    temp = True
     if display_complete_state == True:
         print('RemoteCNOTandWindowLookAhead start')
         print('level_lookahead is', level_lookahead)
         print('fall back count is', total_fallback_num)
-    while temp == True:
-        temp = False
-        for vertex in executable_vertex:
-            if ct.IsVertexInDGOperatiable(vertex, DG, G, initial_map) == True:
-                #DG.remove_node(vertex)
-                '''check whether this CNOT needs 4 H gates to convert direction'''
-                if DiG != None:
-                    flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, initial_map, edges_DiG)
-                    if flag_4H == False:
-                        '''conduct the operation'''
-                        if draw == True:
-                            ct.ConductCNOTOperationInVertex(DG, vertex, initial_map, cir_phy, q_phy, flag_4H)
-                            cir_phy.barrier()
-                        else:
-                            DG.remove_node(vertex)
-                        num_executed_vertex += 1
-                        temp = True                        
-                else:
-                    '''conduct the operation'''
-                    if draw == True:
-                        ct.ConductCNOTOperationInVertex(DG, vertex, initial_map, cir_phy, q_phy, flag_4H)
-                        cir_phy.barrier()
-                    else:
-                        DG.remove_node(vertex)
-                    num_executed_vertex += 1
-                    temp = True
-        if temp == True: executable_vertex = ct.FindExecutableNode(DG)
+    res = ct.ExecuteAllPossibileNodesInDG(executable_vertex, executed_vertex, G, DG, initial_map, draw, DiG, edges_DiG, cir_phy, q_phy)
+    executed_vertex = res[0]
+    executable_vertex = res[1]
     
     '''initialize search tree'''
     search_tree = nx.DiGraph()
-    search_tree.add_node(0)
     next_node_list = [1]
-    cost_h_initial = CalculateHeuristicCost(initial_map, DG, executable_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
+    cost_h_initial = CalculateHeuristicCost(initial_map, DG, executable_vertex, executed_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG)
     cost_total_initial = CalculateTotalCost(cost_h_initial, 0)
-    search_tree.nodes[0]['mapping'] = initial_map
-    search_tree.nodes[0]['cost_g'] = cost_g_initial#this is the count for number of added gates
-    search_tree.nodes[0]['cost_h'] = cost_total_initial
-    search_tree.nodes[0]['num_executed_vertex'] = num_executed_vertex
-    search_tree.nodes[0]['DG'] = DG
+    AddNewNodeToSearchTree(0, search_tree, initial_map, cost_g_initial, cost_h_initial, cost_total_initial, executed_vertex, executable_vertex)
+    '''old version for adding nodes'''
+# =============================================================================
+#     search_tree.nodes[0]['mapping'] = initial_map
+#     search_tree.nodes[0]['cost_g'] = cost_g_initial#this is the count for number of added gates
+#     search_tree.nodes[0]['cost_h'] = cost_total_initial
+#     search_tree.nodes[0]['num_executed_vertex'] = num_executed_vertex
+# =============================================================================
     if draw == True: search_tree.nodes[0]['phy_circuit'] = cir_phy
-    if len(DG.nodes()) == 0: finished_nodes.append(0)
+    if len(executed_vertex) == num_all_vertex: finished_nodes.append(0)
     leaf_nodes = [0]
     num_pruned_nodes_list = [0]
     
-    if display_complete_state == True: print(len(search_tree.nodes[0]['DG'].nodes()), 'gates remaining')
+    if display_complete_state == True: print(num_all_vertex - len(search_tree.nodes[0]['executed_vertex']), 'gates remaining')
     
     '''expand search tree for the first time'''
     for i in range(depth_lookahead+1):
         if finished_nodes != []: break
-        res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
+        res = ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         leaf_nodes = res[2]
         finished_nodes.extend(res[1])
     if finished_nodes == []: best_leaf_node = res[0]
@@ -516,7 +469,7 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     if use_fallback == True:
         fallback_count = total_fallback_num
         fallback_vertex = 0
-        pre_num_executed_vertex = num_executed_vertex
+        pre_num_executed_vertex = len(executed_vertex)
         flag_no_leaf_fallback = False
     
     while finished_nodes == []:
@@ -528,14 +481,14 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
             if len(leaf_nodes) == 0:
                 flag_no_leaf_fallback = True
             else:
-                res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
+                res = ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         else:
-            res = ExpandTreeForNextStep(G, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
+            res = ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combination, SWAP_cost, shortest_length_G, shortest_path_G, next_node_list, max_shortest_length_G, min_remoteCNOT_hop, level_lookahead, q_phy, draw, DiG)
         best_leaf_node = res[0]
         '''renew fallback count'''
         if use_fallback == True:
             #print(fallback_count)
-            current_num_executed_vertex = search_tree.nodes[next_node]['num_executed_vertex']
+            current_num_executed_vertex = len(search_tree.nodes[next_node]['executed_vertex'])
             #print(current_num_executed_vertex)
             if pre_num_executed_vertex == current_num_executed_vertex:
                 fallback_count -= 1
@@ -551,13 +504,13 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
                     if flag_no_leaf_fallback == True: print('no leaf fall back')
                 fallback_count = total_fallback_num
                 flag_no_leaf_fallback = False
-                res = FallBack(fallback_vertex, G, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG)
+                res = FallBack(fallback_vertex, G, DG, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG)
                 best_leaf_node = res[0]
                 next_node = res[3]
                 
         
         if debug_mode == True: print(search_tree.nodes[best_leaf_node]['phy_circuit'].draw())
-        if display_complete_state == True: print(len(search_tree.nodes[best_leaf_node]['DG'].nodes()), 'gates remaining')
+        if display_complete_state == True: print(num_all_vertex - len(search_tree.nodes[best_leaf_node]['executed_vertex']), 'gates remaining')
         finished_nodes = res[1]     
     
     '''find the best finished node'''
@@ -577,13 +530,17 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     if draw == True:
         best_cir_phy = search_tree.nodes[best_finish_node]['phy_circuit']
         #print(best_cir_phy.draw())
+        if debug_mode == True: print('start saving output physical circuit')
         fig = (best_cir_phy.draw(scale=0.7, filename=None, style=None, output='mpl', interactive=False, line_length=None, plot_barriers=True, reverse_bits=False))
         fig.savefig('Circuit_RemoteCNOTandWindowLookAhead.pdf', format='pdf', papertype='a4')
+        if debug_mode == True: print('circuit saved')
+    else:
+        best_cir_phy = None
     '''number of traversed states'''
     num_total_state = next_node_list[0] - 1
     num_pruned_nodes = num_pruned_nodes_list[0]
     #nx.draw(search_tree, with_labels=True)
-    return swap_count, num_total_state, num_total_state - num_pruned_nodes, additional_gate_count
+    return swap_count, num_total_state, num_total_state - num_pruned_nodes, additional_gate_count, best_cir_phy, search_tree.nodes[best_finish_node]['mapping']
 
 if __name__ == '__main__':
     '''test FindNextNodeAndRenewTree'''

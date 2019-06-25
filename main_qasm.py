@@ -37,7 +37,7 @@ imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
 initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [6, 11, 7, 16, 12, 17, 10, 2, 5, 13, 15, 1, 9, 14, 4, 3, 8, 18, 0, 19]#only used for initial_mapping_control = 4
+initial_map_list = [1, 6, 9, 2, 3, 13, 7, 12, 14, 8, 4, 0, 5, 16, 10, 11, 19, 15, 17, 18]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -53,7 +53,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''QASM input control'''
-QASM_files = ['qft_10.qasm']
+QASM_files = ['z4_268.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -64,12 +64,12 @@ draw_Steiner_paper = False
 draw_architecture_graph = 0
 draw_DG = 0
 draw_logical_circuit = 0
-draw_physical_circuit = False
+draw_physical_circuit = 0
 draw_physical_circuit_niave = 0
 draw_physical_circuit_HeuristicGreedySearch = 0
 draw_physical_circuit_Astar = 0
 draw_physical_circuit_RemotoCNOTandWindow = False
-draw_physical_circuit_RemotoCNOTandWindowLookAhead = 0
+draw_physical_circuit_RemotoCNOTandWindowLookAhead = 1
 
 x_label = []
 x_lable_filename = []

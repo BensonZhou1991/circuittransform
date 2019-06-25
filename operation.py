@@ -32,11 +32,14 @@ def OperationToDependencyGraph(operations):
     
     return DG
 
-def FindExecutableNode(dependency_graph, executable_vertex=None, removed_vertexes=None):
+def FindExecutableNode(dependency_graph, executed_vertex=None, executable_vertex=None, removed_vertexes=None):
     '''
-    Use dependency graph to find the executable vertexes/nodes, i.e., nodes in current level
-    return:
-        executable_nodes: a list of nodes. If no executable node, return []
+    WHEN executable_vertex = None:
+        Use dependency graph to find the executable vertexes/nodes, i.e., nodes in current level
+        return:
+            executable_nodes: a list of nodes. If no executable node, return []
+    WHEN executable_vertex != None:
+        
     '''
     DG = dependency_graph
     if executable_vertex == None:
@@ -49,11 +52,18 @@ def FindExecutableNode(dependency_graph, executable_vertex=None, removed_vertexe
         executable_nodes = executable_vertex
         for removed_vertex in removed_vertexes:
             if not removed_vertex in executable_vertex: raise Exception('removed node is not executable')
-            nodes = DG.successors(removed_vertex)
+            candidate_nodes = DG.successors(removed_vertex)
             executable_nodes.remove(removed_vertex)
-            DG.remove_node(removed_vertex)
-            for node in nodes:
-                if DG.in_degree[node] == 0: executable_nodes.append(node)
+            executed_vertex.append(removed_vertex)
+            #DG.remove_node(removed_vertex)
+            for node in candidate_nodes:
+                flag_add = True
+                '''check whether this node is executable'''
+                for pre_node in DG.predecessors(node):
+                    if not pre_node in executed_vertex:
+                        flag_add = False
+                        break
+                if flag_add == True: executable_nodes.append(node)
     return executable_nodes
     
 def FindExecutableOperation(dependency_graph, executable_node = None):
@@ -70,7 +80,7 @@ def FindExecutableOperation(dependency_graph, executable_node = None):
         executable_operation.append(DG.node[node]['operation'])
     return executable_operation
 
-def ConductOperationInVertex(DG, vertex, mapping, cir_phy, q_phy):
+def ConductOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, remove_node=True):
     '''
     Conduct operation in physical quantum circuit represented by
     a node/vertex in dependency graph(directed graph), then, erase the corresponding
@@ -84,15 +94,16 @@ def ConductOperationInVertex(DG, vertex, mapping, cir_phy, q_phy):
     q_phy_c = q_phy[v_c]
     q_phy_t = q_phy[v_t]
     conduct_operation.ConductOperationOutside(cir_phy, q_phy_c, q_phy_t)
-    DG.remove_node(vertex)
+    if remove_node == True: DG.remove_node(vertex)
 
-def ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_drection=False):
+def ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_drection=False, remove_node=True):
     '''
     conduct CNOT operation in physical quantum circuit represented by
     a node/vertex in dependency graph(directed graph), then, erase the corresponding
     node/vertex in dependency graph
     input:
         convert_drection -> whether use 4 H gates to reverse direction of CNOT
+        remove_node -> whether the node in DG shuold be removed
     '''
     conduct_operation = DG.node[vertex]['operation']
     q_c = conduct_operation.control_qubit
@@ -108,8 +119,8 @@ def ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_dr
         cir_phy.h(q_phy_c)
         cir_phy.h(q_phy_t)
     else:
-        cir_phy.cx(q_phy_c, q_phy_t)
-    DG.remove_node(vertex)
+        cir_phy.cx(q_phy_c, q_phy_t)    
+    if remove_node == True: DG.remove_node(vertex)
     
 def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy=None, cir_phy=None, draw=True):
     '''
@@ -119,12 +130,11 @@ def SWAPInArchitectureGraph(vertex0, vertex1, mapping, q_phy=None, cir_phy=None,
     if draw == True: cir_phy.swap(q_phy[vertex0], q_phy[vertex1])
     mapping.RenewMapViaExchangeCod(vertex0, vertex1)
 
-def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, draw, q_phy=None, cir_phy=None, edges_DiG=None):
+def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, draw, remove_node=True, q_phy=None, cir_phy=None, edges_DiG=None):
     '''
     conduct CNOT in a vertex in DG along a specific path([control, ..., target]) in architecture graph,
     then, renew physical circuit and mapping
     '''
-    '''untested'''
     add_gates_count = 0
     v_c_pos = 0
     v_t_pos = len(path) - 1
@@ -142,10 +152,10 @@ def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, draw, q_phy=None, cir_ph
                 v_t_pos -= 1
                 flag_head = not flag_head
         if draw == True:
-            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_drection=False, remove_node=remove_node)
             cir_phy.barrier()
         else:
-            DG.remove_node(vertex)
+            if remove_node == True: DG.remove_node(vertex)
     else:
         for i in range(num_swaps):
             add_gates_count += 7
@@ -158,10 +168,10 @@ def ConductCNOTInDGAlongPath(DG, vertex, path, mapping, draw, q_phy=None, cir_ph
         flag_4H = not ((path[v_c_pos], path[v_t_pos]) in edges_DiG)
         add_gates_count += flag_4H * 4
         if draw == True:
-            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
+            ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H, remove_node)
             cir_phy.barrier()
         else:
-            DG.remove_node(vertex)   
+            if remove_node == True: DG.remove_node(vertex)   
     return add_gates_count
     
 def RemoveUnparallelEdge(remain_edge, remove_edge):
@@ -424,7 +434,7 @@ def CheckSWAPInvolved(swaps, executable_vertex, DG, mapping):
             return False
     return True
 
-def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, mapping, draw, DiG, edges_DiG, cir_phy=None, q_phy=None):
+def ExecuteAllPossibileNodesInDG(executable_vertex, executed_vertex, G, DG, mapping, draw, DiG, edges_DiG, cir_phy=None, q_phy=None):
     '''check whether this window already has appliable vertexes, if has, then execute them'''
     temp = True
     while temp == True:
@@ -437,25 +447,17 @@ def ExecuteAllPossibileNodesInDG(executable_vertex, num_executed_vertex, G, DG, 
                     flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, mapping, edges_DiG)
                     if flag_4H == False:
                         '''if no need 4 extra H, then execute it'''
-                        num_executed_vertex += 1
                         if draw == True:
-                            ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, flag_4H)
+                            ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_drection=flag_4H, remove_node=False)
                             cir_phy.barrier()
-                        else:
-                            #DG.remove_node(vertex)
-                            removed_nodes.append(vertex)
+                        removed_nodes.append(vertex)
                         temp = True
                 else:
                     '''if architecture graph is undirected, execute it'''
-                    num_executed_vertex += 1
                     if draw == True:
-                        ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy)
+                        ct.ConductCNOTOperationInVertex(DG, vertex, mapping, cir_phy, q_phy, reverse_drection=False, remove_node=False)
                         cir_phy.barrier()
-                    else:
-                        #DG.remove_node(vertex)
-                        removed_nodes.append(vertex)                           
+                    removed_nodes.append(vertex)                           
                     temp = True
-        if temp == True:
-            if draw == True: executable_vertex = ct.FindExecutableNode(DG)
-            if draw == False: executable_vertex = FindExecutableNode(DG, executable_vertex, removed_nodes)
-    return num_executed_vertex, executable_vertex
+        if temp == True: executable_vertex = FindExecutableNode(DG, executed_vertex, executable_vertex, removed_nodes)
+    return executed_vertex, executable_vertex
