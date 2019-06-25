@@ -6,3 +6,4 @@ Created on Tue May 14 22:45:19 2019
 """
 
 from .QiskitcircuittoDG import QiskitCircuitToDG
+from .checkQiskitcircuitsatisfyAG import CheckQiskitCircuitSatisfyAG

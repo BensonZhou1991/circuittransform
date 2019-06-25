@@ -20,9 +20,9 @@ import json
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex =16
+num_vertex = 20
 # repeat time
 repeat_time = 1
 # architecture graph generation control
@@ -30,14 +30,14 @@ repeat_time = 1
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['IBM QX20']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
 initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [11, 6, 5, 3, 4, 13, 12, 2, 14, 7, 9, 0, 8, 1, 15, 10]#only used for initial_mapping_control = 4
+initial_map_list = [1, 6, 9, 2, 3, 13, 7, 12, 14, 8, 4, 0, 5, 16, 10, 11, 19, 15, 17, 18]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -53,7 +53,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead2_nocut = 0
 '''QASM input control'''
-QASM_files = ['mini_alu_305.qasm']
+QASM_files = ['z4_268.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -64,7 +64,7 @@ draw_Steiner_paper = False
 draw_architecture_graph = 0
 draw_DG = 0
 draw_logical_circuit = 0
-draw_physical_circuit = False
+draw_physical_circuit = 0
 draw_physical_circuit_niave = 0
 draw_physical_circuit_HeuristicGreedySearch = 0
 draw_physical_circuit_Astar = 0

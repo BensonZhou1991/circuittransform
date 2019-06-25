@@ -33,7 +33,7 @@ def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h
     search_tree.nodes[next_node]['cost_total'] = cost_total_next
     search_tree.nodes[next_node]['executed_vertex'] = executed_vertex_next
     search_tree.nodes[next_node]['executable_vertex'] = executable_vertex_next
-
+    
 def CalculateHeuristicCost(current_map, DG, executable_vertex, executed_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG):
     '''
     cost_h1: sum_num_gate for lookahead level with weights
@@ -142,7 +142,7 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
             next_node_list[0] = next_node_list[0] + 1
             added_nodes.append(next_node)
             AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
-            search_tree.add_edge(leaf_node, next_node)           
+            search_tree.add_edge(leaf_node, next_node)
             if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
             '''renew best expanded node in search tree'''
             num_remaining_vertex_next = num_all_vertex - len(executed_vertex_next)
@@ -308,7 +308,7 @@ def FallBack(father_node, G, DG, search_tree, next_node_list, shortest_path_G, s
     current_map = search_tree.nodes[father_node]['mapping']
     cost_g_current = search_tree.nodes[father_node]['cost_g']
     executed_vertex_current = search_tree.nodes[father_node]['executed_vertex']
-    executable_vertex_current = [father_node]['executable_vertex']
+    executable_vertex_current = search_tree.nodes[father_node]['executable_vertex']
     #print('remaining gates before', len(DG_current.nodes()))
     if draw == True: cir_phy_current = search_tree.nodes[father_node]['phy_circuit']
     '''fallback method: find the vertex in DG to be executed along shoetest path'''
@@ -504,7 +504,7 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
                     if flag_no_leaf_fallback == True: print('no leaf fall back')
                 fallback_count = total_fallback_num
                 flag_no_leaf_fallback = False
-                res = FallBack(fallback_vertex, G, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG)
+                res = FallBack(fallback_vertex, G, DG, search_tree, next_node_list, shortest_path_G, shortest_length_G, shortest_length_G_with4H, max_shortest_length_G, level_lookahead, possible_swap_combination, depth_lookahead, SWAP_cost, draw, q_phy, edges_DiG, DiG)
                 best_leaf_node = res[0]
                 next_node = res[3]
                 
@@ -530,13 +530,17 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
     if draw == True:
         best_cir_phy = search_tree.nodes[best_finish_node]['phy_circuit']
         #print(best_cir_phy.draw())
+        if debug_mode == True: print('start saving output physical circuit')
         fig = (best_cir_phy.draw(scale=0.7, filename=None, style=None, output='mpl', interactive=False, line_length=None, plot_barriers=True, reverse_bits=False))
         fig.savefig('Circuit_RemoteCNOTandWindowLookAhead.pdf', format='pdf', papertype='a4')
+        if debug_mode == True: print('circuit saved')
+    else:
+        best_cir_phy = None
     '''number of traversed states'''
     num_total_state = next_node_list[0] - 1
     num_pruned_nodes = num_pruned_nodes_list[0]
     #nx.draw(search_tree, with_labels=True)
-    return swap_count, num_total_state, num_total_state - num_pruned_nodes, additional_gate_count
+    return swap_count, num_total_state, num_total_state - num_pruned_nodes, additional_gate_count, best_cir_phy, search_tree.nodes[best_finish_node]['mapping']
 
 if __name__ == '__main__':
     '''test FindNextNodeAndRenewTree'''

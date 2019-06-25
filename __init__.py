@@ -12,5 +12,5 @@ from .cost import OperationCost, HeuristicCostZulehner, HeuristicCostZhou1, Heur
 from circuittransform.method import NaiveSearch, AStarSearch, AStarSearchLookAhead, RemoteCNOTandWindow, RemoteCNOTandWindowLookAhead, HeuristicGreedySearch
 from .operation_for_U_decomposition import SteinerTreeAndRemoteCNOT, AllocateVertexToPartyMap, PerformOperationCNOTinPartyMap
 from .operation_for_U_decomposition import UDecompositionFullConnectivity, UDecompositionFullConnectivityPATEL, FindAllLeafNodesInDG
-from circuittransform.Qiskitconverter import QiskitCircuitToDG
+from circuittransform.Qiskitconverter import QiskitCircuitToDG, CheckQiskitCircuitSatisfyAG
 from circuittransform.inputs import CreateDGfromQASMfile, CreateQASMFilesFromExample, ShortestPath

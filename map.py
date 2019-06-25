@@ -120,6 +120,18 @@ class Map(object):
         
         return out
     
+    def MapToList(self):
+        '''
+        return the list(phy -> log) of the map
+        '''
+        map_list = []
+        q_log = self.logical_quantum_register
+        for q in q_log:
+            map_list.append(self.LogToPhy(q))
+        
+        return map_list
+            
+    
 def SortKey(qubit_weight):
     return qubit_weight[1]
 
