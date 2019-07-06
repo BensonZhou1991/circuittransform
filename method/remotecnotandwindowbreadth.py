@@ -20,7 +20,7 @@ use_remoteCNOT_fallback = 1
 min_remoteCNOT_hop = 2
 use_fallback = True
 fallback_mode = 0#0:choose the current best gate, 1: current worst gate
-display_complete_state = 1
+display_complete_state = 0
 debug_mode = False
 level_lookahead_default = [1, 0.8, 0.6, 0.4]
 
