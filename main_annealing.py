@@ -382,7 +382,7 @@ plt.show()
 # save as local file
 figure_fig.savefig('figure.eps', format='eps', dpi=1000)
 
-'''result processing'''
+'''result processing average'''
 post_res = {}
 for rate in results.keys():
     post_res[rate] = []
@@ -392,4 +392,18 @@ for rate in results.keys():
             total += gates
         ave = total / repeat_time
         post_res[rate].append(ave)
+        
+'''result processing best'''
+post_res = {}
+for rate in results.keys():
+    post_res[rate] = []
+    for name in results[rate].keys():
+        best = None
+        for gates in results[rate][name]:
+            if best == None:
+                best = gates
+            else:
+                if gates < best:
+                    best = gates
+        post_res[rate].append(best)
         

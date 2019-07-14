@@ -28,23 +28,23 @@ import time
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex = 16
+num_vertex = 20
 # repeat time
-repeat_time = 5
+repeat_time = 1
 # architecture graph generation control
 #method_AG = ['circle']
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['IBM QX20']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
-initial_mapping_control = 3#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
-num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
+initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
+num_consider_gates = 0.2#counted gates for annealing search, 0-1 represents number gates * 0-1
 initial_map_list = [10, 17, 11, 1, 2, 6, 12, 9, 4, 3, 13, 8, 7, 15, 0, 14]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
@@ -55,12 +55,13 @@ use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
-use_RemotoCNOTandWindowLookAhead0 = 0
-use_RemotoCNOTandWindowLookAhead1 = 1
+use_RemotoCNOTandWindowLookAhead0 = 1
+use_RemotoCNOTandWindowLookAhead1 = 0
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
-use_RemotoCNOTandWindowLookAhead2_nocut = 0
+use_RemotoCNOTandWindowLookAhead1_nocut = 0
 '''QASM input control'''
+'''QX20'''
 # =============================================================================
 # QASM_files = ['4mod5-v1_22.qasm',
 # 'mod5mils_65.qasm',
@@ -86,32 +87,90 @@ use_RemotoCNOTandWindowLookAhead2_nocut = 0
 # 'co14_215.qasm',
 # 'sym9_193.qasm',
 # '9symml_195.qasm']
+# '''initial map for QX 20'''
+# initial_map_best = [\
+# [4, 14, 8, 13, 7, 11, 16, 0, 2, 18, 3, 19, 6, 12, 15, 9, 5, 10, 1, 17],
+# [8, 6, 13, 7, 12, 11, 2, 17, 1, 16, 3, 18, 4, 10, 9, 14, 0, 5, 15, 19],
+# [8, 1, 7, 2, 13, 9, 19, 16, 6, 17, 18, 12, 14, 4, 15, 0, 3, 11, 10, 5],
+# [3, 8, 9, 4, 0, 14, 1, 5, 18, 11, 19, 15, 13, 10, 2, 6, 7, 16, 17, 12],
+# [7, 8, 14, 19, 13, 4, 11, 5, 16, 1, 12, 15, 10, 6, 17, 0, 18, 9, 2, 3],
+# [19, 13, 12, 17, 11, 6, 2, 3, 8, 9, 0, 15, 10, 4, 14, 16, 18, 5, 1, 7],
+# [15, 16, 11, 10, 6, 2, 3, 4, 9, 8, 13, 12, 7, 18, 19, 1, 17, 14, 0, 5],
+# [12, 16, 15, 10, 5, 6, 11, 17, 18, 14, 9, 8, 7, 2, 1, 0, 4, 13, 19, 3],
+# [7, 6, 12, 5, 10, 11, 1, 8, 2, 13, 16, 15, 18, 0, 4, 3, 17, 19, 9, 14],
+# [12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15],
+# [19, 18, 13, 8, 4, 1, 10, 12, 14, 9, 3, 2, 6, 11, 17, 16, 5, 7, 15, 0],
+# [17, 3, 0, 10, 11, 5, 2, 8, 13, 12, 1, 7, 6, 18, 16, 4, 9, 19, 15, 14],
+# [5, 15, 13, 18, 19, 6, 10, 16, 8, 7, 12, 17, 11, 9, 3, 2, 0, 4, 14, 1],
+# [11, 6, 4, 1, 2, 8, 3, 13, 9, 7, 12, 15, 18, 14, 16, 0, 5, 10, 17, 19],
+# [7, 13, 12, 6, 1, 8, 11, 19, 5, 18, 16, 14, 2, 4, 15, 0, 17, 9, 3, 10],
+# [2, 1, 10, 3, 8, 16, 5, 17, 11, 13, 7, 6, 12, 18, 14, 9, 0, 4, 19, 15],
+# [1, 6, 9, 12, 3, 8, 2, 4, 13, 7, 16, 10, 19, 11, 14, 18, 0, 5, 15, 17],
+# [13, 16, 17, 12, 1, 10, 5, 8, 11, 6, 7, 2, 9, 19, 3, 14, 18, 15, 4, 0],
+# [6, 7, 13, 2, 1, 8, 18, 0, 11, 10, 16, 12, 17, 5, 19, 4, 9, 3, 14, 15],
+# [17, 16, 13, 8, 1, 2, 6, 11, 7, 12, 15, 5, 18, 0, 10, 14, 3, 9, 4, 19],
+# [8, 2, 0, 5, 13, 16, 10, 6, 1, 11, 12, 7, 17, 15, 19, 4, 14, 9, 3, 18],
+# [18, 16, 19, 3, 7, 1, 5, 10, 11, 6, 2, 8, 13, 12, 17, 14, 15, 0, 9, 4],
+# [17, 16, 13, 5, 1, 2, 10, 6, 7, 12, 11, 0, 3, 4, 18, 9, 19, 14, 15, 8],
+# [16, 17, 8, 10, 1, 2, 5, 6, 7, 12, 11, 18, 14, 19, 4, 0, 9, 15, 13, 3]]
 # =============================================================================
 
-QASM_files = ['4mod5-v1_22.qasm',
-'mod5mils_65.qasm',
-'alu-v0_27.qasm',
-'decod24-v2_43.qasm',
-'4gt13_92.qasm',
-'ising_model_10.qasm',
-'ising_model_13.qasm',
-'ising_model_16.qasm',
-'qft_10.qasm',
-'qft_16.qasm',
+'''QX5'''
+# =============================================================================
+# QASM_files = ['mini_alu_305.qasm',
+# 'qft_10.qasm',
+# 'sys6-v0_111.qasm',
+# 'rd73_140.qasm',
+# 'sym6_316.qasm',
+# 'rd53_311.qasm',
+# 'sym9_146.qasm',
+# 'rd84_142.qasm',
+# 'ising_model_10.qasm',
+# 'cnt3-5_180.qasm',
+# 'qft_16.qasm',
+# 'ising_model_13.qasm',
+# 'ising_model_16.qasm',
+# 'wim_266.qasm',
+# 'cm152a_212.qasm',
+# 'cm42a_207.qasm',
+# 'pm1_249.qasm',
+# 'dc1_220.qasm',
+# 'squar5_261.qasm',
+# 'sqrt8_260.qasm',
+# 'z4_268.qasm',
+# 'adr4_197.qasm',
+# 'sym6_145.qasm',
+# 'misex1_241.qasm',
+# 'square_root_7.qasm',
+# 'ham15_107.qasm',
+# 'dc2_222.qasm',
+# 'sqn_258.qasm',
+# 'inc_237.qasm',
+# 'co14_215.qasm',
+# 'life_238.qasm',
+# 'max46_240.qasm',
+# '9symml_195.qasm',
+# 'dist_223.qasm'
+# 'sao2_257.qasm',
+# 'plus63mod4096_163.qasm',
+# 'urf6_160.qasm',
+# 'hwb9_119.qasm']
+# =============================================================================
+'''Lookahead 2 QX20'''
+QASM_files = ['qft_10.qasm',
 'rd84_142.qasm',
-'adr4_197.qasm',
-'radd_250.qasm',
+'qft_16.qasm',
 'z4_268.qasm',
-'sym6_145.qasm',
-'misex1_241.qasm',
-'rd73_252.qasm',
-'cycle10_2_110.qasm',
-'square_root_7.qasm',
-'sqn_258.qasm',
-'rd84_253.qasm',
-'co14_215.qasm',
-'sym9_193.qasm',
-'9symml_195.qasm']
+'adr4_197.qasm',
+'rd73_252.qasm'
+]
+initial_map_best = [\
+[7, 6, 12, 5, 10, 11, 1, 8, 2, 13, 16, 15, 18, 0, 4, 3, 17, 19, 9, 14],
+[19, 18, 13, 8, 4, 1, 10, 12, 14, 9, 3, 2, 6, 11, 17, 16, 5, 7, 15, 0],
+[12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15],
+[11, 6, 4, 1, 2, 8, 3, 13, 9, 7, 12, 15, 18, 14, 16, 0, 5, 10, 17, 19],
+[17, 3, 0, 10, 11, 5, 2, 8, 13, 12, 1, 7, 6, 18, 16, 4, 9, 19, 15, 14],
+[1, 6, 9, 12, 3, 8, 2, 4, 13, 7, 16, 10, 19, 11, 14, 18, 0, 5, 15, 17]]
 
 print('QASM file is', QASM_files)
 '''output control'''
@@ -248,7 +307,10 @@ for file in QASM_files:
         
         '''initialize map from logical qubits to physical qubits'''
         '''1-1, 2-2 ...'''
-        if initial_mapping_control == 0: initial_map = Map(q_log, G)
+        if initial_mapping_control == 0:
+            t_s = time.time()
+            initial_map = Map(q_log, G)
+            t_e = time.time()
         '''for circuit with only 10 qubit, we mannually map last 5 qubits to the down line'''
         if initial_mapping_control == 2:
             initial_map = Map(q_log, G)
@@ -262,7 +324,9 @@ for file in QASM_files:
 # =============================================================================
         '''optimized initial mapping'''
         if initial_mapping_control == 1:
+            t_s = time.time()
             map_res = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
+            t_e = time.time()
             initial_map = map_res[0]
             print('initial_map is', map_res[1])
         '''annealing search'''
@@ -274,7 +338,10 @@ for file in QASM_files:
             initial_map = map_res[0]
             initial_map_list = map_res[1]
         if initial_mapping_control == 4:
+            t_s = time.time()
+            initial_map_list = initial_map_best[num_file-1]
             initial_map = Map(q_log, G, initial_map_list)
+            t_e = time.time()
         
         results[file[0:-5]]['initial map'].append(initial_map_list)
         results[file[0:-5]]['initial map time'].append(t_e - t_s)
@@ -334,8 +401,12 @@ for file in QASM_files:
             y_label_UDecompositionFullConnectivityPATEL.append(cost_UDecompositionFullConnectivityPATEL)
 
         if use_RemotoCNOTandWindowLookAhead0 == True:
+            t_s = time.time()
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=0, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_e = time.time()
             if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
+            results[file[0:-5]]['gates'].append(cost_RemotoCNOTandWindowLookAhead)
+            results[file[0:-5]]['gates time'].append(t_e - t_s)
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead0.append(cost_RemotoCNOTandWindowLookAhead)
@@ -356,8 +427,12 @@ for file in QASM_files:
             y_label_RemotoCNOTandWindowLookAhead1_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
 
         if use_RemotoCNOTandWindowLookAhead2 == True:
+            t_s = time.time()
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_e = time.time()
             if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
+            results[file[0:-5]]['gates'].append(cost_RemotoCNOTandWindowLookAhead)
+            results[file[0:-5]]['gates time'].append(t_e - t_s)
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead.append(cost_RemotoCNOTandWindowLookAhead)
@@ -373,9 +448,13 @@ for file in QASM_files:
             y_label_RemotoCNOTandWindowLookAhead3_state.append(cost_RemotoCNOTandWindowLookAhead_state)
             y_label_RemotoCNOTandWindowLookAhead3_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
 
-        if use_RemotoCNOTandWindowLookAhead2_nocut == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+        if use_RemotoCNOTandWindowLookAhead1_nocut == True:
+            t_s = time.time()
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_e = time.time()
             if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
+            results[file[0:-5]]['gates'].append(cost_RemotoCNOTandWindowLookAhead)
+            results[file[0:-5]]['gates time'].append(t_e - t_s)
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
             y_label_RemotoCNOTandWindowLookAhead2nocut.append(cost_RemotoCNOTandWindowLookAhead)
@@ -425,7 +504,7 @@ if use_RemotoCNOTandWindowLookAhead1 == True:
 if use_RemotoCNOTandWindowLookAhead3 == True:
     #plt.plot(ave_x_label, ave_y_label_RemotoCNOTandWindowLookAhead3,  label='Breadth first with look ahead 3')
     if draw_circle == True: plt.plot(y_label_RemotoCNOTandWindowLookAhead3, 'o')
-if use_RemotoCNOTandWindowLookAhead2_nocut == True:
+if use_RemotoCNOTandWindowLookAhead1_nocut == True:
     #plt.plot(ave_x_label, ave_y_label_RemotoCNOTandWindowLookAhead2nocut,  label='Breadth first with look ahead 2 no pruning')
     if draw_circle == True: plt.plot(y_label_RemotoCNOTandWindowLookAhead2nocut, 'o')
     
@@ -443,16 +522,23 @@ figure_fig.savefig('figure.eps', format='eps', dpi=1000)
 post_res = []
 post_res_t1 = []
 post_res_t2 = []
-for name in results.keys():
+post_res_map= []
+for name in QASM_files:#results.keys():
+    name = name[0:-5]
     best_num = None
     best_t1 = None
     best_t2 = None
+    best_map = None
+    pos = -1
     for num_gate in results[name]['gates']:
+        pos += 1
         if best_num == None:
             best_num = num_gate
+            best_map = results[name]['initial map'][pos]
         else:
             if num_gate < best_num:
                 best_num = num_gate
+                best_map = results[name]['initial map'][pos]
     for num in results[name]['initial map time']:
         if best_t1 == None:
             best_t1 = num
@@ -468,3 +554,4 @@ for name in results.keys():
     post_res.append(best_num)
     post_res_t1.append(best_t1)
     post_res_t2.append(best_t2)
+    post_res_map.append(best_map)

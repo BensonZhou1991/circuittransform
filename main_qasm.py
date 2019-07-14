@@ -15,6 +15,7 @@ from circuittransform import OperationU, OperationCNOT, OperationSWAP, Map
 import matplotlib.pyplot as plt
 import copy
 import json
+import time
 
 '''initialize parameters'''
 # choose quantum circuits
@@ -24,7 +25,7 @@ num_qubits = 20
 # description of architecture graph
 num_vertex = 20
 # repeat time
-repeat_time = 5
+repeat_time = 1
 # architecture graph generation control
 #method_AG = ['circle']
 #method_AG = ['grid', 4, 5]
@@ -37,7 +38,7 @@ imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
 initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [10, 17, 11, 1, 2, 6, 12, 9, 4, 3, 13, 8, 7, 15, 0, 14]#only used for initial_mapping_control = 4
+initial_map_list = [12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -51,9 +52,9 @@ use_RemotoCNOTandWindowLookAhead0 = 0
 use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
-use_RemotoCNOTandWindowLookAhead2_nocut = 0
+use_RemotoCNOTandWindowLookAhead1_nocut = 0
 '''QASM input control'''
-QASM_files = ['4mod5-v1_22.qasm']
+QASM_files = ['qft_16.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -272,7 +273,9 @@ for file in QASM_files:
             y_label_RemotoCNOTandWindowLookAhead0_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
 
         if use_RemotoCNOTandWindowLookAhead1 == True:
+            t_e = time.time()
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_s = time.time()
             if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -281,7 +284,9 @@ for file in QASM_files:
             y_label_RemotoCNOTandWindowLookAhead1_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
 
         if use_RemotoCNOTandWindowLookAhead2 == True:
+            t_s = time.time()
             res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_e = time.time()
             if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -298,8 +303,10 @@ for file in QASM_files:
             y_label_RemotoCNOTandWindowLookAhead3_state.append(cost_RemotoCNOTandWindowLookAhead_state)
             y_label_RemotoCNOTandWindowLookAhead3_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
 
-        if use_RemotoCNOTandWindowLookAhead2_nocut == True:
-            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=2, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+        if use_RemotoCNOTandWindowLookAhead1_nocut == True:
+            t_s = time.time()
+            res = ct.RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_e = time.time()
             if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
             cost_RemotoCNOTandWindowLookAhead_state = res[1]
             cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
@@ -350,7 +357,7 @@ if use_RemotoCNOTandWindowLookAhead1 == True:
 if use_RemotoCNOTandWindowLookAhead3 == True:
     #plt.plot(ave_x_label, ave_y_label_RemotoCNOTandWindowLookAhead3,  label='Breadth first with look ahead 3')
     if draw_circle == True: plt.plot(y_label_RemotoCNOTandWindowLookAhead3, 'o')
-if use_RemotoCNOTandWindowLookAhead2_nocut == True:
+if use_RemotoCNOTandWindowLookAhead1_nocut == True:
     #plt.plot(ave_x_label, ave_y_label_RemotoCNOTandWindowLookAhead2nocut,  label='Breadth first with look ahead 2 no pruning')
     if draw_circle == True: plt.plot(y_label_RemotoCNOTandWindowLookAhead2nocut, 'o')
     

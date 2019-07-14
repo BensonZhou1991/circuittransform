@@ -381,7 +381,9 @@ def FallBack(father_node, G, DG, search_tree, next_node_list, shortest_path_G, s
     next_node_list[0] = next_node_list[0] + 1
     leaf_nodes.append(next_node)
     AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
-    search_tree.add_edge(father_node, next_node)           
+    search_tree.add_edge(father_node, next_node)
+    if executable_vertex_next == []:
+        return next_node, [next_node], leaf_nodes, new_father_node
     #print('remaining gates after', len(DG_next.nodes()))
     if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
     

@@ -5,6 +5,7 @@ Created on Fri Jun 28 23:33:00 2019
 @author: zxz58
 """
 
+import circuittransform as ct
 from qiskit import QuantumCircuit
 from qiskit import QuantumRegister
 
@@ -33,7 +34,7 @@ from qiskit import QuantumRegister
 # cir.swap(q[3], q[4])
 # =============================================================================
 
-q = QuantumRegister(2, 'q')
+q = QuantumRegister(4, 'q')
 cir = QuantumCircuit(q)
 # =============================================================================
 # cir.cx(q[0], q[1])
@@ -59,10 +60,14 @@ cir = QuantumCircuit(q)
 # cir.cx(q[0], q[1])
 # cir.barrier()
 # =============================================================================
-cir.cx(q[1], q[0])
-cir.cx(q[0], q[1])
-cir.cx(q[1], q[0])
-
+# =============================================================================
+# cir.cx(q[1], q[0])
+# cir.cx(q[0], q[1])
+# cir.cx(q[1], q[0])
+# =============================================================================
+cir.cx(q[0], q[3])
+cir.barrier()
+ct.RemoteCNOTinArchitectureGraph([0,1,2,3], cir, q)
 
 fig = (cir.draw(scale=0.7, filename=None, style=None, output='mpl', interactive=False, line_length=None, plot_barriers=True, reverse_bits=False))
 fig.savefig('cir.svg', format='svg', papertype='a4')
