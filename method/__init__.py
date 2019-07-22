@@ -11,3 +11,4 @@ from .remotecnotandwindow import RemoteCNOTandWindow
 from .remotecnotandwindowbreadth import RemoteCNOTandWindowLookAhead
 from .heuristicgreedysearch import HeuristicGreedySearch
 from .Astarwithlookahead import AStarSearchLookAhead
+from .remotecnotandwindowbreadth_LI import RemoteCNOTandWindowLookAheadLI

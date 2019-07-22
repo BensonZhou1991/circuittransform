@@ -145,6 +145,7 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
             IBM QX20
             directed grid
             directed circle
+            example in paper
     '''
     if method == ['IBM QX3']:
         G = GenerateArchitectureGraph(16, ['grid', 8, 2])
@@ -183,6 +184,15 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
         G.add_edges_from(edges)
         if draw_architecture_graph == True: nx.draw(G, with_labels=True)
         return G
+    
+    if method == ['example in paper']:
+        G = nx.DiGraph()
+        vertex = list(range(6))
+        edges = [(1,2), (1,0), (2,3), (3,4), (5,4), (5,2), (5,0)]
+        G.add_nodes_from(vertex)
+        G.add_edges_from(edges)
+        if draw_architecture_graph == True: nx.draw(G, with_labels=True)
+        return G        
     
     if method[0] == 'directed grid' or method[0] == 'directed circle':
         G = nx.DiGraph()

@@ -9,6 +9,7 @@ This module is for the map from logical qubits to physical qubits
 import numpy as np
 import networkx as nx
 import circuittransform as ct
+import matplotlib.pyplot as plt
 
 class Map(object):
     
@@ -202,7 +203,7 @@ def FindInitialMapping(DG, q_log, G, shortest_length_G):
 def initpara():
     '''only for simulated annealing'''
     alpha = 0.98
-    t = (1,100)
+    t = (1,100)#(1,100)
     markovlen = 100
     return alpha,t,markovlen
 
@@ -227,10 +228,14 @@ def VListReverse(v_list, num_q):
         map_list[v_list[i]] = i
     return map_list
 
-def InitialMapSimulatedAnnealing(start_map, DG, G, DiG, q_log, shortest_length_G, shortest_path_G, num_consider_gates=0):
+def InitialMapSimulatedAnnealing(start_map, DG, G, DiG, q_log, shortest_length_G, shortest_path_G, num_consider_gates=0, convergence=False):
     '''
     this function is modified from "https://blog.csdn.net/qq_34798326/article/details/79013338"
     '''
+    if convergence == True:
+        temp = []
+        solution = []
+        solution_best = []
     if len(start_map) != len(G.nodes()):
         for v in G.nodes():
             if not v in start_map: start_map.append(v)
@@ -251,7 +256,7 @@ def InitialMapSimulatedAnnealing(start_map, DG, G, DiG, q_log, shortest_length_G
     num = len(start_map)
     #valuenew = np.max(num)
     solutioncurrent = solutionnew.copy()
-    valuecurrent =99000  #np.max这样的源代码可能同样是因为版本问题被当做函数不能正确使用，应取一个较大值作为初始值
+    valuecurrent = 99000  #np.max这样的源代码可能同样是因为版本问题被当做函数不能正确使用，应取一个较大值作为初始值
     
     #print(valuecurrent)
     
@@ -307,10 +312,25 @@ def InitialMapSimulatedAnnealing(start_map, DG, G, DiG, q_log, shortest_length_G
                     solutioncurrent = solutionnew.copy()
                 else:
                     solutionnew = solutioncurrent.copy()
-    
+
+            if convergence == True:
+                temp.append(t)
+                solution.append(valuecurrent)
+                solution_best.append(valuebest)
+        
         t = alpha*t
         #print(valuebest)
         result.append(valuebest)
     print('initial_map is', solutionbest)
+    '''draw convergence graph'''
+    if convergence == True:
+        figure_fig = plt.figure()
+        plt.grid()
+        plt.xlabel('Times of Iteration')
+        plt.ylabel('Cost of States')
+        plt.plot(solution)
+        plt.plot(solution_best)
+        figure_fig.savefig('simulated annealing convergence.eps', format='eps', dpi=1000)
+        
     return Map(q_log, G, solutionbest), solutionbest
         

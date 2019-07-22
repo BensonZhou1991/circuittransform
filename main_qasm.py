@@ -21,9 +21,9 @@ import time
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 20
+num_qubits = 16
 # description of architecture graph
-num_vertex = 20
+num_vertex = 16
 # repeat time
 repeat_time = 1
 # architecture graph generation control
@@ -31,14 +31,15 @@ repeat_time = 1
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-#method_AG = ['IBM QX5']
-method_AG = ['IBM QX20']
+method_AG = ['IBM QX5']
+#method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
+#method_AG = ['example in paper']
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
-initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
+initial_mapping_control = 3#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15]#only used for initial_mapping_control = 4
+initial_map_list = [12, 11, 10, 5, 4, 2, 7, 15, 3, 13, 1, 14, 6, 8, 9, 0]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -48,13 +49,14 @@ use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
+use_RemotoCNOTandWindowLookAhead1_LI = 0
 use_RemotoCNOTandWindowLookAhead0 = 0
 use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead1_nocut = 0
 '''QASM input control'''
-QASM_files = ['qft_16.qasm']
+QASM_files = ['rd73_140.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -203,7 +205,7 @@ for file in QASM_files:
         '''annealing search'''
         if initial_mapping_control == 3:
             start_map = ct.FindInitialMapping(DG, q_log, G, shortest_length_G[0])
-            map_res = ct.InitialMapSimulatedAnnealing(start_map[1], DG, G, DiG, q_log, shortest_length_G[0], shortest_path_G, num_consider_gates)
+            map_res = ct.InitialMapSimulatedAnnealing(start_map[1], DG, G, DiG, q_log, shortest_length_G[0], shortest_path_G, num_consider_gates, convergence=False)
             initial_map = map_res[0]
             initial_map_list = map_res[1]
         if initial_mapping_control == 4:
@@ -211,6 +213,9 @@ for file in QASM_files:
         
         '''draw logical quantum circuits'''
         if draw_logical_circuit == True: print(cir_log.draw())
+        
+        if use_RemotoCNOTandWindowLookAhead1_LI == True:
+            res = ct.RemoteCNOTandWindowLookAheadLI(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
         
         '''search using specific methods'''
         if use_naive_search == True:

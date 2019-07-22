@@ -502,7 +502,10 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
             '''check whether fallback is needed'''
             if fallback_count < 0 or flag_no_leaf_fallback == True:
                 if display_complete_state == True:
-                    if fallback_count < 0: print('fall back')
+                    if fallback_count < 0:
+                        print('fall back')
+                        print('current mapping is' + str(search_tree.nodes[best_leaf_node]['mapping'].MapToList()))
+                        print('cost g is' + str(search_tree.nodes[best_leaf_node]['cost_g']))
                     if flag_no_leaf_fallback == True: print('no leaf fall back')
                 fallback_count = total_fallback_num
                 flag_no_leaf_fallback = False

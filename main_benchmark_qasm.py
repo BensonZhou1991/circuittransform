@@ -28,23 +28,23 @@ import time
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 20
+num_qubits = 16
 # description of architecture graph
-num_vertex = 20
+num_vertex = 16
 # repeat time
-repeat_time = 1
+repeat_time = 5
 # architecture graph generation control
 #method_AG = ['circle']
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-#method_AG = ['IBM QX5']
-method_AG = ['IBM QX20']
+method_AG = ['IBM QX5']
+#method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
-initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
-num_consider_gates = 0.2#counted gates for annealing search, 0-1 represents number gates * 0-1
+initial_mapping_control = 3#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
+num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
 initial_map_list = [10, 17, 11, 1, 2, 6, 12, 9, 4, 3, 13, 8, 7, 15, 0, 14]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
@@ -55,8 +55,8 @@ use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
-use_RemotoCNOTandWindowLookAhead0 = 1
-use_RemotoCNOTandWindowLookAhead1 = 0
+use_RemotoCNOTandWindowLookAhead0 = 0
+use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead1_nocut = 0
@@ -155,22 +155,143 @@ use_RemotoCNOTandWindowLookAhead1_nocut = 0
 # 'plus63mod4096_163.qasm',
 # 'urf6_160.qasm',
 # 'hwb9_119.qasm']
+
 # =============================================================================
 '''Lookahead 2 QX20'''
-QASM_files = ['qft_10.qasm',
-'rd84_142.qasm',
-'qft_16.qasm',
-'z4_268.qasm',
-'adr4_197.qasm',
-'rd73_252.qasm'
-]
-initial_map_best = [\
-[7, 6, 12, 5, 10, 11, 1, 8, 2, 13, 16, 15, 18, 0, 4, 3, 17, 19, 9, 14],
-[19, 18, 13, 8, 4, 1, 10, 12, 14, 9, 3, 2, 6, 11, 17, 16, 5, 7, 15, 0],
-[12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15],
-[11, 6, 4, 1, 2, 8, 3, 13, 9, 7, 12, 15, 18, 14, 16, 0, 5, 10, 17, 19],
-[17, 3, 0, 10, 11, 5, 2, 8, 13, 12, 1, 7, 6, 18, 16, 4, 9, 19, 15, 14],
-[1, 6, 9, 12, 3, 8, 2, 4, 13, 7, 16, 10, 19, 11, 14, 18, 0, 5, 15, 17]]
+# =============================================================================
+# QASM_files = ['qft_10.qasm',
+# 'rd84_142.qasm',
+# 'qft_16.qasm',
+# 'z4_268.qasm',
+# 'adr4_197.qasm',
+# 'rd73_252.qasm'
+# ]
+# initial_map_best = [\
+# [7, 6, 12, 5, 10, 11, 1, 8, 2, 13, 16, 15, 18, 0, 4, 3, 17, 19, 9, 14],
+# [19, 18, 13, 8, 4, 1, 10, 12, 14, 9, 3, 2, 6, 11, 17, 16, 5, 7, 15, 0],
+# [12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15],
+# [11, 6, 4, 1, 2, 8, 3, 13, 9, 7, 12, 15, 18, 14, 16, 0, 5, 10, 17, 19],
+# [17, 3, 0, 10, 11, 5, 2, 8, 13, 12, 1, 7, 6, 18, 16, 4, 9, 19, 15, 14],
+# [1, 6, 9, 12, 3, 8, 2, 4, 13, 7, 16, 10, 19, 11, 14, 18, 0, 5, 15, 17]]
+# =============================================================================
+
+'''Cambridge, QX5'''
+QASM_files = ['graycode6_47.qasm',
+'xor5_254.qasm',
+'ex1_226.qasm',
+'4gt11_84.qasm',
+'ex-1_166.qasm',
+'ham3_102.qasm',
+'4mod5-v0_20.qasm',
+'4mod5-v1_22.qasm',
+'mod5d1_63.qasm',
+'4gt11_83.qasm',
+'4gt11_82.qasm',
+'rd32-v0_66.qasm',
+'mod5mils_65.qasm',
+'4mod5-v0_19.qasm',
+'rd32-v1_68.qasm',
+'alu-v0_27.qasm',
+'3_17_13.qasm',
+'4mod5-v1_24.qasm',
+'alu-v1_29.qasm',
+'alu-v1_28.qasm',
+'alu-v3_35.qasm',
+'alu-v2_33.qasm',
+'alu-v4_37.qasm',
+'miller_11.qasm',
+'decod24-v0_38.qasm',
+'alu-v3_34.qasm',
+'decod24-v2_43.qasm',
+'mod5d2_64.qasm',
+'4gt13_92.qasm',
+'4gt13-v1_93.qasm',
+'one-two-three-v2_100.qasm',
+'4mod5-v1_23.qasm',
+'4mod5-v0_18.qasm',
+'one-two-three-v3_101.qasm',
+'4mod5-bdd_287.qasm',
+'decod24-bdd_294.qasm',
+'4gt5_75.qasm',
+'alu-v0_26.qasm',
+'rd32_270.qasm',
+'alu-bdd_288.qasm',
+'decod24-v1_41.qasm',
+'4gt5_76.qasm',
+'4gt13_91.qasm',
+'4gt13_90.qasm',
+'alu-v4_36.qasm',
+'4gt5_77.qasm',
+'one-two-three-v1_99.qasm',
+'rd53_138.qasm',
+'one-two-three-v0_98.qasm',
+'4gt10-v1_81.qasm',
+'decod24-v3_45.qasm',
+'aj-e11_165.qasm',
+'4mod7-v0_94.qasm',
+'alu-v2_32.qasm',
+'4mod7-v1_96.qasm',
+'cnt3-5_179.qasm',
+'mod10_176.qasm',
+'4gt4-v0_80.qasm',
+'4gt12-v0_88.qasm',
+'0410184_169.qasm',
+'4_49_16.qasm',
+'4gt12-v1_89.qasm',
+'4gt4-v0_79.qasm',
+'hwb4_49.qasm',
+'4gt4-v0_78.qasm',
+'mod10_171.qasm',
+'4gt12-v0_87.qasm',
+'4gt12-v0_86.qasm',
+'4gt4-v0_72.qasm',
+'4gt4-v1_74.qasm',
+'mini-alu_167.qasm',
+'one-two-three-v0_97.qasm',
+'rd53_135.qasm',
+'ham7_104.qasm',
+'decod24-enable_126.qasm',
+'mod8-10_178.qasm',
+'4gt4-v0_73.qasm',
+'ex3_229.qasm',
+'mod8-10_177.qasm',
+'alu-v2_31.qasm',
+'C17_204.qasm',
+'rd53_131.qasm',
+'alu-v2_30.qasm',
+'mod5adder_127.qasm',
+'rd53_133.qasm',
+'majority_239.qasm',
+'ex2_227.qasm',
+'cm82a_208.qasm',
+'sf_276.qasm',
+'sf_274.qasm',
+'con1_216.qasm',
+'rd53_130.qasm',
+'f2_232.qasm',
+'rd53_251.qasm',
+'hwb5_53.qasm',
+'radd_250.qasm',
+'rd73_252.qasm',
+'cycle10_2_110.qasm',
+'hwb6_56.qasm',
+'cm85a_209.qasm',
+'rd84_253.qasm',
+'root_255.qasm',
+'mlp4_245.qasm',
+'urf2_277.qasm',
+'sym9_148.qasm',
+'hwb7_59.qasm',
+'clip_206.qasm',
+'sym9_193.qasm',
+'dist_223.qasm',
+'sao2_257.qasm',
+'urf5_280.qasm',
+'urf1_278.qasm',
+'sym10_262.qasm',
+'hwb8_113.qasm',
+'urf2_152.qasm']
+
 
 print('QASM file is', QASM_files)
 '''output control'''
@@ -255,6 +376,7 @@ for current_edge in edges:
     possible_swap_combination.append([current_edge]) 
 
 num_file = 0
+original_cir_size = []
 
 for file in QASM_files:
     num_file += 1
@@ -273,6 +395,7 @@ for file in QASM_files:
         q_log = res_qasm[1][2]
         cir_log = res_qasm[0]
         x_label.append(cir_log.size())
+        if repeat == 0: original_cir_size.append(cir_log.size())
         
         '''initialize physical quantum circuit'''
         q_phy = QuantumRegister(num_vertex, 'v')
@@ -525,9 +648,9 @@ post_res_t2 = []
 post_res_map= []
 for name in QASM_files:#results.keys():
     name = name[0:-5]
-    best_num = None
-    best_t1 = None
-    best_t2 = None
+    best_num = None#number of output gates
+    best_t1 = None#time for initial map
+    best_t2 = None#time for searching
     best_map = None
     pos = -1
     for num_gate in results[name]['gates']:
