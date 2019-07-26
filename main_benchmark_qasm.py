@@ -116,47 +116,45 @@ use_RemotoCNOTandWindowLookAhead1_nocut = 0
 # =============================================================================
 
 '''QX5'''
-# =============================================================================
-# QASM_files = ['mini_alu_305.qasm',
-# 'qft_10.qasm',
-# 'sys6-v0_111.qasm',
-# 'rd73_140.qasm',
-# 'sym6_316.qasm',
-# 'rd53_311.qasm',
-# 'sym9_146.qasm',
-# 'rd84_142.qasm',
-# 'ising_model_10.qasm',
-# 'cnt3-5_180.qasm',
-# 'qft_16.qasm',
-# 'ising_model_13.qasm',
-# 'ising_model_16.qasm',
-# 'wim_266.qasm',
-# 'cm152a_212.qasm',
-# 'cm42a_207.qasm',
-# 'pm1_249.qasm',
-# 'dc1_220.qasm',
-# 'squar5_261.qasm',
-# 'sqrt8_260.qasm',
-# 'z4_268.qasm',
-# 'adr4_197.qasm',
-# 'sym6_145.qasm',
-# 'misex1_241.qasm',
-# 'square_root_7.qasm',
-# 'ham15_107.qasm',
-# 'dc2_222.qasm',
-# 'sqn_258.qasm',
-# 'inc_237.qasm',
-# 'co14_215.qasm',
-# 'life_238.qasm',
-# 'max46_240.qasm',
-# '9symml_195.qasm',
-# 'dist_223.qasm'
-# 'sao2_257.qasm',
-# 'plus63mod4096_163.qasm',
-# 'urf6_160.qasm',
-# 'hwb9_119.qasm']
+QASM_files = ['mini_alu_305.qasm',
+'qft_10.qasm',
+'sys6-v0_111.qasm',
+'rd73_140.qasm',
+'sym6_316.qasm',
+'rd53_311.qasm',
+'sym9_146.qasm',
+'rd84_142.qasm',
+'ising_model_10.qasm',
+'cnt3-5_180.qasm',
+'qft_16.qasm',
+'ising_model_13.qasm',
+'ising_model_16.qasm',
+'wim_266.qasm',
+'cm152a_212.qasm',
+'cm42a_207.qasm',
+'pm1_249.qasm',
+'dc1_220.qasm',
+'squar5_261.qasm',
+'sqrt8_260.qasm',
+'z4_268.qasm',
+'adr4_197.qasm',
+'sym6_145.qasm',
+'misex1_241.qasm',
+'square_root_7.qasm',
+'ham15_107.qasm',
+'dc2_222.qasm',
+'sqn_258.qasm',
+'inc_237.qasm',
+'co14_215.qasm',
+'life_238.qasm',
+'max46_240.qasm',
+'9symml_195.qasm',
+'dist_223.qasm',
+'sao2_257.qasm',
+'plus63mod4096_163.qasm',
+'urf6_160.qasm',
+'hwb9_119.qasm']
 
-# =============================================================================
 '''Lookahead 2 QX20'''
 # =============================================================================
 # QASM_files = ['qft_10.qasm',
@@ -292,6 +290,9 @@ QASM_files = ['graycode6_47.qasm',
 'hwb8_113.qasm',
 'urf2_152.qasm']
 
+QASM_files = ['urf5_280.qasm',
+'urf1_278.qasm',
+'sym10_262.qasm']
 
 print('QASM file is', QASM_files)
 '''output control'''
@@ -643,14 +644,14 @@ figure_fig.savefig('figure.eps', format='eps', dpi=1000)
 
 '''data processing'''
 post_res = []
-post_res_t1 = []
-post_res_t2 = []
+post_res_t1 = []#time for initial map
+post_res_t2 = []#time for searching
 post_res_map= []
 for name in QASM_files:#results.keys():
     name = name[0:-5]
     best_num = None#number of output gates
-    best_t1 = None#time for initial map
-    best_t2 = None#time for searching
+    best_t1 = None
+    best_t2 = None
     best_map = None
     pos = -1
     for num_gate in results[name]['gates']:

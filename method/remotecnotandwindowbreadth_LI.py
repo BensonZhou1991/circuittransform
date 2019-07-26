@@ -24,7 +24,7 @@ display_complete_state = 0
 debug_mode = False
 level_lookahead_default = [1, 0.8, 0.6, 0.4]
 
-def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next):
+def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next, action=None):
     '''generate next node'''
     search_tree.add_node(next_node)
     search_tree.nodes[next_node]['mapping'] = next_map
@@ -35,6 +35,7 @@ def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h
     search_tree.nodes[next_node]['executable_vertex'] = executable_vertex_next
     ST_file = open('ST_file.txt', 'a')
     ST_file.write('node number is ' + str(next_node) + '\n')
+    ST_file.write('current operation is ' + str(action) + '\n')
     ST_file.write('cost_g is' + str(cost_g_next) + '\n')
     ST_file.write('cost_h is' + str(cost_total_next-cost_g_next) + '\n')
     ST_file.write('cost_total is' + str(cost_total_next) + '\n')
@@ -149,7 +150,7 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
             next_node = next_node_list[0]
             next_node_list[0] = next_node_list[0] + 1
             added_nodes.append(next_node)
-            AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
+            AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next, current_swap)
             search_tree.add_edge(leaf_node, next_node)
             ST_file = open('ST_file.txt', 'a')
             ST_file.write('added edge is ' + str((leaf_node, next_node)) + '\n' + '\n')
@@ -171,7 +172,7 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
         '''execute possible CNOT needing 4 extra 4 H'''
         if DiG != None:
             for vertex in executable_vertex_current:
-                if ct.IsVertexInDGOperatiable(vertex, DG, G, next_map) == True:
+                if ct.IsVertexInDGOperatiable(vertex, DG, G, current_map) == True:
                     '''check whether this CNOT needs 4 H gates to convert direction'''
                     flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, current_map, edges_DiG)
                     if flag_4H == False: raise Exception('unexpected operatible CNOT without 4 H gates')
@@ -198,8 +199,10 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
                         next_node = next_node_list[0]
                         next_node_list[0] = next_node_list[0] + 1
                         added_nodes.append(next_node)
-                        AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
+                        qbits = DG.node[vertex]['operation'].involve_qubits
+                        AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next, '4H'+str(qbits))
                         search_tree.add_edge(leaf_node, next_node)
+                        print('add 4H ', next_node)
                         ST_file = open('ST_file.txt', 'a')
                         ST_file.write('added edge is ' + str((leaf_node, next_node)) + '\n' + '\n')
                         ST_file.close()

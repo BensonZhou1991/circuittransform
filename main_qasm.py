@@ -37,9 +37,9 @@ method_AG = ['IBM QX5']
 #method_AG = ['example in paper']
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
-initial_mapping_control = 3#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
+initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [12, 11, 10, 5, 4, 2, 7, 15, 3, 13, 1, 14, 6, 8, 9, 0]#only used for initial_mapping_control = 4
+initial_map_list = [11, 10, 15, 6, 4, 3, 13, 14, 5, 12, 0, 8, 2, 9, 1, 7]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -56,7 +56,7 @@ use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead1_nocut = 0
 '''QASM input control'''
-QASM_files = ['rd73_140.qasm']
+QASM_files = ['sqn_258.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -215,7 +215,7 @@ for file in QASM_files:
         if draw_logical_circuit == True: print(cir_log.draw())
         
         if use_RemotoCNOTandWindowLookAhead1_LI == True:
-            res = ct.RemoteCNOTandWindowLookAheadLI(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            res = ct.RemoteCNOTandWindowLookAheadLI(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
         
         '''search using specific methods'''
         if use_naive_search == True:

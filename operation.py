@@ -414,8 +414,9 @@ def CheckCNOTNeedConvertDirection2(vertex, DG, mapping, edges):
     v1 = mapping.DomToCod(q1)
     if (v0, v1) in edges:
         return False
-    
-    return True
+    if (v1, v0) in edges:
+        return True
+    raise Exception('this CNOT can not be executed')
 
 def CheckSWAPInvolved(swaps, executable_vertex, DG, mapping):
     '''

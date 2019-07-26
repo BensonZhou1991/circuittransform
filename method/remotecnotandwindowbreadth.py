@@ -157,7 +157,7 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
         '''execute possible CNOT needing 4 extra 4 H'''
         if DiG != None:
             for vertex in executable_vertex_current:
-                if ct.IsVertexInDGOperatiable(vertex, DG, G, next_map) == True:
+                if ct.IsVertexInDGOperatiable(vertex, DG, G, current_map) == True:
                     '''check whether this CNOT needs 4 H gates to convert direction'''
                     flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, current_map, edges_DiG)
                     if flag_4H == False: raise Exception('unexpected operatible CNOT without 4 H gates')
