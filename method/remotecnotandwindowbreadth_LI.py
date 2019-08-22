@@ -38,8 +38,10 @@ def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h
     ST_file.write('current operation is ' + str(action) + '\n')
     ST_file.write('cost_g is' + str(cost_g_next) + '\n')
     ST_file.write('cost_h is' + str(cost_total_next-cost_g_next) + '\n')
-    ST_file.write('cost_total is' + str(cost_total_next) + '\n')
-    ST_file.write('current mapping is' + str(next_map.MapToList()) + '\n')
+    ST_file.write('cost_h1 is' + str(cost_h_next[0]) + '\n')
+    ST_file.write('cost_h2 is' + str(cost_h_next[1]) + '\n')
+    ST_file.write('cost_total is ' + str(cost_total_next) + '\n')
+    ST_file.write('current mapping is ' + str(next_map.MapToList()) + '\n')
     ST_file.close()
     
 def CalculateHeuristicCost(current_map, DG, executable_vertex, executed_vertex, shortest_length_G, shortest_path_G, SWAP_cost, max_shortest_length_G, level_lookahead, DiG):
@@ -119,6 +121,9 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
         for swaps in possible_swap_combination:
             '''judge whether the swap in trivial to avoid unnecessary state'''
             flag_nontrivial = ct.CheckSWAPInvolved(swaps, executable_vertex_current, DG, current_map)
+            print('FL is ', executable_vertex_current)
+            print('SWAP ', swaps)
+            print(flag_nontrivial)
             if flag_nontrivial == False:
                 #print('trivival swap')
                 continue

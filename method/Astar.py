@@ -79,6 +79,8 @@ def ExpandSearchTree(DG, search_tree, next_node_list, father_node, none_leaf_nod
 
 def AStarSearch(q_phy, cir_phy, G, DG, initial_map, shortest_length_G, shortest_path_G=None, possible_swap_combination=None, draw=False, DiG=None):
     # only set True when debugging
+    shortest_length_G = shortest_length_G[0]
+    shortest_length_G_4H = shortest_length_G[1]
     debug_model = False
     display_complete_state = 1
     SWAP_cost = 3

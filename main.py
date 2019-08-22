@@ -22,28 +22,28 @@ import json
 #list_num_CNOT = [3, 5, 10]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200, 250, 300, 350, 400]
 #list_num_CNOT = [3, 5, 10, 20 ,30, 50, 100, 150, 200]
-list_num_CNOT = [50]
+list_num_CNOT = [16]
 # number of logical qubits
-num_qubits = 12
+num_qubits = 16
 # description of architecture graph
-num_vertex = 12
+num_vertex = 16
 # repeat time
 repeat_time = 10
 # architecture graph generation control
 #method_AG = ['circle']
-#method_AG = ['grid', 3, 3]
+method_AG = ['grid', 4, 4]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
 #method_AG = ['IBM QX5']
-method_AG = ['directed grid', 4, 3]
+#method_AG = ['directed grid', 4, 3]
 #method_AG = ['directed circle', 6]
 imoprt_swaps_combination_from_json = 0
 
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
-use_Astar_search = 1
-use_Astar_lookahead = 1
+use_Astar_search = 0
+use_Astar_lookahead = 0
 use_RemotoCNOTandWindow = 0
 use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
@@ -132,7 +132,7 @@ if draw_architecture_graph == True: nx.draw(G, with_labels=True)
 if DiG == None:
     res = ct.ShortestPath(G)
     shortest_path_G = res[1]
-    shortest_length_G = res[0]
+    shortest_length_G = (res[0], res[2])
 else:
     res = ct.ShortestPath(DiG)
     shortest_path_G = res[1]

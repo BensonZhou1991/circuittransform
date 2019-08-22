@@ -57,6 +57,32 @@ def CreateCNOTRandomly(q_reg, num_CNOT, cir = None):
     
     return total_CNOT
 
+def CreateCNOTRandomlyOneLayer(q_log, num_CNOT):
+    '''
+    generate CNOT operation randomly in only one layer
+    input:
+        q_reg: quantum register
+        list of all operatuions
+    output:
+        list [(v_c, v_t), (v_c, v_t), ...]
+        list [operation, ...]
+    '''
+    q = q_log
+    num_qubits = len(q)
+    pos = list(range(num_qubits))
+    np.random.shuffle(pos)
+    CNOT_operations = []
+    CNOT_list = []
+    for i in range(num_CNOT):
+        q_c_pos = pos.pop()
+        q_t_pos = pos.pop()
+        q_c = q[q_c_pos]
+        q_t = q[q_t_pos]
+        new_CNOT = OperationCNOT(q_c, q_t, [])
+        CNOT_operations.append(new_CNOT)
+        CNOT_list.append((q_c_pos, q_t_pos))
+    return CNOT_list, CNOT_operations
+
 def CreateCircuitFromQASM(file):
     QASM_file = open('inputs/QASM example/' + file, 'r')
     iter_f = iter(QASM_file)

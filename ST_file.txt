@@ -1,0 +1,3410 @@
+node number is 0
+current operation is None
+cost_g is0
+cost_h is195.8
+cost_h1 is16.6
+cost_h2 is179.20000000000002
+cost_total is 195.8
+current mapping is [0, 1, 2, 3, 4]
+node number is 1
+current operation is (0, 1)
+cost_g is7
+cost_h is208.20000000000002
+cost_h1 is28.999999999999996
+cost_h2 is179.20000000000002
+cost_total is 215.20000000000002
+current mapping is [1, 0, 2, 3, 4]
+added edge is (0, 1)
+
+node number is 2
+current operation is (1, 2)
+cost_g is7
+cost_h is167.2
+cost_h1 is21.599999999999998
+cost_h2 is145.6
+cost_total is 174.2
+current mapping is [0, 2, 1, 3, 4]
+added edge is (0, 2)
+
+node number is 3
+current operation is (2, 3)
+cost_g is7
+cost_h is199.0
+cost_h1 is19.799999999999997
+cost_h2 is179.20000000000002
+cost_total is 206.0
+current mapping is [0, 1, 3, 2, 4]
+added edge is (0, 3)
+
+node number is 4
+current operation is (2, 5)
+cost_g is7
+cost_h is203.00001000000003
+cost_h1 is23.80001
+cost_h2 is179.20000000000002
+cost_total is 210.00001000000003
+current mapping is [0, 1, 5, 3, 4]
+added edge is (0, 4)
+
+node number is 5
+current operation is 4H[(QuantumRegister(5, 'q'), 2), (QuantumRegister(5, 'q'), 1)]
+cost_g is4
+cost_h is188.8
+cost_h1 is20.8
+cost_h2 is168.0
+cost_total is 192.8
+current mapping is [0, 1, 2, 3, 4]
+added edge is (0, 5)
+
+chosen node is 2
+node number is 6
+current operation is (0, 1)
+cost_g is14
+cost_h is195.8
+cost_h1 is16.6
+cost_h2 is179.20000000000002
+cost_total is 209.8
+current mapping is [0, 1, 2, 3, 4]
+added edge is (1, 6)
+
+node number is 7
+current operation is (0, 5)
+cost_g is14
+cost_h is195.8
+cost_h1 is16.6
+cost_h2 is179.20000000000002
+cost_total is 209.8
+current mapping is [1, 5, 2, 3, 4]
+added edge is (1, 7)
+
+node number is 8
+current operation is (1, 2)
+cost_g is14
+cost_h is199.2
+cost_h1 is31.200000000000003
+cost_h2 is168.0
+cost_total is 213.2
+current mapping is [2, 0, 1, 3, 4]
+added edge is (1, 8)
+
+node number is 9
+current operation is (2, 3)
+cost_g is14
+cost_h is211.4
+cost_h1 is32.199999999999996
+cost_h2 is179.20000000000002
+cost_total is 225.4
+current mapping is [1, 0, 3, 2, 4]
+added edge is (1, 9)
+
+node number is 10
+current operation is (2, 5)
+cost_g is14
+cost_h is196.0
+cost_h1 is28.0
+cost_h2 is168.0
+cost_total is 210.0
+current mapping is [1, 0, 5, 3, 4]
+added edge is (1, 10)
+
+node number is 11
+current operation is (0, 1)
+cost_g is14
+cost_h is177.6
+cost_h1 is32.0
+cost_h2 is145.6
+cost_total is 191.6
+current mapping is [1, 2, 0, 3, 4]
+added edge is (2, 11)
+
+node number is 12
+current operation is (1, 2)
+cost_g is14
+cost_h is166.2
+cost_h1 is20.6
+cost_h2 is145.6
+cost_total is 180.2
+current mapping is [0, 1, 2, 3, 4]
+added edge is (2, 12)
+
+node number is 13
+current operation is (2, 3)
+cost_g is14
+cost_h is157.6
+cost_h1 is12.0
+cost_h2 is145.6
+cost_total is 171.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (2, 13)
+
+node number is 14
+current operation is (3, 4)
+cost_g is14
+cost_h is175.0
+cost_h1 is29.400000000000002
+cost_h2 is145.6
+cost_total is 189.0
+current mapping is [0, 2, 1, 4, 3]
+added edge is (2, 14)
+
+node number is 15
+current operation is (0, 1)
+cost_g is14
+cost_h is211.4
+cost_h1 is32.199999999999996
+cost_h2 is179.20000000000002
+cost_total is 225.4
+current mapping is [1, 0, 3, 2, 4]
+added edge is (3, 15)
+
+node number is 16
+current operation is (1, 2)
+cost_g is14
+cost_h is194.60000000000002
+cost_h1 is15.399999999999999
+cost_h2 is179.20000000000002
+cost_total is 208.60000000000002
+current mapping is [0, 2, 3, 1, 4]
+added edge is (3, 16)
+
+node number is 17
+current operation is (2, 3)
+cost_g is14
+cost_h is195.8
+cost_h1 is16.6
+cost_h2 is179.20000000000002
+cost_total is 209.8
+current mapping is [0, 1, 2, 3, 4]
+added edge is (3, 17)
+
+node number is 18
+current operation is (3, 4)
+cost_g is14
+cost_h is208.60000000000002
+cost_h1 is29.400000000000002
+cost_h2 is179.20000000000002
+cost_total is 222.60000000000002
+current mapping is [0, 1, 4, 2, 3]
+added edge is (3, 18)
+
+node number is 19
+current operation is (0, 1)
+cost_g is14
+cost_h is196.0
+cost_h1 is28.0
+cost_h2 is168.0
+cost_total is 210.0
+current mapping is [1, 0, 5, 3, 4]
+added edge is (4, 19)
+
+node number is 20
+current operation is (0, 5)
+cost_g is14
+cost_h is201.8
+cost_h1 is22.6
+cost_h2 is179.20000000000002
+cost_total is 215.8
+current mapping is [5, 1, 0, 3, 4]
+added edge is (4, 20)
+
+node number is 21
+current operation is (1, 2)
+cost_g is14
+cost_h is160.79999999999998
+cost_h1 is15.2
+cost_h2 is145.6
+cost_total is 174.79999999999998
+current mapping is [0, 2, 5, 3, 4]
+added edge is (4, 21)
+
+node number is 22
+current operation is (2, 5)
+cost_g is14
+cost_h is195.8
+cost_h1 is16.6
+cost_h2 is179.20000000000002
+cost_total is 209.8
+current mapping is [0, 1, 2, 3, 4]
+added edge is (4, 22)
+
+node number is 23
+current operation is (4, 5)
+cost_g is14
+cost_h is211.4
+cost_h1 is32.199999999999996
+cost_h2 is179.20000000000002
+cost_total is 225.4
+current mapping is [0, 1, 4, 3, 5]
+added edge is (4, 23)
+
+node number is 24
+current operation is (0, 1)
+cost_g is11
+cost_h is200.6
+cost_h1 is32.6
+cost_h2 is168.0
+cost_total is 211.6
+current mapping is [1, 0, 2, 3, 4]
+added edge is (5, 24)
+
+node number is 25
+current operation is (1, 2)
+cost_g is11
+cost_h is167.2
+cost_h1 is21.599999999999998
+cost_h2 is145.6
+cost_total is 178.2
+current mapping is [0, 2, 1, 3, 4]
+added edge is (5, 25)
+
+node number is 26
+current operation is (2, 3)
+cost_g is11
+cost_h is177.60000000000002
+cost_h1 is20.8
+cost_h2 is156.8
+cost_total is 188.60000000000002
+current mapping is [0, 1, 3, 2, 4]
+added edge is (5, 26)
+
+node number is 27
+current operation is (3, 4)
+cost_g is11
+cost_h is200.0
+cost_h1 is32.0
+cost_h2 is168.0
+cost_total is 211.0
+current mapping is [0, 1, 2, 4, 3]
+added edge is (5, 27)
+
+chosen node is 13
+round number is 1
+
+node number is 28
+current operation is (0, 1)
+cost_g is21
+cost_h is167.2
+cost_h1 is21.599999999999998
+cost_h2 is145.6
+cost_total is 188.2
+current mapping is [0, 2, 1, 3, 4]
+added edge is (11, 28)
+
+node number is 29
+current operation is (0, 5)
+cost_g is21
+cost_h is160.8
+cost_h1 is15.2
+cost_h2 is145.6
+cost_total is 181.8
+current mapping is [1, 2, 5, 3, 4]
+added edge is (11, 29)
+
+node number is 30
+current operation is (2, 3)
+cost_g is21
+cost_h is168.0
+cost_h1 is22.400000000000002
+cost_h2 is145.6
+cost_total is 189.0
+current mapping is [1, 3, 0, 2, 4]
+added edge is (11, 30)
+
+node number is 31
+current operation is (3, 4)
+cost_g is21
+cost_h is169.40001
+cost_h1 is23.80001
+cost_h2 is145.6
+cost_total is 190.40001
+current mapping is [1, 2, 0, 4, 3]
+added edge is (11, 31)
+
+node number is 32
+current operation is (1, 2)
+cost_g is21
+cost_h is167.2
+cost_h1 is21.599999999999998
+cost_h2 is145.6
+cost_total is 188.2
+current mapping is [0, 2, 1, 3, 4]
+added edge is (12, 32)
+
+node number is 33
+current operation is (2, 3)
+cost_g is21
+cost_h is157.8
+cost_h1 is23.4
+cost_h2 is134.4
+cost_total is 178.8
+current mapping is [0, 1, 3, 2, 4]
+added edge is (12, 33)
+
+node number is 34
+current operation is (2, 5)
+cost_g is21
+cost_h is173.39999999999998
+cost_h1 is27.799999999999997
+cost_h2 is145.6
+cost_total is 194.39999999999998
+current mapping is [0, 1, 5, 3, 4]
+added edge is (12, 34)
+
+node number is 35
+current operation is (3, 4)
+cost_g is21
+cost_h is174.0
+cost_h1 is28.4
+cost_h2 is145.6
+cost_total is 195.0
+current mapping is [0, 1, 2, 4, 3]
+added edge is (12, 35)
+
+node number is 36
+current operation is 4H[(QuantumRegister(5, 'q'), 3), (QuantumRegister(5, 'q'), 2)]
+cost_g is18
+cost_h is161.0
+cost_h1 is26.6
+cost_h2 is134.4
+cost_total is 179.0
+current mapping is [0, 1, 2, 3, 4]
+added edge is (12, 36)
+
+node number is 37
+current operation is (0, 1)
+cost_g is21
+cost_h is168.0
+cost_h1 is22.400000000000002
+cost_h2 is145.6
+cost_total is 189.0
+current mapping is [1, 3, 0, 2, 4]
+added edge is (13, 37)
+
+node number is 38
+current operation is (1, 2)
+cost_g is21
+cost_h is152.2
+cost_h1 is17.799999999999997
+cost_h2 is134.4
+cost_total is 173.2
+current mapping is [0, 3, 2, 1, 4]
+added edge is (13, 38)
+
+node number is 39
+current operation is (2, 3)
+cost_g is21
+cost_h is167.2
+cost_h1 is21.599999999999998
+cost_h2 is145.6
+cost_total is 188.2
+current mapping is [0, 2, 1, 3, 4]
+added edge is (13, 39)
+
+node number is 40
+current operation is (2, 5)
+cost_g is21
+cost_h is169.40001
+cost_h1 is23.80001
+cost_h2 is145.6
+cost_total is 190.40001
+current mapping is [0, 3, 1, 5, 4]
+added edge is (13, 40)
+
+node number is 41
+current operation is 4H[(QuantumRegister(5, 'q'), 3), (QuantumRegister(5, 'q'), 2)]
+cost_g is18
+cost_h is141.6
+cost_h1 is18.4
+cost_h2 is123.2
+cost_total is 159.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (13, 41)
+
+node number is 42
+current operation is (0, 1)
+cost_g is21
+cost_h is169.40001
+cost_h1 is23.80001
+cost_h2 is145.6
+cost_total is 190.40001
+current mapping is [1, 2, 0, 4, 3]
+added edge is (14, 42)
+
+node number is 43
+current operation is (1, 2)
+cost_g is21
+cost_h is174.0
+cost_h1 is28.4
+cost_h2 is145.6
+cost_total is 195.0
+current mapping is [0, 1, 2, 4, 3]
+added edge is (14, 43)
+
+node number is 44
+current operation is (3, 4)
+cost_g is21
+cost_h is167.2
+cost_h1 is21.599999999999998
+cost_h2 is145.6
+cost_total is 188.2
+current mapping is [0, 2, 1, 3, 4]
+added edge is (14, 44)
+
+node number is 45
+current operation is (4, 5)
+cost_g is21
+cost_h is156.8
+cost_h1 is11.200000000000001
+cost_h2 is145.6
+cost_total is 177.8
+current mapping is [0, 2, 1, 5, 3]
+added edge is (14, 45)
+
+chosen node is 41
+round number is 2
+
+node number is 46
+current operation is (0, 1)
+cost_g is28
+cost_h is157.6
+cost_h1 is12.0
+cost_h2 is145.6
+cost_total is 185.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (37, 46)
+
+node number is 47
+current operation is (0, 5)
+cost_g is28
+cost_h is157.6
+cost_h1 is12.0
+cost_h2 is145.6
+cost_total is 185.6
+current mapping is [1, 3, 5, 2, 4]
+added edge is (37, 47)
+
+node number is 48
+current operation is (1, 2)
+cost_g is28
+cost_h is166.2
+cost_h1 is31.799999999999997
+cost_h2 is134.4
+cost_total is 194.2
+current mapping is [2, 3, 0, 1, 4]
+added edge is (37, 48)
+
+node number is 49
+current operation is (2, 3)
+cost_g is28
+cost_h is177.6
+cost_h1 is32.0
+cost_h2 is145.6
+cost_total is 205.6
+current mapping is [1, 2, 0, 3, 4]
+added edge is (37, 49)
+
+node number is 50
+current operation is (2, 5)
+cost_g is28
+cost_h is162.0
+cost_h1 is27.6
+cost_h2 is134.4
+cost_total is 190.0
+current mapping is [1, 3, 0, 5, 4]
+added edge is (37, 50)
+
+node number is 51
+current operation is (0, 1)
+cost_g is28
+cost_h is164.8
+cost_h1 is30.4
+cost_h2 is134.4
+cost_total is 192.8
+current mapping is [1, 3, 2, 0, 4]
+added edge is (38, 51)
+
+node number is 52
+current operation is (1, 2)
+cost_g is28
+cost_h is141.6
+cost_h1 is18.4
+cost_h2 is123.2
+cost_total is 169.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (38, 52)
+
+node number is 53
+current operation is (2, 3)
+cost_g is28
+cost_h is152.8
+cost_h1 is29.6
+cost_h2 is123.2
+cost_total is 180.8
+current mapping is [0, 2, 3, 1, 4]
+added edge is (38, 53)
+
+node number is 54
+current operation is (3, 4)
+cost_g is28
+cost_h is168.0
+cost_h1 is33.6
+cost_h2 is134.4
+cost_total is 196.0
+current mapping is [0, 4, 2, 1, 3]
+added edge is (38, 54)
+
+node number is 55
+current operation is (0, 1)
+cost_g is28
+cost_h is177.6
+cost_h1 is32.0
+cost_h2 is145.6
+cost_total is 205.6
+current mapping is [1, 2, 0, 3, 4]
+added edge is (39, 55)
+
+node number is 56
+current operation is (1, 2)
+cost_g is28
+cost_h is166.2
+cost_h1 is20.6
+cost_h2 is145.6
+cost_total is 194.2
+current mapping is [0, 1, 2, 3, 4]
+added edge is (39, 56)
+
+node number is 57
+current operation is (2, 3)
+cost_g is28
+cost_h is157.6
+cost_h1 is12.0
+cost_h2 is145.6
+cost_total is 185.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (39, 57)
+
+node number is 58
+current operation is (3, 4)
+cost_g is28
+cost_h is175.0
+cost_h1 is29.400000000000002
+cost_h2 is145.6
+cost_total is 203.0
+current mapping is [0, 2, 1, 4, 3]
+added edge is (39, 58)
+
+node number is 59
+current operation is (0, 1)
+cost_g is28
+cost_h is162.0
+cost_h1 is27.6
+cost_h2 is134.4
+cost_total is 190.0
+current mapping is [1, 3, 0, 5, 4]
+added edge is (40, 59)
+
+node number is 60
+current operation is (0, 5)
+cost_g is28
+cost_h is171.6
+cost_h1 is25.999999999999996
+cost_h2 is145.6
+cost_total is 199.6
+current mapping is [5, 3, 1, 0, 4]
+added edge is (40, 60)
+
+node number is 61
+current operation is (1, 2)
+cost_g is28
+cost_h is149.8
+cost_h1 is15.400000000000002
+cost_h2 is134.4
+cost_total is 177.8
+current mapping is [0, 3, 2, 5, 4]
+added edge is (40, 61)
+
+node number is 62
+current operation is (2, 5)
+cost_g is28
+cost_h is157.6
+cost_h1 is12.0
+cost_h2 is145.6
+cost_total is 185.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (40, 62)
+
+node number is 63
+current operation is (4, 5)
+cost_g is28
+cost_h is177.6
+cost_h1 is32.0
+cost_h2 is145.6
+cost_total is 205.6
+current mapping is [0, 3, 1, 4, 5]
+added edge is (40, 63)
+
+node number is 64
+current operation is (0, 1)
+cost_g is25
+cost_h is159.0
+cost_h1 is35.800000000000004
+cost_h2 is123.2
+cost_total is 184.0
+current mapping is [1, 3, 0, 2, 4]
+added edge is (41, 64)
+
+node number is 65
+current operation is (1, 2)
+cost_g is25
+cost_h is135.60000000000002
+cost_h1 is34.8
+cost_h2 is100.80000000000001
+cost_total is 160.60000000000002
+current mapping is [0, 3, 2, 1, 4]
+added edge is (41, 65)
+
+node number is 66
+current operation is (2, 3)
+cost_g is25
+cost_h is128.6
+cost_h1 is16.6
+cost_h2 is112.0
+cost_total is 153.6
+current mapping is [0, 2, 1, 3, 4]
+added edge is (41, 66)
+
+node number is 67
+current operation is (3, 4)
+cost_g is25
+cost_h is155.2
+cost_h1 is32.0
+cost_h2 is123.2
+cost_total is 180.2
+current mapping is [0, 4, 1, 2, 3]
+added edge is (41, 67)
+
+chosen node is 66
+round number is 3
+
+node number is 68
+current operation is (0, 1)
+cost_g is32
+cost_h is141.6
+cost_h1 is18.4
+cost_h2 is123.2
+cost_total is 173.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (64, 68)
+
+node number is 69
+current operation is (0, 5)
+cost_g is32
+cost_h is151.4
+cost_h1 is28.2
+cost_h2 is123.2
+cost_total is 183.4
+current mapping is [1, 3, 5, 2, 4]
+added edge is (64, 69)
+
+node number is 70
+current operation is (2, 3)
+cost_g is32
+cost_h is155.8
+cost_h1 is32.6
+cost_h2 is123.2
+cost_total is 187.8
+current mapping is [1, 2, 0, 3, 4]
+added edge is (64, 70)
+
+node number is 71
+current operation is (3, 4)
+cost_g is32
+cost_h is150.20001000000002
+cost_h1 is27.00001
+cost_h2 is123.2
+cost_total is 182.20001000000002
+current mapping is [1, 4, 0, 2, 3]
+added edge is (64, 71)
+
+node number is 72
+current operation is (0, 1)
+cost_g is32
+cost_h is140.20001000000002
+cost_h1 is39.40001
+cost_h2 is100.80000000000001
+cost_total is 172.20001000000002
+current mapping is [1, 3, 2, 0, 4]
+added edge is (65, 72)
+
+node number is 73
+current operation is (0, 5)
+cost_g is32
+cost_h is123.20000000000002
+cost_h1 is22.400000000000002
+cost_h2 is100.80000000000001
+cost_total is 155.20000000000002
+current mapping is [5, 3, 2, 1, 4]
+added edge is (65, 73)
+
+node number is 74
+current operation is (1, 2)
+cost_g is32
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 148.0
+current mapping is [0, 3, 1, 2, 4]
+added edge is (65, 74)
+
+node number is 75
+current operation is (2, 3)
+cost_g is32
+cost_h is139.4
+cost_h1 is38.599999999999994
+cost_h2 is100.80000000000001
+cost_total is 171.4
+current mapping is [0, 2, 3, 1, 4]
+added edge is (65, 75)
+
+node number is 76
+current operation is (2, 5)
+cost_g is32
+cost_h is115.0
+cost_h1 is25.4
+cost_h2 is89.60000000000001
+cost_total is 147.0
+current mapping is [0, 3, 5, 1, 4]
+added edge is (65, 76)
+
+node number is 77
+current operation is (3, 4)
+cost_g is32
+cost_h is143.80001000000001
+cost_h1 is43.00001
+cost_h2 is100.80000000000001
+cost_total is 175.80001000000001
+current mapping is [0, 4, 2, 1, 3]
+added edge is (65, 77)
+
+node number is 78
+current operation is (0, 1)
+cost_g is32
+cost_h is143.6
+cost_h1 is31.599999999999994
+cost_h2 is112.0
+cost_total is 175.6
+current mapping is [1, 2, 0, 3, 4]
+added edge is (66, 78)
+
+node number is 79
+current operation is (1, 2)
+cost_g is32
+cost_h is139.80001
+cost_h1 is27.800009999999997
+cost_h2 is112.0
+cost_total is 171.80001
+current mapping is [0, 1, 2, 3, 4]
+added edge is (66, 79)
+
+node number is 80
+current operation is (2, 3)
+cost_g is32
+cost_h is125.6
+cost_h1 is13.6
+cost_h2 is112.0
+cost_total is 157.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (66, 80)
+
+node number is 81
+current operation is (3, 4)
+cost_g is32
+cost_h is144.2
+cost_h1 is32.199999999999996
+cost_h2 is112.0
+cost_total is 176.2
+current mapping is [0, 2, 1, 4, 3]
+added edge is (66, 81)
+
+node number is 82
+current operation is (0, 1)
+cost_g is32
+cost_h is150.20001000000002
+cost_h1 is27.00001
+cost_h2 is123.2
+cost_total is 182.20001000000002
+current mapping is [1, 4, 0, 2, 3]
+added edge is (67, 82)
+
+node number is 83
+current operation is (1, 2)
+cost_g is32
+cost_h is155.4
+cost_h1 is32.2
+cost_h2 is123.2
+cost_total is 187.4
+current mapping is [0, 4, 2, 1, 3]
+added edge is (67, 83)
+
+node number is 84
+current operation is (3, 4)
+cost_g is32
+cost_h is141.6
+cost_h1 is18.4
+cost_h2 is123.2
+cost_total is 173.6
+current mapping is [0, 3, 1, 2, 4]
+added edge is (67, 84)
+
+node number is 85
+current operation is (4, 5)
+cost_g is32
+cost_h is142.6
+cost_h1 is19.4
+cost_h2 is123.2
+cost_total is 174.6
+current mapping is [0, 5, 1, 2, 3]
+added edge is (67, 85)
+
+chosen node is 76
+round number is 4
+
+node number is 86
+current operation is (0, 1)
+cost_g is39
+cost_h is135.60000000000002
+cost_h1 is34.8
+cost_h2 is100.80000000000001
+cost_total is 174.60000000000002
+current mapping is [0, 3, 2, 1, 4]
+added edge is (72, 86)
+
+node number is 87
+current operation is (0, 5)
+cost_g is39
+cost_h is133.20000000000002
+cost_h1 is32.4
+cost_h2 is100.80000000000001
+cost_total is 172.20000000000002
+current mapping is [1, 3, 2, 5, 4]
+added edge is (72, 87)
+
+node number is 88
+current operation is (1, 2)
+cost_g is39
+cost_h is126.0
+cost_h1 is36.39999999999999
+cost_h2 is89.60000000000001
+cost_total is 165.0
+current mapping is [2, 3, 1, 0, 4]
+added edge is (72, 88)
+
+node number is 89
+current operation is (2, 3)
+cost_g is39
+cost_h is144.0
+cost_h1 is43.199999999999996
+cost_h2 is100.80000000000001
+cost_total is 183.0
+current mapping is [1, 2, 3, 0, 4]
+added edge is (72, 89)
+
+node number is 90
+current operation is (2, 5)
+cost_g is39
+cost_h is143.80001000000001
+cost_h1 is43.00001
+cost_h2 is100.80000000000001
+cost_total is 182.80001000000001
+current mapping is [1, 3, 5, 0, 4]
+added edge is (72, 90)
+
+node number is 91
+current operation is (3, 4)
+cost_g is39
+cost_h is124.40001000000001
+cost_h1 is23.60001
+cost_h2 is100.80000000000001
+cost_total is 163.40001
+current mapping is [1, 4, 2, 0, 3]
+added edge is (72, 91)
+
+node number is 92
+current operation is 4H[(QuantumRegister(5, 'q'), 2), (QuantumRegister(5, 'q'), 0)]
+cost_g is36
+cost_h is135.60001
+cost_h1 is46.00001
+cost_h2 is89.60000000000001
+cost_total is 171.60001
+current mapping is [1, 3, 2, 0, 4]
+added edge is (72, 92)
+
+node number is 93
+current operation is (0, 1)
+cost_g is39
+cost_h is126.20000000000002
+cost_h1 is25.4
+cost_h2 is100.80000000000001
+cost_total is 165.20000000000002
+current mapping is [5, 3, 2, 0, 4]
+added edge is (73, 93)
+
+node number is 94
+current operation is (0, 5)
+cost_g is39
+cost_h is135.60000000000002
+cost_h1 is34.8
+cost_h2 is100.80000000000001
+cost_total is 174.60000000000002
+current mapping is [0, 3, 2, 1, 4]
+added edge is (73, 94)
+
+node number is 95
+current operation is (1, 2)
+cost_g is39
+cost_h is125.80000000000001
+cost_h1 is25.0
+cost_h2 is100.80000000000001
+cost_total is 164.8
+current mapping is [5, 3, 1, 2, 4]
+added edge is (73, 95)
+
+node number is 96
+current operation is (2, 3)
+cost_g is39
+cost_h is119.80000000000001
+cost_h1 is19.0
+cost_h2 is100.80000000000001
+cost_total is 158.8
+current mapping is [5, 2, 3, 1, 4]
+added edge is (73, 96)
+
+node number is 97
+current operation is (2, 5)
+cost_g is39
+cost_h is115.0
+cost_h1 is25.4
+cost_h2 is89.60000000000001
+cost_total is 154.0
+current mapping is [2, 3, 5, 1, 4]
+added edge is (73, 97)
+
+node number is 98
+current operation is (3, 4)
+cost_g is39
+cost_h is131.4
+cost_h1 is30.599999999999998
+cost_h2 is100.80000000000001
+cost_total is 170.4
+current mapping is [5, 4, 2, 1, 3]
+added edge is (73, 98)
+
+node number is 99
+current operation is (4, 5)
+cost_g is39
+cost_h is128.4
+cost_h1 is27.599999999999994
+cost_h2 is100.80000000000001
+cost_total is 167.4
+current mapping is [4, 3, 2, 1, 5]
+added edge is (73, 99)
+
+node number is 100
+current operation is 4H[(QuantumRegister(5, 'q'), 2), (QuantumRegister(5, 'q'), 0)]
+cost_g is36
+cost_h is106.0
+cost_h1 is27.6
+cost_h2 is78.4
+cost_total is 142.0
+current mapping is [5, 3, 2, 1, 4]
+added edge is (73, 100)
+
+node number is 101
+current operation is (0, 1)
+cost_g is39
+cost_h is125.60000000000002
+cost_h1 is36.0
+cost_h2 is89.60000000000001
+cost_total is 164.60000000000002
+current mapping is [1, 3, 0, 2, 4]
+added edge is (74, 101)
+
+node number is 102
+current operation is (0, 5)
+cost_g is39
+cost_h is110.80000000000001
+cost_h1 is32.4
+cost_h2 is78.4
+cost_total is 149.8
+current mapping is [5, 3, 1, 2, 4]
+added edge is (74, 102)
+
+node number is 103
+current operation is (1, 2)
+cost_g is39
+cost_h is124.4
+cost_h1 is34.8
+cost_h2 is89.60000000000001
+cost_total is 163.4
+current mapping is [0, 3, 2, 1, 4]
+added edge is (74, 103)
+
+node number is 104
+current operation is (2, 3)
+cost_g is39
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 139.8
+current mapping is [0, 2, 1, 3, 4]
+added edge is (74, 104)
+
+node number is 105
+current operation is (2, 5)
+cost_g is39
+cost_h is119.0
+cost_h1 is29.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 158.0
+current mapping is [0, 3, 1, 5, 4]
+added edge is (74, 105)
+
+node number is 106
+current operation is (3, 4)
+cost_g is39
+cost_h is127.80000000000001
+cost_h1 is38.2
+cost_h2 is89.60000000000001
+cost_total is 166.8
+current mapping is [0, 4, 1, 2, 3]
+added edge is (74, 106)
+
+node number is 107
+current operation is (4, 5)
+cost_g is39
+cost_h is103.20000000000002
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 142.20000000000002
+current mapping is [0, 3, 1, 2, 5]
+added edge is (74, 107)
+
+node number is 108
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is36
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 136.8
+current mapping is [0, 3, 1, 2, 4]
+added edge is (74, 108)
+
+node number is 109
+current operation is (0, 1)
+cost_g is39
+cost_h is144.0
+cost_h1 is43.199999999999996
+cost_h2 is100.80000000000001
+cost_total is 183.0
+current mapping is [1, 2, 3, 0, 4]
+added edge is (75, 109)
+
+node number is 110
+current operation is (0, 5)
+cost_g is39
+cost_h is119.80000000000001
+cost_h1 is19.0
+cost_h2 is100.80000000000001
+cost_total is 158.8
+current mapping is [5, 2, 3, 1, 4]
+added edge is (75, 110)
+
+node number is 111
+current operation is (1, 2)
+cost_g is39
+cost_h is124.19999999999999
+cost_h1 is34.599999999999994
+cost_h2 is89.60000000000001
+cost_total is 163.2
+current mapping is [0, 1, 3, 2, 4]
+added edge is (75, 111)
+
+node number is 112
+current operation is (2, 3)
+cost_g is39
+cost_h is135.60000000000002
+cost_h1 is34.8
+cost_h2 is100.80000000000001
+cost_total is 174.60000000000002
+current mapping is [0, 3, 2, 1, 4]
+added edge is (75, 112)
+
+node number is 113
+current operation is (2, 5)
+cost_g is39
+cost_h is142.4
+cost_h1 is41.599999999999994
+cost_h2 is100.80000000000001
+cost_total is 181.4
+current mapping is [0, 5, 3, 1, 4]
+added edge is (75, 113)
+
+node number is 114
+current operation is (3, 4)
+cost_g is39
+cost_h is131.4
+cost_h1 is30.599999999999998
+cost_h2 is100.80000000000001
+cost_total is 170.4
+current mapping is [0, 2, 4, 1, 3]
+added edge is (75, 114)
+
+node number is 115
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is36
+cost_h is124.19999999999999
+cost_h1 is34.599999999999994
+cost_h2 is89.60000000000001
+cost_total is 160.2
+current mapping is [0, 2, 3, 1, 4]
+added edge is (75, 115)
+
+node number is 116
+current operation is (0, 1)
+cost_g is39
+cost_h is136.20001000000002
+cost_h1 is46.600010000000005
+cost_h2 is89.60000000000001
+cost_total is 175.20001000000002
+current mapping is [1, 3, 5, 0, 4]
+added edge is (76, 116)
+
+node number is 117
+current operation is (0, 5)
+cost_g is39
+cost_h is106.0
+cost_h1 is27.6
+cost_h2 is78.4
+cost_total is 145.0
+current mapping is [5, 3, 0, 1, 4]
+added edge is (76, 117)
+
+node number is 118
+current operation is (1, 2)
+cost_g is39
+cost_h is108.0
+cost_h1 is18.4
+cost_h2 is89.60000000000001
+cost_total is 147.0
+current mapping is [0, 3, 5, 2, 4]
+added edge is (76, 118)
+
+node number is 119
+current operation is (2, 3)
+cost_g is39
+cost_h is108.0
+cost_h1 is18.4
+cost_h2 is89.60000000000001
+cost_total is 147.0
+current mapping is [0, 2, 5, 1, 4]
+added edge is (76, 119)
+
+node number is 120
+current operation is (3, 4)
+cost_g is39
+cost_h is131.60001
+cost_h1 is42.00001
+cost_h2 is89.60000000000001
+cost_total is 170.60001
+current mapping is [0, 4, 5, 1, 3]
+added edge is (76, 120)
+
+node number is 121
+current operation is (4, 5)
+cost_g is39
+cost_h is111.60000000000002
+cost_h1 is22.0
+cost_h2 is89.60000000000001
+cost_total is 150.60000000000002
+current mapping is [0, 3, 4, 1, 5]
+added edge is (76, 121)
+
+node number is 122
+current operation is (0, 1)
+cost_g is39
+cost_h is124.40001000000001
+cost_h1 is23.60001
+cost_h2 is100.80000000000001
+cost_total is 163.40001
+current mapping is [1, 4, 2, 0, 3]
+added edge is (77, 122)
+
+node number is 123
+current operation is (0, 5)
+cost_g is39
+cost_h is131.4
+cost_h1 is30.599999999999998
+cost_h2 is100.80000000000001
+cost_total is 170.4
+current mapping is [5, 4, 2, 1, 3]
+added edge is (77, 123)
+
+node number is 124
+current operation is (1, 2)
+cost_g is39
+cost_h is127.80000000000001
+cost_h1 is38.2
+cost_h2 is89.60000000000001
+cost_total is 166.8
+current mapping is [0, 4, 1, 2, 3]
+added edge is (77, 124)
+
+node number is 125
+current operation is (2, 3)
+cost_g is39
+cost_h is147.00001
+cost_h1 is46.20001
+cost_h2 is100.80000000000001
+cost_total is 186.00001
+current mapping is [0, 4, 3, 1, 2]
+added edge is (77, 125)
+
+node number is 126
+current operation is (2, 5)
+cost_g is39
+cost_h is131.60001
+cost_h1 is42.00001
+cost_h2 is89.60000000000001
+cost_total is 170.60001
+current mapping is [0, 4, 5, 1, 3]
+added edge is (77, 126)
+
+node number is 127
+current operation is (3, 4)
+cost_g is39
+cost_h is135.60000000000002
+cost_h1 is34.8
+cost_h2 is100.80000000000001
+cost_total is 174.60000000000002
+current mapping is [0, 3, 2, 1, 4]
+added edge is (77, 127)
+
+node number is 128
+current operation is (4, 5)
+cost_g is39
+cost_h is136.8
+cost_h1 is36.0
+cost_h2 is100.80000000000001
+cost_total is 175.8
+current mapping is [0, 5, 2, 1, 3]
+added edge is (77, 128)
+
+chosen node is 108
+round number is 5
+
+node number is 129
+current operation is (0, 1)
+cost_g is46
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 162.0
+current mapping is [0, 3, 1, 2, 4]
+added edge is (101, 129)
+
+node number is 130
+current operation is (1, 2)
+cost_g is46
+cost_h is124.4
+cost_h1 is34.8
+cost_h2 is89.60000000000001
+cost_total is 170.4
+current mapping is [2, 3, 0, 1, 4]
+added edge is (101, 130)
+
+node number is 131
+current operation is (2, 3)
+cost_g is46
+cost_h is110.4
+cost_h1 is32.0
+cost_h2 is78.4
+cost_total is 156.4
+current mapping is [1, 2, 0, 3, 4]
+added edge is (101, 131)
+
+node number is 132
+current operation is (2, 5)
+cost_g is46
+cost_h is128.60000000000002
+cost_h1 is39.0
+cost_h2 is89.60000000000001
+cost_total is 174.60000000000002
+current mapping is [1, 3, 0, 5, 4]
+added edge is (101, 132)
+
+node number is 133
+current operation is (3, 4)
+cost_g is46
+cost_h is125.4
+cost_h1 is35.8
+cost_h2 is89.60000000000001
+cost_total is 171.4
+current mapping is [1, 4, 0, 2, 3]
+added edge is (101, 133)
+
+node number is 134
+current operation is (4, 5)
+cost_g is46
+cost_h is108.80000000000001
+cost_h1 is19.2
+cost_h2 is89.60000000000001
+cost_total is 154.8
+current mapping is [1, 3, 0, 2, 5]
+added edge is (101, 134)
+
+node number is 135
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is43
+cost_h is110.4
+cost_h1 is32.0
+cost_h2 is78.4
+cost_total is 153.4
+current mapping is [1, 3, 0, 2, 4]
+added edge is (101, 135)
+
+node number is 136
+current operation is (0, 1)
+cost_g is46
+cost_h is99.0
+cost_h1 is20.6
+cost_h2 is78.4
+cost_total is 145.0
+current mapping is [5, 3, 0, 2, 4]
+added edge is (102, 136)
+
+node number is 137
+current operation is (0, 5)
+cost_g is46
+cost_h is100.60000000000002
+cost_h1 is33.4
+cost_h2 is67.2
+cost_total is 146.60000000000002
+current mapping is [0, 3, 1, 2, 4]
+added edge is (102, 137)
+
+node number is 138
+current operation is (1, 2)
+cost_g is46
+cost_h is106.0
+cost_h1 is27.6
+cost_h2 is78.4
+cost_total is 152.0
+current mapping is [5, 3, 2, 1, 4]
+added edge is (102, 138)
+
+node number is 139
+current operation is (2, 3)
+cost_g is46
+cost_h is95.60000000000002
+cost_h1 is28.4
+cost_h2 is67.2
+cost_total is 141.60000000000002
+current mapping is [5, 2, 1, 3, 4]
+added edge is (102, 139)
+
+node number is 140
+current operation is (2, 5)
+cost_g is46
+cost_h is103.60000000000002
+cost_h1 is36.4
+cost_h2 is67.2
+cost_total is 149.60000000000002
+current mapping is [2, 3, 1, 5, 4]
+added edge is (102, 140)
+
+node number is 141
+current operation is (3, 4)
+cost_g is46
+cost_h is113.19999999999999
+cost_h1 is34.8
+cost_h2 is78.4
+cost_total is 159.2
+current mapping is [5, 4, 1, 2, 3]
+added edge is (102, 141)
+
+node number is 142
+current operation is (4, 5)
+cost_g is46
+cost_h is111.80000000000001
+cost_h1 is33.4
+cost_h2 is78.4
+cost_total is 157.8
+current mapping is [4, 3, 1, 2, 5]
+added edge is (102, 142)
+
+node number is 143
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is43
+cost_h is95.60000000000002
+cost_h1 is28.4
+cost_h2 is67.2
+cost_total is 138.60000000000002
+current mapping is [5, 3, 1, 2, 4]
+added edge is (102, 143)
+
+node number is 144
+current operation is (0, 1)
+cost_g is46
+cost_h is135.60001
+cost_h1 is46.00001
+cost_h2 is89.60000000000001
+cost_total is 181.60001
+current mapping is [1, 3, 2, 0, 4]
+added edge is (103, 144)
+
+node number is 145
+current operation is (0, 5)
+cost_g is46
+cost_h is106.0
+cost_h1 is27.6
+cost_h2 is78.4
+cost_total is 152.0
+current mapping is [5, 3, 2, 1, 4]
+added edge is (103, 145)
+
+node number is 146
+current operation is (1, 2)
+cost_g is46
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 162.0
+current mapping is [0, 3, 1, 2, 4]
+added edge is (103, 146)
+
+node number is 147
+current operation is (2, 3)
+cost_g is46
+cost_h is122.0
+cost_h1 is32.4
+cost_h2 is89.60000000000001
+cost_total is 168.0
+current mapping is [0, 2, 3, 1, 4]
+added edge is (103, 147)
+
+node number is 148
+current operation is (3, 4)
+cost_g is46
+cost_h is136.20001000000002
+cost_h1 is46.600010000000005
+cost_h2 is89.60000000000001
+cost_total is 182.20001000000002
+current mapping is [0, 4, 2, 1, 3]
+added edge is (103, 148)
+
+node number is 149
+current operation is (4, 5)
+cost_g is46
+cost_h is111.60000000000002
+cost_h1 is22.0
+cost_h2 is89.60000000000001
+cost_total is 157.60000000000002
+current mapping is [0, 3, 2, 1, 5]
+added edge is (103, 149)
+
+node number is 150
+current operation is (0, 1)
+cost_g is46
+cost_h is110.4
+cost_h1 is32.0
+cost_h2 is78.4
+cost_total is 156.4
+current mapping is [1, 2, 0, 3, 4]
+added edge is (104, 150)
+
+node number is 151
+current operation is (0, 5)
+cost_g is46
+cost_h is95.60000000000002
+cost_h1 is28.4
+cost_h2 is67.2
+cost_total is 141.60000000000002
+current mapping is [5, 2, 1, 3, 4]
+added edge is (104, 151)
+
+node number is 152
+current operation is (3, 4)
+cost_g is46
+cost_h is109.60000000000002
+cost_h1 is31.200000000000003
+cost_h2 is78.4
+cost_total is 155.60000000000002
+current mapping is [0, 2, 1, 4, 3]
+added edge is (104, 152)
+
+node number is 153
+current operation is (4, 5)
+cost_g is46
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 134.0
+current mapping is [0, 2, 1, 3, 5]
+added edge is (104, 153)
+
+node number is 154
+current operation is (0, 1)
+cost_g is46
+cost_h is128.60000000000002
+cost_h1 is39.0
+cost_h2 is89.60000000000001
+cost_total is 174.60000000000002
+current mapping is [1, 3, 0, 5, 4]
+added edge is (105, 154)
+
+node number is 155
+current operation is (0, 5)
+cost_g is46
+cost_h is120.80001000000001
+cost_h1 is42.40001
+cost_h2 is78.4
+cost_total is 166.80001000000001
+current mapping is [5, 3, 1, 0, 4]
+added edge is (105, 155)
+
+node number is 156
+current operation is (2, 3)
+cost_g is46
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 162.0
+current mapping is [0, 2, 1, 5, 4]
+added edge is (105, 156)
+
+node number is 157
+current operation is (2, 5)
+cost_g is46
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 162.0
+current mapping is [0, 3, 1, 2, 4]
+added edge is (105, 157)
+
+node number is 158
+current operation is (3, 4)
+cost_g is46
+cost_h is124.80000000000001
+cost_h1 is35.2
+cost_h2 is89.60000000000001
+cost_total is 170.8
+current mapping is [0, 4, 1, 5, 3]
+added edge is (105, 158)
+
+node number is 159
+current operation is (4, 5)
+cost_g is46
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 134.0
+current mapping is [0, 3, 1, 4, 5]
+added edge is (105, 159)
+
+node number is 160
+current operation is (0, 1)
+cost_g is46
+cost_h is125.4
+cost_h1 is35.8
+cost_h2 is89.60000000000001
+cost_total is 171.4
+current mapping is [1, 4, 0, 2, 3]
+added edge is (106, 160)
+
+node number is 161
+current operation is (0, 5)
+cost_g is46
+cost_h is123.60000000000002
+cost_h1 is34.0
+cost_h2 is89.60000000000001
+cost_total is 169.60000000000002
+current mapping is [5, 4, 1, 2, 3]
+added edge is (106, 161)
+
+node number is 162
+current operation is (1, 2)
+cost_g is46
+cost_h is136.20001000000002
+cost_h1 is46.600010000000005
+cost_h2 is89.60000000000001
+cost_total is 182.20001000000002
+current mapping is [0, 4, 2, 1, 3]
+added edge is (106, 162)
+
+node number is 163
+current operation is (2, 3)
+cost_g is46
+cost_h is108.0
+cost_h1 is18.4
+cost_h2 is89.60000000000001
+cost_total is 154.0
+current mapping is [0, 4, 1, 3, 2]
+added edge is (106, 163)
+
+node number is 164
+current operation is (2, 5)
+cost_g is46
+cost_h is124.80000000000001
+cost_h1 is35.2
+cost_h2 is89.60000000000001
+cost_total is 170.8
+current mapping is [0, 4, 1, 5, 3]
+added edge is (106, 164)
+
+node number is 165
+current operation is (3, 4)
+cost_g is46
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 162.0
+current mapping is [0, 3, 1, 2, 4]
+added edge is (106, 165)
+
+node number is 166
+current operation is (4, 5)
+cost_g is46
+cost_h is109.60000000000002
+cost_h1 is31.200000000000003
+cost_h2 is78.4
+cost_total is 155.60000000000002
+current mapping is [0, 5, 1, 2, 3]
+added edge is (106, 166)
+
+node number is 167
+current operation is (0, 1)
+cost_g is46
+cost_h is108.80000000000001
+cost_h1 is19.2
+cost_h2 is89.60000000000001
+cost_total is 154.8
+current mapping is [1, 3, 0, 2, 5]
+added edge is (107, 167)
+
+node number is 168
+current operation is (0, 5)
+cost_g is46
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 146.8
+current mapping is [5, 3, 1, 2, 0]
+added edge is (107, 168)
+
+node number is 169
+current operation is (1, 2)
+cost_g is46
+cost_h is111.60000000000002
+cost_h1 is22.0
+cost_h2 is89.60000000000001
+cost_total is 157.60000000000002
+current mapping is [0, 3, 2, 1, 5]
+added edge is (107, 169)
+
+node number is 170
+current operation is (2, 3)
+cost_g is46
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 134.0
+current mapping is [0, 2, 1, 3, 5]
+added edge is (107, 170)
+
+node number is 171
+current operation is (2, 5)
+cost_g is46
+cost_h is111.00001000000003
+cost_h1 is21.40001
+cost_h2 is89.60000000000001
+cost_total is 157.00001000000003
+current mapping is [0, 3, 1, 5, 2]
+added edge is (107, 171)
+
+node number is 172
+current operation is (3, 4)
+cost_g is46
+cost_h is106.20000000000002
+cost_h1 is16.6
+cost_h2 is89.60000000000001
+cost_total is 152.20000000000002
+current mapping is [0, 4, 1, 2, 5]
+added edge is (107, 172)
+
+node number is 173
+current operation is (4, 5)
+cost_g is46
+cost_h is116.0
+cost_h1 is26.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 162.0
+current mapping is [0, 3, 1, 2, 4]
+added edge is (107, 173)
+
+node number is 174
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is43
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 131.0
+current mapping is [0, 3, 1, 2, 5]
+added edge is (107, 174)
+
+node number is 175
+current operation is 4H[(QuantumRegister(5, 'q'), 0), (QuantumRegister(5, 'q'), 4)]
+cost_g is43
+cost_h is82.4
+cost_h1 is15.2
+cost_h2 is67.2
+cost_total is 125.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (107, 175)
+
+node number is 176
+current operation is (0, 1)
+cost_g is43
+cost_h is110.4
+cost_h1 is32.0
+cost_h2 is78.4
+cost_total is 153.4
+current mapping is [1, 3, 0, 2, 4]
+added edge is (108, 176)
+
+node number is 177
+current operation is (0, 5)
+cost_g is43
+cost_h is95.60000000000002
+cost_h1 is28.4
+cost_h2 is67.2
+cost_total is 138.60000000000002
+current mapping is [5, 3, 1, 2, 4]
+added edge is (108, 177)
+
+node number is 178
+current operation is (3, 4)
+cost_g is43
+cost_h is109.60000000000002
+cost_h1 is31.200000000000003
+cost_h2 is78.4
+cost_total is 152.60000000000002
+current mapping is [0, 4, 1, 2, 3]
+added edge is (108, 178)
+
+node number is 179
+current operation is (4, 5)
+cost_g is43
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 131.0
+current mapping is [0, 3, 1, 2, 5]
+added edge is (108, 179)
+
+chosen node is 175
+round number is 6
+
+node number is 180
+current operation is (0, 1)
+cost_g is53
+cost_h is103.19999999999999
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 156.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (167, 180)
+
+node number is 181
+current operation is (0, 5)
+cost_g is53
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 153.8
+current mapping is [1, 3, 5, 2, 0]
+added edge is (167, 181)
+
+node number is 182
+current operation is (1, 2)
+cost_g is53
+cost_h is111.60000000000002
+cost_h1 is22.0
+cost_h2 is89.60000000000001
+cost_total is 164.60000000000002
+current mapping is [2, 3, 0, 1, 5]
+added edge is (167, 182)
+
+node number is 183
+current operation is (2, 3)
+cost_g is53
+cost_h is93.60000000000002
+cost_h1 is15.2
+cost_h2 is78.4
+cost_total is 146.60000000000002
+current mapping is [1, 2, 0, 3, 5]
+added edge is (167, 183)
+
+node number is 184
+current operation is (2, 5)
+cost_g is53
+cost_h is102.00001
+cost_h1 is23.60001
+cost_h2 is78.4
+cost_total is 155.00001
+current mapping is [1, 3, 0, 5, 2]
+added edge is (167, 184)
+
+node number is 185
+current operation is (3, 4)
+cost_g is53
+cost_h is111.80000999999999
+cost_h1 is22.20001
+cost_h2 is89.60000000000001
+cost_total is 164.80001
+current mapping is [1, 4, 0, 2, 5]
+added edge is (167, 185)
+
+node number is 186
+current operation is (4, 5)
+cost_g is53
+cost_h is125.60000000000002
+cost_h1 is36.0
+cost_h2 is89.60000000000001
+cost_total is 178.60000000000002
+current mapping is [1, 3, 0, 2, 4]
+added edge is (167, 186)
+
+node number is 187
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is50
+cost_h is93.60000000000002
+cost_h1 is15.2
+cost_h2 is78.4
+cost_total is 143.60000000000002
+current mapping is [1, 3, 0, 2, 5]
+added edge is (167, 187)
+
+node number is 188
+current operation is (0, 1)
+cost_g is53
+cost_h is94.4
+cost_h1 is16.0
+cost_h2 is78.4
+cost_total is 147.4
+current mapping is [5, 3, 0, 2, 1]
+added edge is (168, 188)
+
+node number is 189
+current operation is (0, 5)
+cost_g is53
+cost_h is82.4
+cost_h1 is15.2
+cost_h2 is67.2
+cost_total is 135.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (168, 189)
+
+node number is 190
+current operation is (1, 2)
+cost_g is53
+cost_h is106.0
+cost_h1 is27.6
+cost_h2 is78.4
+cost_total is 159.0
+current mapping is [5, 3, 2, 1, 0]
+added edge is (168, 190)
+
+node number is 191
+current operation is (2, 3)
+cost_g is53
+cost_h is85.60000000000002
+cost_h1 is18.4
+cost_h2 is67.2
+cost_total is 138.60000000000002
+current mapping is [5, 2, 1, 3, 0]
+added edge is (168, 191)
+
+node number is 192
+current operation is (2, 5)
+cost_g is53
+cost_h is87.60001
+cost_h1 is20.400009999999998
+cost_h2 is67.2
+cost_total is 140.60001
+current mapping is [2, 3, 1, 5, 0]
+added edge is (168, 192)
+
+node number is 193
+current operation is (3, 4)
+cost_g is53
+cost_h is103.80000999999999
+cost_h1 is25.400009999999998
+cost_h2 is78.4
+cost_total is 156.80001
+current mapping is [5, 4, 1, 2, 0]
+added edge is (168, 193)
+
+node number is 194
+current operation is (4, 5)
+cost_g is53
+cost_h is114.4
+cost_h1 is36.0
+cost_h2 is78.4
+cost_total is 167.4
+current mapping is [4, 3, 1, 2, 0]
+added edge is (168, 194)
+
+node number is 195
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is50
+cost_h is85.60000000000002
+cost_h1 is18.4
+cost_h2 is67.2
+cost_total is 135.60000000000002
+current mapping is [5, 3, 1, 2, 0]
+added edge is (168, 195)
+
+node number is 196
+current operation is (0, 1)
+cost_g is53
+cost_h is118.80000000000001
+cost_h1 is29.199999999999996
+cost_h2 is89.60000000000001
+cost_total is 171.8
+current mapping is [1, 3, 2, 0, 5]
+added edge is (169, 196)
+
+node number is 197
+current operation is (0, 5)
+cost_g is53
+cost_h is106.0
+cost_h1 is27.6
+cost_h2 is78.4
+cost_total is 159.0
+current mapping is [5, 3, 2, 1, 0]
+added edge is (169, 197)
+
+node number is 198
+current operation is (1, 2)
+cost_g is53
+cost_h is103.19999999999999
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 156.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (169, 198)
+
+node number is 199
+current operation is (2, 3)
+cost_g is53
+cost_h is117.19999999999999
+cost_h1 is27.6
+cost_h2 is89.60000000000001
+cost_total is 170.2
+current mapping is [0, 2, 3, 1, 5]
+added edge is (169, 199)
+
+node number is 200
+current operation is (2, 5)
+cost_g is53
+cost_h is115.0
+cost_h1 is25.4
+cost_h2 is89.60000000000001
+cost_total is 168.0
+current mapping is [0, 3, 5, 1, 2]
+added edge is (169, 200)
+
+node number is 201
+current operation is (3, 4)
+cost_g is53
+cost_h is114.60000000000002
+cost_h1 is25.0
+cost_h2 is89.60000000000001
+cost_total is 167.60000000000002
+current mapping is [0, 4, 2, 1, 5]
+added edge is (169, 201)
+
+node number is 202
+current operation is (4, 5)
+cost_g is53
+cost_h is124.4
+cost_h1 is34.8
+cost_h2 is89.60000000000001
+cost_total is 177.4
+current mapping is [0, 3, 2, 1, 4]
+added edge is (169, 202)
+
+node number is 203
+current operation is 4H[(QuantumRegister(5, 'q'), 0), (QuantumRegister(5, 'q'), 4)]
+cost_g is50
+cost_h is100.60000000000002
+cost_h1 is22.2
+cost_h2 is78.4
+cost_total is 150.60000000000002
+current mapping is [0, 3, 2, 1, 5]
+added edge is (169, 203)
+
+node number is 204
+current operation is (0, 1)
+cost_g is53
+cost_h is93.60000000000002
+cost_h1 is15.2
+cost_h2 is78.4
+cost_total is 146.60000000000002
+current mapping is [1, 2, 0, 3, 5]
+added edge is (170, 204)
+
+node number is 205
+current operation is (0, 5)
+cost_g is53
+cost_h is85.60000000000002
+cost_h1 is18.4
+cost_h2 is67.2
+cost_total is 138.60000000000002
+current mapping is [5, 2, 1, 3, 0]
+added edge is (170, 205)
+
+node number is 206
+current operation is (2, 5)
+cost_g is53
+cost_h is92.80000000000001
+cost_h1 is14.399999999999999
+cost_h2 is78.4
+cost_total is 145.8
+current mapping is [0, 5, 1, 3, 2]
+added edge is (170, 206)
+
+node number is 207
+current operation is (4, 5)
+cost_g is53
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 153.8
+current mapping is [0, 2, 1, 3, 4]
+added edge is (170, 207)
+
+node number is 208
+current operation is 4H[(QuantumRegister(5, 'q'), 0), (QuantumRegister(5, 'q'), 4)]
+cost_g is50
+cost_h is67.2
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 117.2
+current mapping is [0, 2, 1, 3, 5]
+added edge is (170, 208)
+
+node number is 209
+current operation is (0, 1)
+cost_g is53
+cost_h is102.00001
+cost_h1 is23.60001
+cost_h2 is78.4
+cost_total is 155.00001
+current mapping is [1, 3, 0, 5, 2]
+added edge is (171, 209)
+
+node number is 210
+current operation is (0, 5)
+cost_g is53
+cost_h is110.80000000000001
+cost_h1 is32.4
+cost_h2 is78.4
+cost_total is 163.8
+current mapping is [5, 3, 1, 0, 2]
+added edge is (171, 210)
+
+node number is 211
+current operation is (1, 2)
+cost_g is53
+cost_h is107.60001
+cost_h1 is18.00001
+cost_h2 is89.60000000000001
+cost_total is 160.60001
+current mapping is [0, 3, 2, 5, 1]
+added edge is (171, 211)
+
+node number is 212
+current operation is (2, 3)
+cost_g is53
+cost_h is124.80000000000001
+cost_h1 is35.2
+cost_h2 is89.60000000000001
+cost_total is 177.8
+current mapping is [0, 2, 1, 5, 3]
+added edge is (171, 212)
+
+node number is 213
+current operation is (2, 5)
+cost_g is53
+cost_h is103.19999999999999
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 156.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (171, 213)
+
+node number is 214
+current operation is (3, 4)
+cost_g is53
+cost_h is108.0
+cost_h1 is18.4
+cost_h2 is89.60000000000001
+cost_total is 161.0
+current mapping is [0, 4, 1, 5, 2]
+added edge is (171, 214)
+
+node number is 215
+current operation is (4, 5)
+cost_g is53
+cost_h is92.80000000000001
+cost_h1 is14.399999999999999
+cost_h2 is78.4
+cost_total is 145.8
+current mapping is [0, 3, 1, 4, 2]
+added edge is (171, 215)
+
+node number is 216
+current operation is (0, 1)
+cost_g is53
+cost_h is111.80000999999999
+cost_h1 is22.20001
+cost_h2 is89.60000000000001
+cost_total is 164.80001
+current mapping is [1, 4, 0, 2, 5]
+added edge is (172, 216)
+
+node number is 217
+current operation is (0, 5)
+cost_g is53
+cost_h is103.80000999999999
+cost_h1 is25.400009999999998
+cost_h2 is78.4
+cost_total is 156.80001
+current mapping is [5, 4, 1, 2, 0]
+added edge is (172, 217)
+
+node number is 218
+current operation is (1, 2)
+cost_g is53
+cost_h is114.60000000000002
+cost_h1 is25.0
+cost_h2 is89.60000000000001
+cost_total is 167.60000000000002
+current mapping is [0, 4, 2, 1, 5]
+added edge is (172, 218)
+
+node number is 219
+current operation is (2, 3)
+cost_g is53
+cost_h is103.19999999999999
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 156.2
+current mapping is [0, 4, 1, 3, 5]
+added edge is (172, 219)
+
+node number is 220
+current operation is (2, 5)
+cost_g is53
+cost_h is108.0
+cost_h1 is18.4
+cost_h2 is89.60000000000001
+cost_total is 161.0
+current mapping is [0, 4, 1, 5, 2]
+added edge is (172, 220)
+
+node number is 221
+current operation is (3, 4)
+cost_g is53
+cost_h is103.19999999999999
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 156.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (172, 221)
+
+node number is 222
+current operation is (4, 5)
+cost_g is53
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 153.8
+current mapping is [0, 5, 1, 2, 4]
+added edge is (172, 222)
+
+node number is 223
+current operation is 4H[(QuantumRegister(5, 'q'), 0), (QuantumRegister(5, 'q'), 4)]
+cost_g is50
+cost_h is85.40001000000001
+cost_h1 is18.20001
+cost_h2 is67.2
+cost_total is 135.40001
+current mapping is [0, 4, 1, 2, 5]
+added edge is (172, 223)
+
+node number is 224
+current operation is (0, 1)
+cost_g is53
+cost_h is125.60000000000002
+cost_h1 is36.0
+cost_h2 is89.60000000000001
+cost_total is 178.60000000000002
+current mapping is [1, 3, 0, 2, 4]
+added edge is (173, 224)
+
+node number is 225
+current operation is (0, 5)
+cost_g is53
+cost_h is110.80000000000001
+cost_h1 is32.4
+cost_h2 is78.4
+cost_total is 163.8
+current mapping is [5, 3, 1, 2, 4]
+added edge is (173, 225)
+
+node number is 226
+current operation is (1, 2)
+cost_g is53
+cost_h is124.4
+cost_h1 is34.8
+cost_h2 is89.60000000000001
+cost_total is 177.4
+current mapping is [0, 3, 2, 1, 4]
+added edge is (173, 226)
+
+node number is 227
+current operation is (2, 3)
+cost_g is53
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 153.8
+current mapping is [0, 2, 1, 3, 4]
+added edge is (173, 227)
+
+node number is 228
+current operation is (2, 5)
+cost_g is53
+cost_h is119.0
+cost_h1 is29.400000000000002
+cost_h2 is89.60000000000001
+cost_total is 172.0
+current mapping is [0, 3, 1, 5, 4]
+added edge is (173, 228)
+
+node number is 229
+current operation is (3, 4)
+cost_g is53
+cost_h is127.80000000000001
+cost_h1 is38.2
+cost_h2 is89.60000000000001
+cost_total is 180.8
+current mapping is [0, 4, 1, 2, 3]
+added edge is (173, 229)
+
+node number is 230
+current operation is (4, 5)
+cost_g is53
+cost_h is103.19999999999999
+cost_h1 is13.6
+cost_h2 is89.60000000000001
+cost_total is 156.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (173, 230)
+
+node number is 231
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is50
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 150.8
+current mapping is [0, 3, 1, 2, 4]
+added edge is (173, 231)
+
+node number is 232
+current operation is (0, 1)
+cost_g is50
+cost_h is93.60000000000002
+cost_h1 is15.2
+cost_h2 is78.4
+cost_total is 143.60000000000002
+current mapping is [1, 3, 0, 2, 5]
+added edge is (174, 232)
+
+node number is 233
+current operation is (0, 5)
+cost_g is50
+cost_h is85.60000000000002
+cost_h1 is18.4
+cost_h2 is67.2
+cost_total is 135.60000000000002
+current mapping is [5, 3, 1, 2, 0]
+added edge is (174, 233)
+
+node number is 234
+current operation is (2, 5)
+cost_g is50
+cost_h is92.80000000000001
+cost_h1 is14.399999999999999
+cost_h2 is78.4
+cost_total is 142.8
+current mapping is [0, 3, 1, 5, 2]
+added edge is (174, 234)
+
+node number is 235
+current operation is (4, 5)
+cost_g is50
+cost_h is100.80000000000001
+cost_h1 is22.400000000000002
+cost_h2 is78.4
+cost_total is 150.8
+current mapping is [0, 3, 1, 2, 4]
+added edge is (174, 235)
+
+node number is 236
+current operation is 4H[(QuantumRegister(5, 'q'), 0), (QuantumRegister(5, 'q'), 4)]
+cost_g is47
+cost_h is67.2
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 114.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (174, 236)
+
+node number is 237
+current operation is (0, 1)
+cost_g is50
+cost_h is75.2
+cost_h1 is19.2
+cost_h2 is56.0
+cost_total is 125.2
+current mapping is [1, 3, 0, 2, 5]
+added edge is (175, 237)
+
+node number is 238
+current operation is (0, 5)
+cost_g is50
+cost_h is87.19999999999999
+cost_h1 is20.0
+cost_h2 is67.2
+cost_total is 137.2
+current mapping is [5, 3, 1, 2, 0]
+added edge is (175, 238)
+
+node number is 239
+current operation is (1, 2)
+cost_g is50
+cost_h is66.0
+cost_h1 is21.2
+cost_h2 is44.800000000000004
+cost_total is 116.0
+current mapping is [0, 3, 2, 1, 5]
+added edge is (175, 239)
+
+node number is 240
+current operation is (2, 3)
+cost_g is50
+cost_h is67.2
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 117.2
+current mapping is [0, 2, 1, 3, 5]
+added edge is (175, 240)
+
+node number is 241
+current operation is (2, 5)
+cost_g is50
+cost_h is87.60001
+cost_h1 is20.400009999999998
+cost_h2 is67.2
+cost_total is 137.60001
+current mapping is [0, 3, 1, 5, 2]
+added edge is (175, 241)
+
+node number is 242
+current operation is (3, 4)
+cost_g is50
+cost_h is85.40001000000001
+cost_h1 is18.20001
+cost_h2 is67.2
+cost_total is 135.40001
+current mapping is [0, 4, 1, 2, 5]
+added edge is (175, 242)
+
+node number is 243
+current operation is (4, 5)
+cost_g is50
+cost_h is100.60000000000002
+cost_h1 is33.4
+cost_h2 is67.2
+cost_total is 150.60000000000002
+current mapping is [0, 3, 1, 2, 4]
+added edge is (175, 243)
+
+node number is 244
+current operation is 4H[(QuantumRegister(5, 'q'), 1), (QuantumRegister(5, 'q'), 3)]
+cost_g is47
+cost_h is67.2
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 114.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (175, 244)
+
+chosen node is 236
+round number is 7
+
+node number is 245
+current operation is (0, 1)
+cost_g is57
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 145.0
+current mapping is [0, 3, 1, 2, 5]
+added edge is (232, 245)
+
+node number is 246
+current operation is (0, 5)
+cost_g is57
+cost_h is85.60000000000002
+cost_h1 is18.4
+cost_h2 is67.2
+cost_total is 142.60000000000002
+current mapping is [1, 3, 5, 2, 0]
+added edge is (232, 246)
+
+node number is 247
+current operation is (1, 2)
+cost_g is57
+cost_h is89.4
+cost_h1 is11.0
+cost_h2 is78.4
+cost_total is 146.4
+current mapping is [2, 3, 0, 1, 5]
+added edge is (232, 247)
+
+node number is 248
+current operation is (2, 5)
+cost_g is57
+cost_h is83.80000000000001
+cost_h1 is16.6
+cost_h2 is67.2
+cost_total is 140.8
+current mapping is [1, 3, 0, 5, 2]
+added edge is (232, 248)
+
+node number is 249
+current operation is (4, 5)
+cost_g is57
+cost_h is110.4
+cost_h1 is32.0
+cost_h2 is78.4
+cost_total is 167.4
+current mapping is [1, 3, 0, 2, 4]
+added edge is (232, 249)
+
+node number is 250
+current operation is (0, 1)
+cost_g is57
+cost_h is79.19999999999999
+cost_h1 is12.0
+cost_h2 is67.2
+cost_total is 136.2
+current mapping is [5, 3, 0, 2, 1]
+added edge is (233, 250)
+
+node number is 251
+current operation is (0, 5)
+cost_g is57
+cost_h is67.2
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 124.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (233, 251)
+
+node number is 252
+current operation is (1, 2)
+cost_g is57
+cost_h is83.80000000000001
+cost_h1 is16.6
+cost_h2 is67.2
+cost_total is 140.8
+current mapping is [5, 3, 2, 1, 0]
+added edge is (233, 252)
+
+node number is 253
+current operation is (2, 5)
+cost_g is57
+cost_h is69.4
+cost_h1 is13.399999999999999
+cost_h2 is56.0
+cost_total is 126.4
+current mapping is [2, 3, 1, 5, 0]
+added edge is (233, 253)
+
+node number is 254
+current operation is (4, 5)
+cost_g is57
+cost_h is99.19999999999999
+cost_h1 is32.0
+cost_h2 is67.2
+cost_total is 156.2
+current mapping is [4, 3, 1, 2, 0]
+added edge is (233, 254)
+
+node number is 255
+current operation is (0, 1)
+cost_g is57
+cost_h is83.80000000000001
+cost_h1 is16.6
+cost_h2 is67.2
+cost_total is 140.8
+current mapping is [1, 3, 0, 5, 2]
+added edge is (234, 255)
+
+node number is 256
+current operation is (0, 5)
+cost_g is57
+cost_h is85.60000000000002
+cost_h1 is18.4
+cost_h2 is67.2
+cost_total is 142.60000000000002
+current mapping is [5, 3, 1, 0, 2]
+added edge is (234, 256)
+
+node number is 257
+current operation is (1, 2)
+cost_g is57
+cost_h is89.4
+cost_h1 is11.0
+cost_h2 is78.4
+cost_total is 146.4
+current mapping is [0, 3, 2, 5, 1]
+added edge is (234, 257)
+
+node number is 258
+current operation is (2, 3)
+cost_g is57
+cost_h is109.60000000000002
+cost_h1 is31.200000000000003
+cost_h2 is78.4
+cost_total is 166.60000000000002
+current mapping is [0, 2, 1, 5, 3]
+added edge is (234, 258)
+
+node number is 259
+current operation is (2, 5)
+cost_g is57
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 145.0
+current mapping is [0, 3, 1, 2, 5]
+added edge is (234, 259)
+
+node number is 260
+current operation is (0, 1)
+cost_g is57
+cost_h is110.4
+cost_h1 is32.0
+cost_h2 is78.4
+cost_total is 167.4
+current mapping is [1, 3, 0, 2, 4]
+added edge is (235, 260)
+
+node number is 261
+current operation is (0, 5)
+cost_g is57
+cost_h is95.60000000000002
+cost_h1 is28.4
+cost_h2 is67.2
+cost_total is 152.60000000000002
+current mapping is [5, 3, 1, 2, 4]
+added edge is (235, 261)
+
+node number is 262
+current operation is (3, 4)
+cost_g is57
+cost_h is109.60000000000002
+cost_h1 is31.200000000000003
+cost_h2 is78.4
+cost_total is 166.60000000000002
+current mapping is [0, 4, 1, 2, 3]
+added edge is (235, 262)
+
+node number is 263
+current operation is (4, 5)
+cost_g is57
+cost_h is88.0
+cost_h1 is9.6
+cost_h2 is78.4
+cost_total is 145.0
+current mapping is [0, 3, 1, 2, 5]
+added edge is (235, 263)
+
+node number is 264
+current operation is (0, 1)
+cost_g is54
+cost_h is60.0
+cost_h1 is15.2
+cost_h2 is44.800000000000004
+cost_total is 114.0
+current mapping is [1, 3, 0, 2, 5]
+added edge is (236, 264)
+
+node number is 265
+current operation is (0, 5)
+cost_g is54
+cost_h is72.0
+cost_h1 is16.0
+cost_h2 is56.0
+cost_total is 126.0
+current mapping is [5, 3, 1, 2, 0]
+added edge is (236, 265)
+
+node number is 266
+current operation is (1, 2)
+cost_g is54
+cost_h is43.80000000000001
+cost_h1 is10.2
+cost_h2 is33.6
+cost_total is 97.80000000000001
+current mapping is [0, 3, 2, 1, 5]
+added edge is (236, 266)
+
+node number is 267
+current operation is (2, 5)
+cost_g is54
+cost_h is69.4
+cost_h1 is13.399999999999999
+cost_h2 is56.0
+cost_total is 123.4
+current mapping is [0, 3, 1, 5, 2]
+added edge is (236, 267)
+
+node number is 268
+current operation is (4, 5)
+cost_g is54
+cost_h is85.4
+cost_h1 is29.400000000000002
+cost_h2 is56.0
+cost_total is 139.4
+current mapping is [0, 3, 1, 2, 4]
+added edge is (236, 268)
+
+chosen node is 266
+round number is 8
+
+node number is 269
+current operation is (0, 1)
+cost_g is61
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 94.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (264, 269)
+
+node number is 270
+current operation is (0, 5)
+cost_g is61
+cost_h is59.0
+cost_h1 is14.2
+cost_h2 is44.800000000000004
+cost_total is 120.0
+current mapping is [1, 3, 5, 2, 0]
+added edge is (264, 270)
+
+node number is 271
+current operation is (1, 2)
+cost_g is61
+cost_h is43.80000000000001
+cost_h1 is10.2
+cost_h2 is33.6
+cost_total is 104.80000000000001
+current mapping is [2, 3, 0, 1, 5]
+added edge is (264, 271)
+
+node number is 272
+current operation is (2, 5)
+cost_g is61
+cost_h is58.400000000000006
+cost_h1 is13.6
+cost_h2 is44.800000000000004
+cost_total is 119.4
+current mapping is [1, 3, 0, 5, 2]
+added edge is (264, 272)
+
+node number is 273
+current operation is (4, 5)
+cost_g is61
+cost_h is76.80000000000001
+cost_h1 is32.0
+cost_h2 is44.800000000000004
+cost_total is 137.8
+current mapping is [1, 3, 0, 2, 4]
+added edge is (264, 273)
+
+node number is 274
+current operation is (0, 1)
+cost_g is61
+cost_h is60.0
+cost_h1 is15.2
+cost_h2 is44.800000000000004
+cost_total is 121.0
+current mapping is [5, 3, 0, 2, 1]
+added edge is (265, 274)
+
+node number is 275
+current operation is (0, 5)
+cost_g is61
+cost_h is67.19999999999999
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 128.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (265, 275)
+
+node number is 276
+current operation is (1, 2)
+cost_g is61
+cost_h is74.4
+cost_h1 is18.4
+cost_h2 is56.0
+cost_total is 135.4
+current mapping is [5, 3, 2, 1, 0]
+added edge is (265, 276)
+
+node number is 277
+current operation is 4H[(QuantumRegister(5, 'q'), 4), (QuantumRegister(5, 'q'), 2)]
+cost_g is58
+cost_h is59.0
+cost_h1 is14.2
+cost_h2 is44.800000000000004
+cost_total is 117.0
+current mapping is [5, 3, 1, 2, 0]
+added edge is (265, 277)
+
+node number is 278
+current operation is (0, 1)
+cost_g is61
+cost_h is43.19999999999999
+cost_h1 is9.6
+cost_h2 is33.6
+cost_total is 104.19999999999999
+current mapping is [1, 3, 2, 0, 5]
+added edge is (266, 278)
+
+node number is 279
+current operation is (0, 5)
+cost_g is61
+cost_h is44.599999999999994
+cost_h1 is11.0
+cost_h2 is33.6
+cost_total is 105.6
+current mapping is [5, 3, 2, 1, 0]
+added edge is (266, 279)
+
+node number is 280
+current operation is (1, 2)
+cost_g is61
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 94.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (266, 280)
+
+node number is 281
+current operation is (2, 3)
+cost_g is61
+cost_h is57.80000000000001
+cost_h1 is24.200000000000003
+cost_h2 is33.6
+cost_total is 118.80000000000001
+current mapping is [0, 2, 3, 1, 5]
+added edge is (266, 281)
+
+node number is 282
+current operation is (2, 5)
+cost_g is61
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 94.4
+current mapping is [0, 3, 5, 1, 2]
+added edge is (266, 282)
+
+node number is 283
+current operation is (0, 1)
+cost_g is61
+cost_h is74.4
+cost_h1 is18.4
+cost_h2 is56.0
+cost_total is 135.4
+current mapping is [1, 3, 0, 5, 2]
+added edge is (267, 283)
+
+node number is 284
+current operation is (1, 2)
+cost_g is61
+cost_h is43.80000000000001
+cost_h1 is10.2
+cost_h2 is33.6
+cost_total is 104.80000000000001
+current mapping is [0, 3, 2, 5, 1]
+added edge is (267, 284)
+
+node number is 285
+current operation is (2, 3)
+cost_g is61
+cost_h is87.6
+cost_h1 is31.6
+cost_h2 is56.0
+cost_total is 148.6
+current mapping is [0, 2, 1, 5, 3]
+added edge is (267, 285)
+
+node number is 286
+current operation is (2, 5)
+cost_g is61
+cost_h is67.19999999999999
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 128.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (267, 286)
+
+node number is 287
+current operation is 4H[(QuantumRegister(5, 'q'), 4), (QuantumRegister(5, 'q'), 2)]
+cost_g is58
+cost_h is59.20000000000002
+cost_h1 is14.399999999999999
+cost_h2 is44.800000000000004
+cost_total is 117.20000000000002
+current mapping is [0, 3, 1, 5, 2]
+added edge is (267, 287)
+
+node number is 288
+current operation is (0, 1)
+cost_g is61
+cost_h is84.4
+cost_h1 is28.4
+cost_h2 is56.0
+cost_total is 145.4
+current mapping is [1, 3, 0, 2, 4]
+added edge is (268, 288)
+
+node number is 289
+current operation is (1, 2)
+cost_g is61
+cost_h is79.80000999999999
+cost_h1 is23.80001
+cost_h2 is56.0
+cost_total is 140.80001
+current mapping is [0, 3, 2, 1, 4]
+added edge is (268, 289)
+
+node number is 290
+current operation is (3, 4)
+cost_g is61
+cost_h is87.6
+cost_h1 is31.6
+cost_h2 is56.0
+cost_total is 148.6
+current mapping is [0, 4, 1, 2, 3]
+added edge is (268, 290)
+
+node number is 291
+current operation is (4, 5)
+cost_g is61
+cost_h is67.19999999999999
+cost_h1 is11.200000000000001
+cost_h2 is56.0
+cost_total is 128.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (268, 291)
+
+chosen node is 269
+round number is 9
+
+node number is 292
+current operation is (0, 1)
+cost_g is68
+cost_h is18.200000000000003
+cost_h1 is7.0
+cost_h2 is11.200000000000001
+cost_total is 86.2
+current mapping is [1, 3, 0, 2, 5]
+added edge is (269, 292)
+
+node number is 293
+current operation is (0, 5)
+cost_g is68
+cost_h is26.400000000000006
+cost_h1 is4.0
+cost_h2 is22.400000000000002
+cost_total is 94.4
+current mapping is [5, 3, 1, 2, 0]
+added edge is (269, 293)
+
+node number is 294
+current operation is (1, 2)
+cost_g is68
+cost_h is15.200000000000003
+cost_h1 is4.0
+cost_h2 is11.200000000000001
+cost_total is 83.2
+current mapping is [0, 3, 2, 1, 5]
+added edge is (269, 294)
+
+node number is 295
+current operation is (2, 5)
+cost_g is68
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 101.4
+current mapping is [0, 3, 1, 5, 2]
+added edge is (269, 295)
+
+node number is 296
+current operation is (4, 5)
+cost_g is68
+cost_h is43.400000000000006
+cost_h1 is21.0
+cost_h2 is22.400000000000002
+cost_total is 111.4
+current mapping is [0, 3, 1, 2, 4]
+added edge is (269, 296)
+
+node number is 297
+current operation is (0, 1)
+cost_g is68
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 101.4
+current mapping is [0, 3, 5, 2, 1]
+added edge is (270, 297)
+
+node number is 298
+current operation is (0, 5)
+cost_g is68
+cost_h is60.0
+cost_h1 is15.2
+cost_h2 is44.800000000000004
+cost_total is 128.0
+current mapping is [1, 3, 0, 2, 5]
+added edge is (270, 298)
+
+node number is 299
+current operation is (1, 2)
+cost_g is68
+cost_h is59.20000000000002
+cost_h1 is14.399999999999999
+cost_h2 is44.800000000000004
+cost_total is 127.20000000000002
+current mapping is [2, 3, 5, 1, 0]
+added edge is (270, 299)
+
+node number is 300
+current operation is 4H[(QuantumRegister(5, 'q'), 4), (QuantumRegister(5, 'q'), 0)]
+cost_g is65
+cost_h is44.599999999999994
+cost_h1 is11.0
+cost_h2 is33.6
+cost_total is 109.6
+current mapping is [1, 3, 5, 2, 0]
+added edge is (270, 300)
+
+node number is 301
+current operation is (0, 1)
+cost_g is68
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 101.4
+current mapping is [2, 3, 1, 0, 5]
+added edge is (271, 301)
+
+node number is 302
+current operation is (0, 5)
+cost_g is68
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 101.4
+current mapping is [2, 3, 5, 1, 0]
+added edge is (271, 302)
+
+node number is 303
+current operation is (1, 2)
+cost_g is68
+cost_h is43.19999999999999
+cost_h1 is9.6
+cost_h2 is33.6
+cost_total is 111.19999999999999
+current mapping is [1, 3, 0, 2, 5]
+added edge is (271, 303)
+
+node number is 304
+current operation is (2, 3)
+cost_g is68
+cost_h is53.19999999999999
+cost_h1 is19.599999999999998
+cost_h2 is33.6
+cost_total is 121.19999999999999
+current mapping is [3, 2, 0, 1, 5]
+added edge is (271, 304)
+
+node number is 305
+current operation is (2, 5)
+cost_g is68
+cost_h is44.599999999999994
+cost_h1 is11.0
+cost_h2 is33.6
+cost_total is 112.6
+current mapping is [5, 3, 0, 1, 2]
+added edge is (271, 305)
+
+node number is 306
+current operation is (0, 1)
+cost_g is68
+cost_h is59.20000000000002
+cost_h1 is14.399999999999999
+cost_h2 is44.800000000000004
+cost_total is 127.20000000000002
+current mapping is [0, 3, 1, 5, 2]
+added edge is (272, 306)
+
+node number is 307
+current operation is (1, 2)
+cost_g is68
+cost_h is43.80000000000001
+cost_h1 is10.2
+cost_h2 is33.6
+cost_total is 111.80000000000001
+current mapping is [2, 3, 0, 5, 1]
+added edge is (272, 307)
+
+node number is 308
+current operation is (2, 3)
+cost_g is68
+cost_h is75.20000000000002
+cost_h1 is30.4
+cost_h2 is44.800000000000004
+cost_total is 143.20000000000002
+current mapping is [1, 2, 0, 5, 3]
+added edge is (272, 308)
+
+node number is 309
+current operation is (2, 5)
+cost_g is68
+cost_h is60.0
+cost_h1 is15.2
+cost_h2 is44.800000000000004
+cost_total is 128.0
+current mapping is [1, 3, 0, 2, 5]
+added edge is (272, 309)
+
+node number is 310
+current operation is 4H[(QuantumRegister(5, 'q'), 4), (QuantumRegister(5, 'q'), 0)]
+cost_g is65
+cost_h is44.599999999999994
+cost_h1 is11.0
+cost_h2 is33.6
+cost_total is 109.6
+current mapping is [1, 3, 0, 5, 2]
+added edge is (272, 310)
+
+node number is 311
+current operation is (0, 1)
+cost_g is68
+cost_h is67.20000000000002
+cost_h1 is22.400000000000002
+cost_h2 is44.800000000000004
+cost_total is 135.20000000000002
+current mapping is [0, 3, 1, 2, 4]
+added edge is (273, 311)
+
+node number is 312
+current operation is (1, 2)
+cost_g is68
+cost_h is68.60001
+cost_h1 is23.80001
+cost_h2 is44.800000000000004
+cost_total is 136.60001
+current mapping is [2, 3, 0, 1, 4]
+added edge is (273, 312)
+
+node number is 313
+current operation is (3, 4)
+cost_g is68
+cost_h is75.20000000000002
+cost_h1 is30.4
+cost_h2 is44.800000000000004
+cost_total is 143.20000000000002
+current mapping is [1, 4, 0, 2, 3]
+added edge is (273, 313)
+
+node number is 314
+current operation is (4, 5)
+cost_g is68
+cost_h is60.0
+cost_h1 is15.2
+cost_h2 is44.800000000000004
+cost_total is 128.0
+current mapping is [1, 3, 0, 2, 5]
+added edge is (273, 314)
+
+chosen node is 294
+round number is 10
+
+node number is 315
+current operation is (0, 1)
+cost_g is75
+cost_h is15.200000000000003
+cost_h1 is4.0
+cost_h2 is11.200000000000001
+cost_total is 90.2
+current mapping is [0, 3, 1, 2, 5]
+added edge is (292, 315)
+
+node number is 316
+current operation is (0, 5)
+cost_g is75
+cost_h is0.0
+cost_h1 is0.0
+cost_h2 is0.0
+cost_total is 75.0
+current mapping is [1, 3, 5, 2, 0]
+added edge is (292, 316)
+
+node number is 317
+current operation is (1, 2)
+cost_g is75
+cost_h is15.200000000000003
+cost_h1 is4.0
+cost_h2 is11.200000000000001
+cost_total is 90.2
+current mapping is [2, 3, 0, 1, 5]
+added edge is (292, 317)
+
+node number is 318
+current operation is (2, 5)
+cost_g is75
+cost_h is0.0
+cost_h1 is0.0
+cost_h2 is0.0
+cost_total is 75.0
+current mapping is [1, 3, 0, 5, 2]
+added edge is (292, 318)
+
+node number is 319
+current operation is (4, 5)
+cost_g is75
+cost_h is25.200000000000003
+cost_h1 is14.0
+cost_h2 is11.200000000000001
+cost_total is 100.2
+current mapping is [1, 3, 0, 2, 4]
+added edge is (292, 319)
+
+node number is 320
+current operation is (0, 1)
+cost_g is75
+cost_h is18.200000000000003
+cost_h1 is7.0
+cost_h2 is11.200000000000001
+cost_total is 93.2
+current mapping is [5, 3, 0, 2, 1]
+added edge is (293, 320)
+
+node number is 321
+current operation is (0, 5)
+cost_g is75
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 108.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (293, 321)
+
+node number is 322
+current operation is (1, 2)
+cost_g is75
+cost_h is29.400000000000006
+cost_h1 is7.0
+cost_h2 is22.400000000000002
+cost_total is 104.4
+current mapping is [5, 3, 2, 1, 0]
+added edge is (293, 322)
+
+node number is 323
+current operation is 4H[(QuantumRegister(5, 'q'), 4), (QuantumRegister(5, 'q'), 2)]
+cost_g is72
+cost_h is0.0
+cost_h1 is0.0
+cost_h2 is0.0
+cost_total is 72.0
+current mapping is [5, 3, 1, 2, 0]
+added edge is (293, 323)
+
+node number is 324
+current operation is (0, 1)
+cost_g is75
+cost_h is18.200000000000003
+cost_h1 is7.0
+cost_h2 is11.200000000000001
+cost_total is 93.2
+current mapping is [1, 3, 2, 0, 5]
+added edge is (294, 324)
+
+node number is 325
+current operation is (0, 5)
+cost_g is75
+cost_h is0.0
+cost_h1 is0.0
+cost_h2 is0.0
+cost_total is 75.0
+current mapping is [5, 3, 2, 1, 0]
+added edge is (294, 325)
+
+node number is 326
+current operation is (2, 5)
+cost_g is75
+cost_h is18.200000000000003
+cost_h1 is7.0
+cost_h2 is11.200000000000001
+cost_total is 93.2
+current mapping is [0, 3, 5, 1, 2]
+added edge is (294, 326)
+
+node number is 327
+current operation is (4, 5)
+cost_g is75
+cost_h is18.200000000000003
+cost_h1 is7.0
+cost_h2 is11.200000000000001
+cost_total is 93.2
+current mapping is [0, 3, 2, 1, 4]
+added edge is (294, 327)
+
+node number is 328
+current operation is 4H[(QuantumRegister(5, 'q'), 0), (QuantumRegister(5, 'q'), 4)]
+cost_g is72
+cost_h is0.0
+cost_h1 is0.0
+cost_h2 is0.0
+cost_total is 72.0
+current mapping is [0, 3, 2, 1, 5]
+added edge is (294, 328)
+
+node number is 329
+current operation is (0, 1)
+cost_g is75
+cost_h is29.400000000000006
+cost_h1 is7.0
+cost_h2 is22.400000000000002
+cost_total is 104.4
+current mapping is [1, 3, 0, 5, 2]
+added edge is (295, 329)
+
+node number is 330
+current operation is (1, 2)
+cost_g is75
+cost_h is15.200000000000003
+cost_h1 is4.0
+cost_h2 is11.200000000000001
+cost_total is 90.2
+current mapping is [0, 3, 2, 5, 1]
+added edge is (295, 330)
+
+node number is 331
+current operation is (2, 3)
+cost_g is75
+cost_h is47.400000000000006
+cost_h1 is25.0
+cost_h2 is22.400000000000002
+cost_total is 122.4
+current mapping is [0, 2, 1, 5, 3]
+added edge is (295, 331)
+
+node number is 332
+current operation is (2, 5)
+cost_g is75
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 108.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (295, 332)
+
+node number is 333
+current operation is 4H[(QuantumRegister(5, 'q'), 4), (QuantumRegister(5, 'q'), 2)]
+cost_g is72
+cost_h is18.200000000000003
+cost_h1 is7.0
+cost_h2 is11.200000000000001
+cost_total is 90.2
+current mapping is [0, 3, 1, 5, 2]
+added edge is (295, 333)
+
+node number is 334
+current operation is (0, 1)
+cost_g is75
+cost_h is43.400000000000006
+cost_h1 is21.0
+cost_h2 is22.400000000000002
+cost_total is 118.4
+current mapping is [1, 3, 0, 2, 4]
+added edge is (296, 334)
+
+node number is 335
+current operation is (1, 2)
+cost_g is75
+cost_h is36.40001000000001
+cost_h1 is14.00001
+cost_h2 is22.400000000000002
+cost_total is 111.40001000000001
+current mapping is [0, 3, 2, 1, 4]
+added edge is (296, 335)
+
+node number is 336
+current operation is (3, 4)
+cost_g is75
+cost_h is47.400000000000006
+cost_h1 is25.0
+cost_h2 is22.400000000000002
+cost_total is 122.4
+current mapping is [0, 4, 1, 2, 3]
+added edge is (296, 336)
+
+node number is 337
+current operation is (4, 5)
+cost_g is75
+cost_h is33.400000000000006
+cost_h1 is11.0
+cost_h2 is22.400000000000002
+cost_total is 108.4
+current mapping is [0, 3, 1, 2, 5]
+added edge is (296, 337)
+
+chosen node is 323

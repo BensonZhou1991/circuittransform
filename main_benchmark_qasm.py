@@ -28,9 +28,9 @@ import time
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex = 16
+num_vertex = 20
 # repeat time
 repeat_time = 5
 # architecture graph generation control
@@ -38,8 +38,8 @@ repeat_time = 5
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['IBM QX20']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
@@ -116,44 +116,46 @@ use_RemotoCNOTandWindowLookAhead1_nocut = 0
 # =============================================================================
 
 '''QX5'''
-QASM_files = ['mini_alu_305.qasm',
-'qft_10.qasm',
-'sys6-v0_111.qasm',
-'rd73_140.qasm',
-'sym6_316.qasm',
-'rd53_311.qasm',
-'sym9_146.qasm',
-'rd84_142.qasm',
-'ising_model_10.qasm',
-'cnt3-5_180.qasm',
-'qft_16.qasm',
-'ising_model_13.qasm',
-'ising_model_16.qasm',
-'wim_266.qasm',
-'cm152a_212.qasm',
-'cm42a_207.qasm',
-'pm1_249.qasm',
-'dc1_220.qasm',
-'squar5_261.qasm',
-'sqrt8_260.qasm',
-'z4_268.qasm',
-'adr4_197.qasm',
-'sym6_145.qasm',
-'misex1_241.qasm',
-'square_root_7.qasm',
-'ham15_107.qasm',
-'dc2_222.qasm',
-'sqn_258.qasm',
-'inc_237.qasm',
-'co14_215.qasm',
-'life_238.qasm',
-'max46_240.qasm',
-'9symml_195.qasm',
-'dist_223.qasm',
-'sao2_257.qasm',
-'plus63mod4096_163.qasm',
-'urf6_160.qasm',
-'hwb9_119.qasm']
+# =============================================================================
+# QASM_files = ['mini_alu_305.qasm',
+# 'qft_10.qasm',
+# 'sys6-v0_111.qasm',
+# 'rd73_140.qasm',
+# 'sym6_316.qasm',
+# 'rd53_311.qasm',
+# 'sym9_146.qasm',
+# 'rd84_142.qasm',
+# 'ising_model_10.qasm',
+# 'cnt3-5_180.qasm',
+# 'qft_16.qasm',
+# 'ising_model_13.qasm',
+# 'ising_model_16.qasm',
+# 'wim_266.qasm',
+# 'cm152a_212.qasm',
+# 'cm42a_207.qasm',
+# 'pm1_249.qasm',
+# 'dc1_220.qasm',
+# 'squar5_261.qasm',
+# 'sqrt8_260.qasm',
+# 'z4_268.qasm',
+# 'adr4_197.qasm',
+# 'sym6_145.qasm',
+# 'misex1_241.qasm',
+# 'square_root_7.qasm',
+# 'ham15_107.qasm',
+# 'dc2_222.qasm',
+# 'sqn_258.qasm',
+# 'inc_237.qasm',
+# 'co14_215.qasm',
+# 'life_238.qasm',
+# 'max46_240.qasm',
+# '9symml_195.qasm',
+# 'dist_223.qasm',
+# 'sao2_257.qasm',
+# 'plus63mod4096_163.qasm',
+# 'urf6_160.qasm',
+# 'hwb9_119.qasm']
+# =============================================================================
 
 '''Lookahead 2 QX20'''
 # =============================================================================
@@ -290,9 +292,20 @@ QASM_files = ['graycode6_47.qasm',
 'hwb8_113.qasm',
 'urf2_152.qasm']
 
-QASM_files = ['urf5_280.qasm',
-'urf1_278.qasm',
-'sym10_262.qasm']
+# =============================================================================
+# QASM_files = ['urf5_280.qasm',
+# 'urf1_278.qasm',
+# 'sym10_262.qasm']
+# =============================================================================
+
+# =============================================================================
+# QASM_files = [
+#                 'max46_240',
+#                 '9symml_195',
+#                 'dist_223',
+#                 'sao2_257',
+#                 'plus63mod4096_163']
+# =============================================================================
 
 print('QASM file is', QASM_files)
 '''output control'''
@@ -380,6 +393,7 @@ num_file = 0
 original_cir_size = []
 
 for file in QASM_files:
+    if file[-5:] != '.qasm': file += '.qasm'
     num_file += 1
     res_qasm = ct.CreateDGfromQASMfile(file)
     x_lable_filename.append(file)
@@ -648,7 +662,7 @@ post_res_t1 = []#time for initial map
 post_res_t2 = []#time for searching
 post_res_map= []
 for name in QASM_files:#results.keys():
-    name = name[0:-5]
+    if name[-5:] == '.qasm': name = name[0:-5]
     best_num = None#number of output gates
     best_t1 = None
     best_t2 = None

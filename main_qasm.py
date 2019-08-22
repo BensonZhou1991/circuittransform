@@ -21,9 +21,9 @@ import time
 # choose quantum circuits
 QASM_files = ct.CreateQASMFilesFromExample()
 # number of logical qubits
-num_qubits = 16
+num_qubits = 20
 # description of architecture graph
-num_vertex = 16
+num_vertex = 20
 # repeat time
 repeat_time = 1
 # architecture graph generation control
@@ -31,15 +31,15 @@ repeat_time = 1
 #method_AG = ['grid', 4, 5]
 #method_AG = ['IBM QX3']
 #method_AG = ['IBM QX4']
-method_AG = ['IBM QX5']
-#method_AG = ['IBM QX20']
+#method_AG = ['IBM QX5']
+method_AG = ['IBM QX20']
 #method_AG = ['directed grid', 3, 3]
 #method_AG = ['example in paper']
 imoprt_swaps_combination_from_json = True
 '''initial mapping method'''
 initial_mapping_control = 4#0: naive; 1: optimized; 2: only for IBM QX5; 3: annealing search; 4: specified by list
 num_consider_gates = 0.5#counted gates for annealing search, 0-1 represents number gates * 0-1
-initial_map_list = [11, 10, 15, 6, 4, 3, 13, 14, 5, 12, 0, 8, 2, 9, 1, 7]#only used for initial_mapping_control = 4
+initial_map_list = [12, 13, 7, 11, 10, 5, 6, 2, 1, 16, 17, 8, 18, 14, 9, 4, 0, 3, 19, 15]#only used for initial_mapping_control = 4
 '''method control'''
 use_naive_search = 0
 use_HeuristicGreedySearch = 0
@@ -50,13 +50,15 @@ use_steiner_tree_and_remoteCNOT = 0
 use_UDecompositionFullConnectivity = 0
 use_UDecompositionFullConnectivityPATEL = 0
 use_RemotoCNOTandWindowLookAhead1_LI = 0
+use_RemotoCNOTandWindowLookAhead1_LI_noprune = 0
+use_RemotoCNOTandWindowLookAhead1_ML = 1
 use_RemotoCNOTandWindowLookAhead0 = 0
 use_RemotoCNOTandWindowLookAhead1 = 1
 use_RemotoCNOTandWindowLookAhead2 = 0
 use_RemotoCNOTandWindowLookAhead3 = 0
 use_RemotoCNOTandWindowLookAhead1_nocut = 0
 '''QASM input control'''
-QASM_files = ['sqn_258.qasm']
+QASM_files = ['qft_16.qasm']
 print('QASM file is', QASM_files)
 '''output control'''
 out_num_swaps = False
@@ -90,15 +92,18 @@ y_label_RemotoCNOTandWindowLookAhead = []
 y_label_RemotoCNOTandWindowLookAhead0 = []
 y_label_RemotoCNOTandWindowLookAhead1 = []
 y_label_RemotoCNOTandWindowLookAhead3 = []
+y_label_RemotoCNOTandWindowLookAhead1_ML = []
 y_label_RemotoCNOTandWindowLookAhead2nocut = []
 y_label_RemotoCNOTandWindowLookAhead_state = []
 y_label_RemotoCNOTandWindowLookAhead0_state = []
 y_label_RemotoCNOTandWindowLookAhead1_state = []
+y_label_RemotoCNOTandWindowLookAhead1_ML_state = []
 y_label_RemotoCNOTandWindowLookAhead3_state = []
 y_label_RemotoCNOTandWindowLookAhead2nocut_state = []
 y_label_RemotoCNOTandWindowLookAhead_state_cut = []
 y_label_RemotoCNOTandWindowLookAhead0_state_cut = []
 y_label_RemotoCNOTandWindowLookAhead1_state_cut = []
+y_label_RemotoCNOTandWindowLookAhead1_ML_state_cut = []
 y_label_RemotoCNOTandWindowLookAhead3_state_cut = []
 
 '''generate architecture graph'''
@@ -215,8 +220,12 @@ for file in QASM_files:
         if draw_logical_circuit == True: print(cir_log.draw())
         
         if use_RemotoCNOTandWindowLookAhead1_LI == True:
-            res = ct.RemoteCNOTandWindowLookAheadLI(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
-        
+            res = ct.RemoteCNOTandWindowLookAheadLI(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
+
+        if use_RemotoCNOTandWindowLookAhead1_LI_noprune == True:
+            res = ct.RemoteCNOTandWindowLookAheadLI(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=False, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)        
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
         '''search using specific methods'''
         if use_naive_search == True:
             cost_naive = ct.NaiveSearch(q_phy, QuantumCircuit(q_phy), G, copy.deepcopy(DG), initial_map, shortest_path_G, draw_physical_circuit_niave)
@@ -287,6 +296,17 @@ for file in QASM_files:
             y_label_RemotoCNOTandWindowLookAhead1.append(cost_RemotoCNOTandWindowLookAhead)
             y_label_RemotoCNOTandWindowLookAhead1_state.append(cost_RemotoCNOTandWindowLookAhead_state)
             y_label_RemotoCNOTandWindowLookAhead1_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
+
+        if use_RemotoCNOTandWindowLookAhead1_ML == True:
+            t_e = time.time()
+            res = ct.RemoteCNOTandWindowLookAheadML(q_phy, cir_phy, G, copy.deepcopy(DG), initial_map, shortest_length_G, shortest_path_G, depth_lookahead=1, use_prune=True, draw=draw_physical_circuit_RemotoCNOTandWindowLookAhead, DiG=DiG)
+            t_s = time.time()
+            if out_num_add_gates == True: cost_RemotoCNOTandWindowLookAhead = res[3] + cir_log.size()
+            cost_RemotoCNOTandWindowLookAhead_state = res[1]
+            cost_RemotoCNOTandWindowLookAhead_state_cut = res[2]
+            y_label_RemotoCNOTandWindowLookAhead1_ML.append(cost_RemotoCNOTandWindowLookAhead)
+            y_label_RemotoCNOTandWindowLookAhead1_ML_state.append(cost_RemotoCNOTandWindowLookAhead_state)
+            y_label_RemotoCNOTandWindowLookAhead1_ML_state_cut.append(cost_RemotoCNOTandWindowLookAhead_state_cut)
 
         if use_RemotoCNOTandWindowLookAhead2 == True:
             t_s = time.time()

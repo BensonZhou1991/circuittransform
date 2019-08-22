@@ -22,7 +22,7 @@ use_fallback = True
 fallback_mode = 0#0:choose the current best gate, 1: current worst gate
 display_complete_state = 0
 debug_mode = False
-level_lookahead_default = [1, 0.8, 0.6, 0.4]
+level_lookahead_default = [1, 0.8, 0.6, 0.4] #default value [1, 0.8, 0.6, 0.4]
 
 def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next):
     '''generate next node'''
@@ -42,7 +42,7 @@ def CalculateHeuristicCost(current_map, DG, executable_vertex, executed_vertex, 
     num_remaining_vertex = len(DG.nodes()) - len(executed_vertex)
     cost_h_total = ct.HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG)
     cost_h1 = cost_h_total[1] * SWAP_cost + cost_h_total[5]*0.00001
-    cost_h2 = SWAP_cost * num_remaining_vertex * (max_shortest_length_G - 1) * level_lookahead[-1]
+    cost_h2 = SWAP_cost * (num_remaining_vertex) * (max_shortest_length_G - 1) * level_lookahead[-1]
     #cost_h2 = 0#only for test, remember to delete it
     cost_h_list = [cost_h1, cost_h2, cost_h_total]
     
@@ -160,6 +160,7 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
                 if ct.IsVertexInDGOperatiable(vertex, DG, G, current_map) == True:
                     '''check whether this CNOT needs 4 H gates to convert direction'''
                     flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, current_map, edges_DiG)
+                    #flag_4H = True #test only
                     if flag_4H == False: raise Exception('unexpected operatible CNOT without 4 H gates')
                     if flag_4H == True:
                         '''if need 4 extra H, then execute it and add to the new node'''
