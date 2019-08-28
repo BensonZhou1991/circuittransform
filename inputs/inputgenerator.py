@@ -57,6 +57,32 @@ def CreateCNOTRandomly(q_reg, num_CNOT, cir = None):
     
     return total_CNOT
 
+def CreateCNOTRandomlyOneLayer(q_log, num_CNOT):
+    '''
+    generate CNOT operation randomly in only one layer
+    input:
+        q_reg: quantum register
+        list of all operatuions
+    output:
+        list [(v_c, v_t), (v_c, v_t), ...]
+        list [operation, ...]
+    '''
+    q = q_log
+    num_qubits = len(q)
+    pos = list(range(num_qubits))
+    np.random.shuffle(pos)
+    CNOT_operations = []
+    CNOT_list = []
+    for i in range(num_CNOT):
+        q_c_pos = pos.pop()
+        q_t_pos = pos.pop()
+        q_c = q[q_c_pos]
+        q_t = q[q_t_pos]
+        new_CNOT = OperationCNOT(q_c, q_t, [])
+        CNOT_operations.append(new_CNOT)
+        CNOT_list.append((q_c_pos, q_t_pos))
+    return CNOT_list, CNOT_operations
+
 def CreateCircuitFromQASM(file):
     QASM_file = open('inputs/QASM example/' + file, 'r')
     iter_f = iter(QASM_file)
@@ -145,6 +171,7 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
             IBM QX20
             directed grid
             directed circle
+            example in paper
     '''
     if method == ['IBM QX3']:
         G = GenerateArchitectureGraph(16, ['grid', 8, 2])
@@ -183,6 +210,15 @@ def GenerateArchitectureGraph(num_vertex, method, draw_architecture_graph = Fals
         G.add_edges_from(edges)
         if draw_architecture_graph == True: nx.draw(G, with_labels=True)
         return G
+    
+    if method == ['example in paper']:
+        G = nx.DiGraph()
+        vertex = list(range(6))
+        edges = [(1,2), (1,0), (2,3), (3,4), (5,4), (5,2), (5,0)]
+        G.add_nodes_from(vertex)
+        G.add_edges_from(edges)
+        if draw_architecture_graph == True: nx.draw(G, with_labels=True)
+        return G        
     
     if method[0] == 'directed grid' or method[0] == 'directed circle':
         G = nx.DiGraph()

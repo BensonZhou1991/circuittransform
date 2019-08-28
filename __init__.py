@@ -8,9 +8,10 @@ from .operation import ConductOperationInVertex, SWAPInArchitectureGraph, FindAl
 from .operation import IsVertexInDGOperatiable, CalRemoteCNOTCostinArchitectureGraph, CheckCNOTNeedConvertDirection, CheckCNOTNeedConvertDirection2
 from .operation import ConductCNOTOperationInVertex, CheckSWAPInvolved, ConductCNOTInDGAlongPath, ExecuteAllPossibileNodesInDG
 from .map import Map, FindInitialMapping, InitialMapSimulatedAnnealing
-from .cost import OperationCost, HeuristicCostZulehner, HeuristicCostZhou1, HeuristicCostZulehnerLookAhead
-from circuittransform.method import NaiveSearch, AStarSearch, AStarSearchLookAhead, RemoteCNOTandWindow, RemoteCNOTandWindowLookAhead, HeuristicGreedySearch
+from .cost import OperationCost, HeuristicCostZulehner, HeuristicCostZhou1, HeuristicCostZulehnerLookAhead, HeuristicCostZhouML
+from circuittransform.method import NaiveSearch, AStarSearch, AStarSearchLookAhead, RemoteCNOTandWindow, RemoteCNOTandWindowLookAhead, RemoteCNOTandWindowLookAheadLI, HeuristicGreedySearch, RemoteCNOTandWindowLookAheadML
 from .operation_for_U_decomposition import SteinerTreeAndRemoteCNOT, AllocateVertexToPartyMap, PerformOperationCNOTinPartyMap
 from .operation_for_U_decomposition import UDecompositionFullConnectivity, UDecompositionFullConnectivityPATEL, FindAllLeafNodesInDG
 from circuittransform.Qiskitconverter import QiskitCircuitToDG, CheckQiskitCircuitSatisfyAG
-from circuittransform.inputs import CreateDGfromQASMfile, CreateQASMFilesFromExample, ShortestPath
+from circuittransform.inputs import CreateDGfromQASMfile, CreateQASMFilesFromExample, ShortestPath, CreateCNOTRandomlyOneLayer
+from circuittransform import machinelearning

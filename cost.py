@@ -10,6 +10,7 @@ from qiskit import QuantumRegister
 import networkx as nx
 import circuittransform as ct
 import copy
+import numpy as np
 
 def OperationCost(dom, mapping, G = None, shortest_length = None, edges_DiG=None, shortest_path_G=None):
     '''
@@ -160,6 +161,7 @@ def HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shor
     #DG_copy = copy.deepcopy(DG)
     executable_vertex_copy = executable_vertex.copy()
     executed_vertex_copy = executed_vertex.copy()
+    num_counted_gates = 0
     for current_lookahead_level in range(len(level_lookahead)):
         if current_lookahead_level == 0:
             '''current level'''
@@ -171,6 +173,7 @@ def HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shor
             current_executable_vertex = ct.FindExecutableNode(DG, executed_vertex_copy, current_executable_vertex, current_executable_vertex.copy())
             weight = level_lookahead[current_lookahead_level - 1]
             
+        num_counted_gates += len(current_executable_vertex)
         for v_DG in current_executable_vertex:
             flag_4H = 0
             current_operation = DG.node[v_DG]['operation']
@@ -208,4 +211,61 @@ def HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shor
                     best_path = shortest_path_G[v0][v1]
                     best_executable_vertex = v_DG
         
-    return worst_num_swap, sum_num_swap, best_num_swap, best_executable_vertex, best_path, count_same_worst
+    return worst_num_swap, sum_num_swap, best_num_swap, best_executable_vertex, best_path, count_same_worst, num_counted_gates
+
+def HeuristicCostZhouML(ANN, current_map, DG, executed_vertex, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG=None):
+    '''
+    Calculate heuristic cost for remaining gates and return best path
+    this cost is based on the minimial distance in architecture graph between
+    two input qubits of each operations
+    
+    ATTENTION: this function is currently only for bidirectional AG Q20!!!
+               for direction AG it need further modification
+    
+    input:
+        ANN -> neural network via keras API
+    '''
+    mapping = current_map
+    if DiG != None: edges = list(DiG.edges)
+    #DG_copy = copy.deepcopy(DG)
+    executable_vertex_copy = executable_vertex.copy()
+    executed_vertex_copy = executed_vertex.copy()
+    num_counted_gates = 0
+    weights = []
+    data_set = np.zeros([len(level_lookahead), 20, 20])
+    num_q_log = 20
+    
+    for current_lookahead_level in range(len(level_lookahead)):
+        '''set the weight parameter for current level'''
+        if current_lookahead_level == 0:
+            '''current level'''
+            current_executable_vertex = executable_vertex_copy
+            weight = 1
+        else:
+            '''lookahead level'''
+            #DG_copy.remove_nodes_from(executable_vertex)
+            current_executable_vertex = ct.FindExecutableNode(DG, executed_vertex_copy, current_executable_vertex, current_executable_vertex.copy())
+            weight = level_lookahead[current_lookahead_level - 1]
+        weights.append(weight)
+        
+        num_counted_gates += len(current_executable_vertex)
+        CNOT_list = []
+        for v_DG in current_executable_vertex:
+            current_operation = DG.node[v_DG]['operation']
+            q0 = current_operation.involve_qubits[0]
+            q1 = current_operation.involve_qubits[1]
+            v0 = mapping.DomToCod(q0)
+            v1 = mapping.DomToCod(q1)
+            CNOT_list.append((v0, v1))
+        '''form data set for ANN input'''
+        map_current = ct.machinelearning.CreateCircuitMap(CNOT_list, num_q_log)
+        data_set[current_lookahead_level] = map_current
+    
+    '''calculate swap cost via ANN'''
+    res = ct.machinelearning.CalSwapCostViaANN(ANN, data_set)
+    #res = np.random.randint(19, size=len(level_lookahead))#test only!!!
+    '''multiply weights to each level'''
+    sum_num_swap = 0
+    for current_lookahead_level in range(len(level_lookahead)):
+        sum_num_swap += res[current_lookahead_level] * weights[current_lookahead_level]
+    return None, sum_num_swap

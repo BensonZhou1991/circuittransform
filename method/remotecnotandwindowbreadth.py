@@ -20,9 +20,9 @@ use_remoteCNOT_fallback = 1
 min_remoteCNOT_hop = 2
 use_fallback = True
 fallback_mode = 0#0:choose the current best gate, 1: current worst gate
-display_complete_state = 1
+display_complete_state = 0
 debug_mode = False
-level_lookahead_default = [1, 0.8, 0.6, 0.4]
+level_lookahead_default = [1, 0.8, 0.6, 0.4] #default value [1, 0.8, 0.6, 0.4]
 
 def AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next):
     '''generate next node'''
@@ -42,7 +42,7 @@ def CalculateHeuristicCost(current_map, DG, executable_vertex, executed_vertex, 
     num_remaining_vertex = len(DG.nodes()) - len(executed_vertex)
     cost_h_total = ct.HeuristicCostZhou1(current_map, DG, executed_vertex, executable_vertex, shortest_length_G, shortest_path_G, level_lookahead, DiG)
     cost_h1 = cost_h_total[1] * SWAP_cost + cost_h_total[5]*0.00001
-    cost_h2 = SWAP_cost * num_remaining_vertex * (max_shortest_length_G - 1) * level_lookahead[-1]
+    cost_h2 = SWAP_cost * (num_remaining_vertex) * (max_shortest_length_G - 1) * level_lookahead[-1]
     #cost_h2 = 0#only for test, remember to delete it
     cost_h_list = [cost_h1, cost_h2, cost_h_total]
     
@@ -157,9 +157,10 @@ def ExpandTreeForNextStep(G, DG, search_tree, leaf_nodes, possible_swap_combinat
         '''execute possible CNOT needing 4 extra 4 H'''
         if DiG != None:
             for vertex in executable_vertex_current:
-                if ct.IsVertexInDGOperatiable(vertex, DG, G, next_map) == True:
+                if ct.IsVertexInDGOperatiable(vertex, DG, G, current_map) == True:
                     '''check whether this CNOT needs 4 H gates to convert direction'''
                     flag_4H = ct.CheckCNOTNeedConvertDirection2(vertex, DG, current_map, edges_DiG)
+                    #flag_4H = True #test only
                     if flag_4H == False: raise Exception('unexpected operatible CNOT without 4 H gates')
                     if flag_4H == True:
                         '''if need 4 extra H, then execute it and add to the new node'''
@@ -381,7 +382,9 @@ def FallBack(father_node, G, DG, search_tree, next_node_list, shortest_path_G, s
     next_node_list[0] = next_node_list[0] + 1
     leaf_nodes.append(next_node)
     AddNewNodeToSearchTree(next_node, search_tree, next_map, cost_g_next, cost_h_next, cost_total_next, executed_vertex_next, executable_vertex_next)
-    search_tree.add_edge(father_node, next_node)           
+    search_tree.add_edge(father_node, next_node)
+    if executable_vertex_next == []:
+        return next_node, [next_node], leaf_nodes, new_father_node
     #print('remaining gates after', len(DG_next.nodes()))
     if draw == True: search_tree.nodes[next_node]['phy_circuit'] = cir_phy_next
     
@@ -500,7 +503,10 @@ def RemoteCNOTandWindowLookAhead(q_phy, cir_phy, G, DG, initial_map, shortest_le
             '''check whether fallback is needed'''
             if fallback_count < 0 or flag_no_leaf_fallback == True:
                 if display_complete_state == True:
-                    if fallback_count < 0: print('fall back')
+                    if fallback_count < 0:
+                        print('fall back')
+                        print('current mapping is' + str(search_tree.nodes[best_leaf_node]['mapping'].MapToList()))
+                        print('cost g is' + str(search_tree.nodes[best_leaf_node]['cost_g']))
                     if flag_no_leaf_fallback == True: print('no leaf fall back')
                 fallback_count = total_fallback_num
                 flag_no_leaf_fallback = False
