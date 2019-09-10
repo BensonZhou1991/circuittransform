@@ -10,8 +10,8 @@ create CNOT Lists
 import circuittransform as ct
 
 num_file = 0
-#QASM_files = ['ising_model_10.qasm', 'max46_240.qasm', 'qft_10.qasm', 'sqn_258.qasm', 'sys6-v0_111.qasm', 'hwb9_119.qasm']
-QASM_files = ('4mod5-v1_22.qasm',
+QASM_files0 = ['ising_model_10.qasm', 'max46_240.qasm', 'qft_10.qasm', 'sqn_258.qasm', 'sys6-v0_111.qasm', 'hwb9_119.qasm']
+QASM_files1 = ('4mod5-v1_22.qasm',
     'mod5mils_65.qasm',
     'alu-v0_27.qasm',
     'decod24-v2_43.qasm',
@@ -36,7 +36,7 @@ QASM_files = ('4mod5-v1_22.qasm',
     'sym9_193.qasm',
     '9symml_195.qasm',
     )
-QASM_files = ['graycode6_47.qasm',
+QASM_files2 = ['graycode6_47.qasm',
 'xor5_254.qasm',
 'ex1_226.qasm',
 '4gt11_84.qasm',
@@ -152,7 +152,7 @@ QASM_files = ['graycode6_47.qasm',
 'hwb8_113.qasm',
 'urf2_152.qasm']
 
-for file in QASM_files:
+for file in QASM_files2:
     num_file += 1
     res = ct.CreateDGfromQASMfile(file)
     DG = res[1][0]

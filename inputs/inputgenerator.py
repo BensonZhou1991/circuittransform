@@ -318,7 +318,7 @@ def CreateCNOTList(DG):
     while len(leaf_nodes) > 0:
         for node in leaf_nodes:
             op = DG_copy.node[node]['operation']
-            add_CNOT = (op.involve_qubits[0][1], op.involve_qubits[1][1])
+            add_CNOT = [op.involve_qubits[0][1], op.involve_qubits[1][1]]
             CNOT_list.append(add_CNOT)
         DG_copy.remove_nodes_from(leaf_nodes)
         leaf_nodes = ct.FindExecutableNode(DG_copy)
