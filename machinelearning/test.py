@@ -9,6 +9,10 @@ import circuittransform as ct
 import tensorflow as tf
 import numpy as np
 
+'''
+this file is to check the accuracy of ANN
+'''
+
 ANN = tf.keras.models.load_model('my_model.h5')
 method_AG = ['IBM QX20']
 num_qubits = 20
